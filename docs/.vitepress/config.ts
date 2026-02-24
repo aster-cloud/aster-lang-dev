@@ -14,16 +14,37 @@ export default defineConfig({
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
   ],
+  vite: {
+    optimizeDeps: {
+      include: ['@codemirror/state', '@codemirror/view'],
+    },
+    ssr: {
+      noExternal: ['@aster-cloud/aster-lang-ts'],
+    },
+  },
   themeConfig: {
     logo: '/logo.svg',
     nav: [
-      { text: 'Getting Started', link: '/getting-started/overview' },
+      { text: 'Learn', link: '/learn/overview' },
+      { text: 'Playground', link: '/learn/playground' },
       { text: 'REST API', link: '/api/policies/evaluate' },
       { text: 'GraphQL', link: '/graphql/overview' },
       { text: 'Language Docs', link: 'https://aster-lang.org' },
       { text: 'GitHub', link: 'https://github.com/aster-cloud/aster-lang-dev' },
     ],
     sidebar: {
+      '/learn/': [
+        {
+          text: 'Learn Aster',
+          items: [
+            { text: 'Overview', link: '/learn/overview' },
+            { text: 'CNL Quick Reference', link: '/learn/cnl-quick-reference' },
+            { text: 'Playground', link: '/learn/playground' },
+            { text: 'Deployment Guide', link: '/learn/deployment-guide' },
+            { text: 'Browser API', link: '/learn/browser-api' },
+          ],
+        },
+      ],
       '/getting-started/': [
         {
           text: 'Getting Started',

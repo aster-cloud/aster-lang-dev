@@ -8,6 +8,16 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
   },
+  "dependencies": {
+    "@aster-cloud/aster-lang-ts": "^0.1.0",
+    "@codemirror/commands": "^6.8.0",
+    "@codemirror/language": "^6.10.0",
+    "@codemirror/search": "^6.5.0",
+    "@codemirror/state": "^6.5.0",
+    "@codemirror/view": "^6.36.0",
+    "@codemirror/theme-one-dark": "^6.1.0",
+    "@lezer/highlight": "^1.2.0"
+  },
   "devDependencies": {
     "vitepress": "^1.6.3",
     "vue": "^3.5.13"
