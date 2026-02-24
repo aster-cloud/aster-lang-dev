@@ -260,7 +260,7 @@ const footerClass = computed(() => {
       </label>
       <button class="secondary" @click="onReset">Reset</button>
     </div>
-    <div class="playground-grid" :style="{ minHeight: height }">
+    <div class="playground-grid" :style="{ height: height }">
       <div class="playground-editor" ref="editorContainer"></div>
       <div class="playground-results">
         <div class="playground-tabs">
