@@ -330,3 +330,120 @@
   font-size: 12px;
   text-transform: uppercase;
 }
+
+/* ── Run button ── */
+.playground-toolbar .run-btn {
+  background: #22c55e;
+  color: white;
+  font-weight: 600;
+  border: 1px solid #16a34a;
+  padding: 4px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.playground-toolbar .run-btn:hover:not(:disabled) {
+  background: #16a34a;
+}
+
+.playground-toolbar .run-btn:disabled {
+  background: var(--playground-border);
+  color: var(--vp-c-text-3);
+  border-color: var(--playground-border);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ── Inputs textarea ── */
+.inputs-editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputs-textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 200px;
+  padding: 8px 12px;
+  border: 1px solid var(--playground-border);
+  border-radius: 4px;
+  background: var(--playground-bg);
+  color: var(--vp-c-text-1);
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+  tab-size: 2;
+}
+
+.dark .inputs-textarea {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.inputs-textarea:focus {
+  outline: none;
+  border-color: var(--vp-c-brand-1);
+}
+
+/* ── Console output ── */
+.console-output {
+  font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.console-prompt {
+  color: var(--vp-c-text-2);
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+
+.console-chevron {
+  color: var(--playground-success);
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.console-result {
+  margin-bottom: 8px;
+}
+
+.console-label {
+  color: var(--playground-success);
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.console-value {
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--vp-c-text-1);
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.console-error {
+  color: var(--playground-error);
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.console-time {
+  color: var(--vp-c-text-3);
+  font-size: 12px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--playground-border);
+}
+
+.console-placeholder {
+  color: var(--vp-c-text-3);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}

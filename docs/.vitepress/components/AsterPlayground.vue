@@ -14,13 +14,21 @@ const props = withDefaults(defineProps<{
 const editorContainer = ref<HTMLElement | null>(null);
 const editorView = shallowRef<any>(null);
 const lexiconId = ref(props.initialLexicon);
-const activeTab = ref<'diagnostics' | 'schema' | 'ast' | 'inputs'>('diagnostics');
+const activeTab = ref<'diagnostics' | 'schema' | 'ast' | 'inputs' | 'console'>('diagnostics');
 const isRunning = ref(false);
 const diagnostics = ref<any[]>([]);
 const schemaResult = ref<any>(null);
 const compileResult = ref<any>(null);
 const sampleInputs = ref<any>(null);
 const lastError = ref<string | null>(null);
+
+// Console / Run 相关状态
+const evalResult = ref<any>(null);
+const evalError = ref<string | null>(null);
+const evalTime = ref<number | null>(null);
+const editableInputs = ref<string>('');
+const lastCalledFunc = ref<string>('');
+const lastCalledArgs = ref<string>('');
 
 // Lazy-loaded modules
 let asterLang: any = null;
@@ -29,6 +37,10 @@ let cmState: any = null;
 let cmCommands: any = null;
 
 const currentTemplates = computed(() => templates[lexiconId.value] || templates.EN_US);
+
+const canRun = computed(() =>
+  compileResult.value?.success && schemaResult.value?.success && !isRunning.value
+);
 
 function getLexicon(id: string) {
   if (!asterLang) return undefined;
@@ -95,12 +107,16 @@ async function runAnalysis() {
           schemaResult.value.parameters,
           lexicon,
         );
+        // 用生成的 sample inputs 更新可编辑输入（仅当用户未手动编辑或 schema 变更时）
+        editableInputs.value = formatJson(sampleInputs.value);
       } else {
         sampleInputs.value = null;
+        editableInputs.value = '{}';
       }
     } else {
       schemaResult.value = null;
       sampleInputs.value = null;
+      editableInputs.value = '{}';
     }
 
     // Auto-select tab
@@ -114,6 +130,42 @@ async function runAnalysis() {
   } finally {
     isRunning.value = false;
   }
+}
+
+function onRun() {
+  if (!asterLang || !compileResult.value?.success || !compileResult.value?.core) return;
+  if (!schemaResult.value?.success) return;
+
+  // 解析用户输入的 JSON
+  let context: Record<string, unknown>;
+  try {
+    context = JSON.parse(editableInputs.value);
+  } catch (err: any) {
+    evalError.value = `Invalid JSON input: ${err.message}`;
+    evalResult.value = null;
+    evalTime.value = null;
+    activeTab.value = 'console';
+    return;
+  }
+
+  const funcName = schemaResult.value.functionName;
+  lastCalledFunc.value = funcName;
+  lastCalledArgs.value = formatJson(context);
+
+  // 调用解释器
+  const result = asterLang.evaluate(compileResult.value.core, funcName, context);
+
+  if (result.success) {
+    evalResult.value = result.value;
+    evalError.value = null;
+    evalTime.value = result.executionTimeMs ?? null;
+  } else {
+    evalResult.value = null;
+    evalError.value = result.error || 'Unknown error';
+    evalTime.value = result.executionTimeMs ?? null;
+  }
+
+  activeTab.value = 'console';
 }
 
 async function initEditor() {
@@ -190,6 +242,10 @@ function onReset() {
   if (template) {
     setSource(template.source);
   }
+  // 清除 console 状态
+  evalResult.value = null;
+  evalError.value = null;
+  evalTime.value = null;
 }
 
 watch(lexiconId, () => {
@@ -198,6 +254,10 @@ watch(lexiconId, () => {
   if (template) {
     setSource(template.source);
   }
+  // 清除 console 状态
+  evalResult.value = null;
+  evalError.value = null;
+  evalTime.value = null;
 });
 
 onMounted(() => {
@@ -217,6 +277,19 @@ function formatJson(obj: any): string {
   } catch {
     return String(obj);
   }
+}
+
+function formatResult(value: any): string {
+  if (value === null || value === undefined) return 'null';
+  if (typeof value === 'object') {
+    // 移除内部 __type 标记以简化显示
+    const clean = JSON.parse(JSON.stringify(value, (key, val) => {
+      if (key === '__type') return undefined;
+      return val;
+    }));
+    return JSON.stringify(clean, null, 2);
+  }
+  return String(value);
 }
 
 const footerText = computed(() => {
@@ -258,6 +331,7 @@ const footerClass = computed(() => {
           </option>
         </select>
       </label>
+      <button class="run-btn" :disabled="!canRun" @click="onRun">Run ▶</button>
       <button class="secondary" @click="onReset">Reset</button>
     </div>
     <div class="playground-grid" :style="{ height: height }">
@@ -292,6 +366,13 @@ const footerClass = computed(() => {
             @click="activeTab = 'inputs'"
           >
             Inputs
+          </button>
+          <button
+            class="playground-tab"
+            :class="{ active: activeTab === 'console' }"
+            @click="activeTab = 'console'"
+          >
+            Console
           </button>
         </div>
         <div class="playground-tab-content">
@@ -340,10 +421,38 @@ const footerClass = computed(() => {
             <pre v-else-if="compileResult?.parseErrors">{{ formatJson(compileResult.parseErrors) }}</pre>
             <p v-else style="color: var(--vp-c-text-3);">Run analysis to see Core IR.</p>
           </div>
-          <!-- Sample Inputs -->
+          <!-- Inputs (editable) -->
           <div v-if="activeTab === 'inputs'">
-            <pre v-if="sampleInputs">{{ formatJson(sampleInputs) }}</pre>
-            <p v-else style="color: var(--vp-c-text-3);">Run analysis to generate sample inputs.</p>
+            <div v-if="compileResult?.success" class="inputs-editor">
+              <textarea
+                class="inputs-textarea"
+                v-model="editableInputs"
+                spellcheck="false"
+              ></textarea>
+            </div>
+            <p v-else style="color: var(--vp-c-text-3);">Compile successfully to edit inputs.</p>
+          </div>
+          <!-- Console -->
+          <div v-if="activeTab === 'console'" class="console-output">
+            <div v-if="evalResult !== null || evalError !== null">
+              <div class="console-prompt">
+                <span class="console-chevron">&gt;</span>
+                <span>{{ lastCalledFunc }}({{ lastCalledArgs }})</span>
+              </div>
+              <div v-if="evalError" class="console-error">
+                Error: {{ evalError }}
+              </div>
+              <div v-else class="console-result">
+                <span class="console-label">Result:</span>
+                <pre class="console-value">{{ formatResult(evalResult) }}</pre>
+              </div>
+              <div v-if="evalTime !== null" class="console-time">
+                Execution time: {{ evalTime }}ms
+              </div>
+            </div>
+            <p v-else class="console-placeholder">
+              Click <strong>Run ▶</strong> to execute the policy and see results here.
+            </p>
           </div>
         </div>
       </div>
