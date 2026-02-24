@@ -258,9 +258,6 @@ const footerClass = computed(() => {
           </option>
         </select>
       </label>
-      <button @click="runAnalysis" :disabled="isRunning">
-        {{ isRunning ? 'Running...' : 'Run ▶' }}
-      </button>
       <button class="secondary" @click="onReset">Reset</button>
     </div>
     <div class="playground-grid" :style="{ minHeight: height }">
