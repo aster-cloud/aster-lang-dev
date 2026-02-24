@@ -52,7 +52,7 @@ Rule calculateQuote given vehicle as Vehicle, produce Quote:
       name: '基础规则',
       source: `模块 定价。
 
-规则 计算价格 给定 金额 为 整数，产出 整数：
+规则 计算价格 给定 金额 作为 整数，产出 整数：
   如果 金额 大于 100
     返回 金额 乘 90 除以 100。
   返回 金额。`,
@@ -62,9 +62,9 @@ Rule calculateQuote given vehicle as Vehicle, produce Quote:
       name: '资格审查',
       source: `模块 贷款。
 
-定义 申请人类型 包含 信用评分 为 整数，收入 为 整数，年龄 为 整数。
+定义 申请人类型 包含 信用评分 作为 整数，收入 作为 整数，年龄 作为 整数。
 
-规则 审查资格 给定 申请人 为 申请人类型，产出 布尔：
+规则 审查资格 给定 申请人 作为 申请人类型，产出 布尔：
   如果 申请人.信用评分 小于 600
     返回 假。
   如果 申请人.收入 小于 30000
