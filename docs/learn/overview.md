@@ -18,9 +18,9 @@ A minimal policy looks like this:
 Module pricing.
 
 Rule discountedPrice given amount as Int, tier as Text, produce Int:
-  If tier is "gold":
-    produce amount * 80 / 100
-  produce amount
+  If tier is "gold"
+    Return amount times 80 divided by 100.
+  Return amount.
 ```
 
 Key properties of Aster CNL:
@@ -72,27 +72,27 @@ Aster CNL is not English-only. The same logical policy can be expressed in any s
 Module pricing.
 
 Rule discountedPrice given amount as Int, produce Int:
-  If amount > 100:
-    produce amount * 90 / 100
-  produce amount
+  If amount greater than 100
+    Return amount times 90 divided by 100.
+  Return amount.
 ```
 
 ```txt [Chinese (ZH_CN)]
 模块 定价。
 
 规则 折扣价格 给定 金额 为 整数，产出 整数：
-  如果 金额 > 100：
-    产出 金额 * 90 / 100
-  产出 金额
+  如果 金额 大于 100
+    返回 金额 乘 90 除以 100。
+  返回 金额。
 ```
 
 ```txt [German (DE_DE)]
 Modul Preisgestaltung.
 
-Regel rabattPreis gegeben betrag als Ganzzahl, gibt Ganzzahl:
-  Wenn betrag > 100:
-    gibt betrag * 90 / 100
-  gibt betrag
+Regel rabattPreis gegeben betrag als Ganzzahl, liefert Ganzzahl:
+  wenn betrag groesser als 100
+    gib zurueck betrag mal 90 geteilt durch 100.
+  gib zurueck betrag.
 ```
 
 :::

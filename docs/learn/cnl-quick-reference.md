@@ -43,11 +43,11 @@ Example:
 
 ```
 Rule calculateDiscount given amount as Int, tier as Text, produce Int:
-  If tier is "gold":
-    produce amount * 20 / 100
-  If tier is "silver":
-    produce amount * 10 / 100
-  produce 0
+  If tier is "gold"
+    Return amount times 20 divided by 100.
+  If tier is "silver"
+    Return amount times 10 divided by 100.
+  Return 0.
 ```
 
 ### Rules with No Parameters
@@ -56,7 +56,7 @@ When a rule takes no parameters, omit the `given` clause:
 
 ```
 Rule defaultRate produce Float:
-  produce 3.5
+  Return 3.5.
 ```
 
 ### Rules with Struct Parameters
@@ -65,9 +65,9 @@ Parameters can use user-defined struct types:
 
 ```
 Rule evaluateApplicant given applicant as Applicant, produce Bool:
-  If applicant.creditScore >= 700:
-    produce true
-  produce false
+  If applicant.creditScore at least 700
+    Return true.
+  Return false.
 ```
 
 ## Data / Struct Definitions
@@ -114,33 +114,33 @@ Any name introduced by a `Define` declaration becomes a valid type:
 Define Policy has premium as Int, deductible as Int.
 
 Rule quote given age as Int, produce Policy:
-  If age < 25:
-    produce Policy set premium to 500, deductible to 1000
-  produce Policy set premium to 300, deductible to 500
+  If age less than 25
+    Return Policy with premium set to 500, deductible set to 1000.
+  Return Policy with premium set to 300, deductible set to 500.
 ```
 
 ## Control Flow
 
 ### If Statements
 
-Conditional logic uses `If` followed by a condition and a colon. The body must be indented.
+Conditional logic uses `If` followed by a condition. The body must be indented.
 
 ```
-If <condition>:
+If <condition>
   <body>
 ```
 
-`If` statements can be chained. The first branch whose condition evaluates to `true` executes, and its `produce` statement returns a value from the rule.
+`If` statements can be chained. The first branch whose condition evaluates to `true` executes, and its `Return` statement returns a value from the rule.
 
 ```
 Rule classify given score as Int, produce Text:
-  If score >= 90:
-    produce "excellent"
-  If score >= 70:
-    produce "good"
-  If score >= 50:
-    produce "average"
-  produce "poor"
+  If score at least 90
+    Return "excellent".
+  If score at least 70
+    Return "good".
+  If score at least 50
+    Return "average".
+  Return "poor".
 ```
 
 ### Nested Conditions
@@ -149,10 +149,10 @@ Conditions can be nested by increasing indentation:
 
 ```
 Rule evaluate given applicant as Applicant, tier as Text, produce Bool:
-  If applicant.creditScore >= 700:
-    If tier is "premium":
-      produce true
-  produce false
+  If applicant.creditScore at least 700
+    If tier is "premium"
+      Return true.
+  Return false.
 ```
 
 ## Expressions and Operators
@@ -161,44 +161,45 @@ Rule evaluate given applicant as Applicant, tier as Text, produce Bool:
 
 | Operator | Description | Example |
 |----------|-------------|---------|
-| `+` | Addition | `amount + 10` |
-| `-` | Subtraction | `price - discount` |
-| `*` | Multiplication | `quantity * unitPrice` |
-| `/` | Division | `total / count` |
+| `plus` | Addition | `amount plus 10` |
+| `minus` | Subtraction | `price minus discount` |
+| `times` | Multiplication | `quantity times unitPrice` |
+| `divided by` | Division | `total divided by count` |
 
-Arithmetic expressions follow standard precedence: multiplication and division bind tighter than addition and subtraction. Use grouping where needed for clarity.
+Arithmetic expressions follow standard precedence: `times` and `divided by` bind tighter than `plus` and `minus`. Use grouping where needed for clarity.
 
 ### Comparison Operators
 
 | Operator | Description | Example |
 |----------|-------------|---------|
-| `>` | Greater than | `age > 18` |
-| `<` | Less than | `score < 50` |
-| `>=` | Greater than or equal | `income >= 30000` |
-| `<=` | Less than or equal | `balance <= 0` |
+| `greater than` | Greater than | `age greater than 18` |
+| `less than` | Less than | `score less than 50` |
+| `at least` | Greater than or equal | `income at least 30000` |
+| `at most` | Less than or equal | `balance at most 0` |
 | `is` | Equality | `tier is "gold"` |
+| `equals to` | Equality (numeric) | `count equals to 5` |
 
 ### Logical Operators
 
 | Operator | Description | Example |
 |----------|-------------|---------|
-| `and` | Logical AND | `age >= 18 and income >= 30000` |
+| `and` | Logical AND | `age at least 18 and income at least 30000` |
 | `or` | Logical OR | `tier is "gold" or tier is "platinum"` |
 | `not` | Logical NOT | `not isExpired` |
 
 Logical operators can be combined in a single condition:
 
 ```
-If applicant.age >= 18 and applicant.creditScore >= 650 and applicant.income >= 25000:
-  produce true
+If applicant.age at least 18 and applicant.creditScore at least 650 and applicant.income at least 25000
+  Return true.
 ```
 
 ## Construction Expressions
 
-To return a value of a struct type, use a construction expression with `set ... to`:
+To return a value of a struct type, use a construction expression with `with <field> set to <value>`:
 
 ```
-<TypeName> set <field> to <value>, <field2> to <value2>
+<TypeName> with <field> set to <value>, <field2> set to <value2>
 ```
 
 Example:
@@ -207,12 +208,12 @@ Example:
 Define Quote has premium as Int, deductible as Int.
 
 Rule calculateQuote given vehicleValue as Int, year as Int, produce Quote:
-  If year < 2015:
-    produce Quote set premium to vehicleValue * 5 / 100, deductible to 1000
-  produce Quote set premium to vehicleValue * 3 / 100, deductible to 500
+  If year less than 2015
+    Return Quote with premium set to vehicleValue times 5 divided by 100, deductible set to 1000.
+  Return Quote with premium set to vehicleValue times 3 divided by 100, deductible set to 500.
 ```
 
-Each `set <field> to <value>` clause assigns one field. Multiple clauses are separated by commas. All fields declared on the struct should be assigned.
+Each `<field> set to <value>` clause assigns one field. Multiple clauses are separated by commas after the `with` keyword. All fields declared on the struct should be assigned.
 
 ## Field Access
 
@@ -236,14 +237,15 @@ Aster CNL supports multiple locales. The same logical policy is expressed using 
 | Rule | `Rule` | `规则` | `Regel` |
 | Given | `given` | `给定` | `gegeben` |
 | As (type) | `as` | `为` | `als` |
-| Produce | `produce` | `产出` | `gibt` |
+| Produce | `produce` | `产出` | `liefert` |
 | Define | `Define` | `定义` | `Definiere` |
-| Has | `has` | `有` | `hat` |
-| If | `If` | `如果` | `Wenn` |
+| Has | `has` | `包含` | `hat` |
+| If | `If` | `如果` | `wenn` |
 | And | `and` | `且` | `und` |
 | Or | `or` | `或` | `oder` |
 | Is | `is` | `是` | `ist` |
-| Set...to | `set ... to` | `设 ... 为` | `setze ... auf` |
+| Set...to | `set ... to` | `将 ... 设为` | `setze ... auf` |
+| Return | `Return` | `返回` | `Ergebnis` |
 
 The compiler accepts a `lexicon` parameter that tells it which keyword set to use. All locales compile to the same core representation.
 
@@ -259,13 +261,13 @@ Module Loan.Approval.
 Define Applicant has name as Text, age as Int, creditScore as Int, income as Int.
 
 Rule isEligible given applicant as Applicant, requestedAmount as Int, produce Bool:
-  If applicant.age < 18:
-    produce false
-  If applicant.creditScore < 650:
-    produce false
-  If applicant.income < requestedAmount * 3:
-    produce false
-  produce true
+  If applicant.age less than 18
+    Return false.
+  If applicant.creditScore less than 650
+    Return false.
+  If applicant.income less than requestedAmount times 3
+    Return false.
+  Return true.
 ```
 
 ### Example 2: Insurance Quote with Struct Return
@@ -279,13 +281,13 @@ Define Vehicle has make as Text, year as Int, value as Int.
 Define Quote has premium as Int, deductible as Int, coverage as Text.
 
 Rule generateQuote given vehicle as Vehicle, driverAge as Int, produce Quote:
-  If driverAge < 25:
-    If vehicle.value > 50000:
-      produce Quote set premium to 4800, deductible to 2000, coverage to "basic"
-    produce Quote set premium to 3200, deductible to 1500, coverage to "basic"
-  If vehicle.year < 2015:
-    produce Quote set premium to vehicle.value * 4 / 100, deductible to 1000, coverage to "standard"
-  produce Quote set premium to vehicle.value * 3 / 100, deductible to 500, coverage to "full"
+  If driverAge less than 25
+    If vehicle.value greater than 50000
+      Return Quote with premium set to 4800, deductible set to 2000, coverage set to "basic".
+    Return Quote with premium set to 3200, deductible set to 1500, coverage set to "basic".
+  If vehicle.year less than 2015
+    Return Quote with premium set to vehicle.value times 4 divided by 100, deductible set to 1000, coverage set to "standard".
+  Return Quote with premium set to vehicle.value times 3 divided by 100, deductible set to 500, coverage set to "full".
 ```
 
 ### Example 3: Tiered Pricing with Multiple Rules
@@ -298,11 +300,11 @@ Module Pricing.Subscription.
 Define Plan has name as Text, monthlyRate as Int, userLimit as Int.
 
 Rule resolvePlan given tier as Text, produce Plan:
-  If tier is "enterprise":
-    produce Plan set name to "Enterprise", monthlyRate to 299, userLimit to 500
-  If tier is "team":
-    produce Plan set name to "Team", monthlyRate to 49, userLimit to 20
-  produce Plan set name to "Starter", monthlyRate to 9, userLimit to 3
+  If tier is "enterprise"
+    Return Plan with name set to "Enterprise", monthlyRate set to 299, userLimit set to 500.
+  If tier is "team"
+    Return Plan with name set to "Team", monthlyRate set to 49, userLimit set to 20.
+  Return Plan with name set to "Starter", monthlyRate set to 9, userLimit set to 3.
 ```
 
 ### Example 4: Chinese Locale
@@ -312,14 +314,14 @@ The same pricing logic expressed with Chinese keywords.
 ```
 模块 定价。
 
-定义 报价 有 单价 为 整数，折扣 为 整数。
+定义 报价 包含 单价 为 整数，折扣 为 整数。
 
 规则 计算报价 给定 数量 为 整数，会员等级 为 文本，产出 报价：
-  如果 会员等级 是 "金牌"：
-    产出 报价 设 单价 为 数量 * 80 / 100，折扣 为 20
-  如果 会员等级 是 "银牌"：
-    产出 报价 设 单价 为 数量 * 90 / 100，折扣 为 10
-  产出 报价 设 单价 为 数量，折扣 为 0
+  如果 会员等级 是 "金牌"
+    返回 报价 将 单价 设为 数量 乘 80 除以 100，折扣 设为 20。
+  如果 会员等级 是 "银牌"
+    返回 报价 将 单价 设为 数量 乘 90 除以 100，折扣 设为 10。
+  返回 报价 将 单价 设为 数量，折扣 设为 0。
 ```
 
 ## Syntax Summary
@@ -330,9 +332,11 @@ The same pricing logic expressed with Chinese keywords.
 | Struct definition | `Define <Name> has <field> as <Type>, ...` |
 | Rule signature | `Rule <name> given <params>, produce <Type>:` |
 | Parameter | `<name> as <Type>` |
-| If condition | `If <expr>:` |
-| Return value | `produce <expr>` |
-| Construction | `<Type> set <field> to <value>, ...` |
+| If condition | `If <condition>` |
+| Return value | `Return <expr>.` |
+| Otherwise | `Otherwise` |
+| Local binding | `Let <name> be <expr>.` |
+| Construction | `<Type> with <field> set to <value>, ...` |
 | Field access | `<param>.<field>` |
 | Equality test | `<expr> is <expr>` |
 | Logical AND | `<expr> and <expr>` |

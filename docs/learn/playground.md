@@ -27,7 +27,7 @@ Use the **Language** dropdown to switch between supported locales:
 |--------|----------|---------------------|
 | `EN_US` | English | `Module`, `Rule`, `given`, `If`, `produce` |
 | `ZH_CN` | Simplified Chinese | `模块`, `规则`, `给定`, `如果`, `产出` |
-| `DE_DE` | German | `Modul`, `Regel`, `gegeben`, `Wenn`, `gibt` |
+| `DE_DE` | German | `Modul`, `Regel`, `gegeben`, `wenn`, `gib zurueck` |
 
 When you switch languages, the editor loads a starter template in that locale. All locales compile to the same underlying core representation.
 
@@ -130,10 +130,10 @@ import {
 
 const source = `Module pricing.
 
-Rule calculatePrice given amount as Int, produce Int:
-  If amount > 100:
-    produce amount * 90 / 100
-  produce amount`
+Rule calculatePrice given amount, produce:
+  If amount greater than 100
+    Return amount times 90 divided by 100.
+  Return amount.`
 
 // Diagnostics tab
 const errors = validateSyntaxWithSpan(source, EN_US)

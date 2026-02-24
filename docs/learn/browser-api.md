@@ -85,7 +85,7 @@ import { validateSyntaxWithSpan, EN_US } from '@aster-cloud/aster-lang-ts/browse
 const source = `Module demo.
 
 Rule greet given name as Text, produce Text:
-  produce "Hello, " + name`
+  Return "Hello, " plus name.`
 
 const errors = validateSyntaxWithSpan(source, EN_US)
 
@@ -128,9 +128,9 @@ import { compile, EN_US } from '@aster-cloud/aster-lang-ts/browser'
 const source = `Module pricing.
 
 Rule calculatePrice given amount as Int, produce Int:
-  If amount > 100:
-    produce amount * 90 / 100
-  produce amount`
+  If amount greater than 100
+    Return amount times 90 divided by 100.
+  Return amount.`
 
 const result = compile(source, {
   lexicon: EN_US,
@@ -220,9 +220,9 @@ const source = `Module loan.
 Define Applicant has creditScore as Int, income as Int, age as Int.
 
 Rule checkEligibility given applicant as Applicant, produce Bool:
-  If applicant.creditScore < 600:
-    produce false
-  produce true`
+  If applicant.creditScore less than 600
+    Return false.
+  Return true.`
 
 const schema = extractSchema(source, { lexicon: EN_US })
 
@@ -261,7 +261,7 @@ import { tokenize, EN_US } from '@aster-cloud/aster-lang-ts/browser'
 const source = `Module demo.
 
 Rule greet given name as Text, produce Text:
-  produce "Hello, " + name`
+  Return "Hello, " plus name.`
 
 const tokens = tokenize(source, EN_US)
 
@@ -299,7 +299,7 @@ const source = `Module loan.
 Define Applicant has creditScore as Int, income as Int, age as Int.
 
 Rule checkEligibility given applicant as Applicant, produce Bool:
-  produce true`
+  Return true.`
 
 const schema = extractSchema(source, { lexicon: EN_US })
 
