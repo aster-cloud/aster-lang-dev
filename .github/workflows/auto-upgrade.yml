@@ -1,0 +1,45 @@
+name: Auto Upgrade aster-lang-ts
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'aster-lang-ts version (e.g. v0.1.2)'
+        required: true
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      # 将本地 link: 覆盖替换为 npm 版本号
+      - name: Replace workspace override with npm version
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          NPM_VERSION="${VERSION#v}"
+          printf "overrides:\n  '@aster-cloud/aster-lang-ts': ^%s\n" "$NPM_VERSION" > pnpm-workspace.yaml
+          echo "--- pnpm-workspace.yaml ---"
+          cat pnpm-workspace.yaml
+
+      - run: pnpm install --no-frozen-lockfile
+
+      - run: pnpm docs:build
+
+      - name: Commit and push to main
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add pnpm-workspace.yaml pnpm-lock.yaml
+          git commit -m "chore(deps): upgrade @aster-cloud/aster-lang-ts to ${VERSION}"
+          git push origin main
