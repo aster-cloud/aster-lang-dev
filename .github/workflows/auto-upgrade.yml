@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      deployments: write
     steps:
       - uses: actions/checkout@v4
 
@@ -49,3 +50,11 @@ jobs:
             git commit -m "chore(deps): upgrade @aster-cloud/aster-lang-ts to ${VERSION}"
             git push origin main
           fi
+
+      # GITHUB_TOKEN 推送不会触发后续工作流，因此直接在此部署
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy docs/.vitepress/dist --project-name aster-lang-dev --branch main
