@@ -21,7 +21,7 @@ Use a stable, human-readable identifier such as your organisation slug or enviro
 
 ## Layer 2 — HMAC Request Signing
 
-For requests that carry a body (POST, PUT, PATCH), you can sign the payload to prevent tampering in transit and to protect against replay attacks. The server validates the signature before processing the request.
+Every request must include HMAC signature headers. The server validates the signature before processing the request, preventing tampering in transit and protecting against replay attacks.
 
 ### Required Headers
 
@@ -29,36 +29,52 @@ For requests that carry a body (POST, PUT, PATCH), you can sign the payload to p
 |----------------------|----------------------------------------------------------------------|
 | `X-Aster-Signature`  | Hex-encoded HMAC-SHA256 of the canonical message (see below)        |
 | `X-Aster-Nonce`      | A randomly-generated string (recommend 16+ bytes, hex or UUID)      |
-| `X-Aster-Timestamp`  | Unix timestamp in seconds at the moment of signing                   |
+| `X-Aster-Timestamp`  | Unix timestamp in **milliseconds** at the moment of signing          |
+
+A request missing any of these three headers returns `401 Unauthorized`.
 
 ### Canonical Message Format
 
-The HMAC is computed over the following newline-delimited string:
+The HMAC is computed over the following pipe-delimited string:
 
 ```
-{X-Tenant-Id}\n{X-Aster-Timestamp}\n{X-Aster-Nonce}\n{raw-request-body}
+{HTTP-method}|{path}|{query}|{X-Aster-Timestamp}|{X-Aster-Nonce}|{body-sha256}
 ```
 
-The HMAC key is the **API secret** issued to your tenant during onboarding.
+| Component | Description | Example |
+|-----------|-------------|---------|
+| `HTTP-method` | Uppercase HTTP method | `POST` |
+| `path` | Request URI path | `/api/v1/policies/evaluate-source` |
+| `query` | Raw query string (empty string if none) | `trace=true` |
+| `X-Aster-Timestamp` | Timestamp value from header | `1708776000000` |
+| `X-Aster-Nonce` | Nonce value from header | `c3ab8ff13720e8ad9047dd39466b3c89` |
+| `body-sha256` | Lowercase hex SHA-256 hash of the raw request body | `a1b2c3d4...` |
+
+The HMAC key is the **API secret** issued to your tenant. The secret is resolved in priority order:
+
+1. Environment variable `ASTER_HMAC_SECRET_{TENANT_ID}` (tenant ID uppercased, dashes replaced with underscores)
+2. Configuration property `aster.security.hmac.secret-key`
 
 ### Example: Computing the Signature (Bash)
 
 ```bash
 TENANT_ID="acme-corp"
-TIMESTAMP=$(date +%s)
+TIMESTAMP=$(($(date +%s) * 1000))
 NONCE=$(openssl rand -hex 16)
 BODY='{"source":"Module demo.\n\nRule ping produce Text:\n  Return \"pong\".","functionName":"ping","context":{},"locale":"en-US"}'
 API_SECRET="your-api-secret-here"
+METHOD="POST"
+PATH_URI="/api/v1/policies/evaluate-source"
+QUERY=""
 
-MESSAGE="${TENANT_ID}\n${TIMESTAMP}\n${NONCE}\n${BODY}"
-SIGNATURE=$(printf '%s' "${TENANT_ID}
-${TIMESTAMP}
-${NONCE}
-${BODY}" | openssl dgst -sha256 -hmac "${API_SECRET}" | awk '{print $2}')
+BODY_HASH=$(printf '%s' "${BODY}" | openssl dgst -sha256 | awk '{print $2}')
+CANONICAL="${METHOD}|${PATH_URI}|${QUERY}|${TIMESTAMP}|${NONCE}|${BODY_HASH}"
+SIGNATURE=$(printf '%s' "${CANONICAL}" | openssl dgst -sha256 -hmac "${API_SECRET}" | awk '{print $2}')
 
-curl -X POST https://policy.aster-lang.dev/api/v1/policies/evaluate-source \
+curl -X POST "https://policy.aster-lang.dev${PATH_URI}" \
   -H "Content-Type: application/json" \
   -H "X-Tenant-Id: ${TENANT_ID}" \
+  -H "X-User-Role: MEMBER" \
   -H "X-Aster-Signature: ${SIGNATURE}" \
   -H "X-Aster-Nonce: ${NONCE}" \
   -H "X-Aster-Timestamp: ${TIMESTAMP}" \
@@ -67,11 +83,7 @@ curl -X POST https://policy.aster-lang.dev/api/v1/policies/evaluate-source \
 
 ### Replay Prevention
 
-The server rejects requests where `X-Aster-Timestamp` is more than **300 seconds** (5 minutes) in the past or future. Additionally, each `(X-Aster-Nonce, X-Aster-Timestamp)` pair is stored for the duration of the replay window; a second request using the same nonce within the window is rejected with `403 Forbidden`.
-
-::: warning Signature validation is optional but strongly recommended
-Requests without HMAC headers are accepted but logged as unsigned. In a future API version, signing may become mandatory for mutation endpoints.
-:::
+The server rejects requests where `X-Aster-Timestamp` is more than **5 minutes** (300,000 milliseconds) in the past or future, returning `401 Unauthorized`. Additionally, each nonce is stored for the duration of the replay window; a second request using the same nonce within the window is rejected with `409 Conflict`.
 
 ## Layer 3 — Role-Based Access Control (`X-User-Role`)
 
@@ -104,22 +116,35 @@ Each role is additive: a higher role inherits all permissions of roles below it.
 
 A request with an insufficient role returns `403 Forbidden`.
 
-### Example: Full Request with All Three Layers
+### Optional Headers
+
+| Header | Description | Default |
+|--------|-------------|---------|
+| `X-User-Id` | Identifies the caller in audit logs | `anonymous` |
+
+### Example: Full Request with All Layers
 
 ```bash
-curl -X POST https://policy.aster-lang.dev/api/v1/policies/evaluate-source \
+TENANT_ID="acme-corp"
+TIMESTAMP=$(($(date +%s) * 1000))
+NONCE=$(openssl rand -hex 16)
+BODY='{"source":"Module demo.\n\nRule ping produce Text:\n  Return \"pong\".","functionName":"ping","context":{},"locale":"en-US"}'
+API_SECRET="your-api-secret-here"
+METHOD="POST"
+PATH_URI="/api/v1/policies/evaluate-source"
+
+BODY_HASH=$(printf '%s' "${BODY}" | openssl dgst -sha256 | awk '{print $2}')
+SIGNATURE=$(printf '%s' "${METHOD}|${PATH_URI}||${TIMESTAMP}|${NONCE}|${BODY_HASH}" | openssl dgst -sha256 -hmac "${API_SECRET}" | awk '{print $2}')
+
+curl -X POST "https://policy.aster-lang.dev${PATH_URI}" \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-Id: acme-corp" \
+  -H "X-Tenant-Id: ${TENANT_ID}" \
+  -H "X-User-Id: user@acme.com" \
   -H "X-User-Role: MEMBER" \
-  -H "X-Aster-Signature: 3d9e2f1a..." \
-  -H "X-Aster-Nonce: c3ab8ff13720e8ad9047dd39466b3c89" \
-  -H "X-Aster-Timestamp: 1708776000" \
-  -d '{
-    "source": "Module demo.\n\nRule ping produce Text:\n  Return \"pong\".",
-    "functionName": "ping",
-    "context": {},
-    "locale": "en-US"
-  }'
+  -H "X-Aster-Signature: ${SIGNATURE}" \
+  -H "X-Aster-Nonce: ${NONCE}" \
+  -H "X-Aster-Timestamp: ${TIMESTAMP}" \
+  -d "${BODY}"
 ```
 
 ## Summary
@@ -127,5 +152,6 @@ curl -X POST https://policy.aster-lang.dev/api/v1/policies/evaluate-source \
 | Layer | Header(s)                                              | Required  | Failure response      |
 |-------|--------------------------------------------------------|-----------|-----------------------|
 | 1     | `X-Tenant-Id`                                          | Always    | `400 Bad Request`     |
-| 2     | `X-Aster-Signature`, `X-Aster-Nonce`, `X-Aster-Timestamp` | Recommended | `403 Forbidden`  |
+| 2     | `X-Aster-Signature`, `X-Aster-Nonce`, `X-Aster-Timestamp` | Always | `401 Unauthorized`  |
 | 3     | `X-User-Role`                                          | Always    | `403 Forbidden`       |
+| —     | `X-User-Id`                                            | Optional  | Defaults to `anonymous` |

@@ -19,6 +19,7 @@ All functions and lexicon objects are exported from the `/browser` subpath:
 ```js
 import {
   compile,
+  evaluate,
   validateSyntaxWithSpan,
   extractSchema,
   tokenize,
@@ -194,10 +195,21 @@ interface SchemaResult {
   error?: string
 }
 
+type TypeKind =
+  | 'primitive'
+  | 'struct'
+  | 'enum'
+  | 'list'
+  | 'map'
+  | 'option'
+  | 'result'
+  | 'function'
+  | 'unknown'
+
 interface ParameterSchema {
   name: string
   type: string
-  typeKind: 'PRIMITIVE' | 'STRUCT'
+  typeKind: TypeKind
   optional: boolean
   position: number
   fields: FieldSchema[]
@@ -206,7 +218,7 @@ interface ParameterSchema {
 interface FieldSchema {
   name: string
   type: string
-  typeKind: 'PRIMITIVE' | 'STRUCT'
+  typeKind: TypeKind
 }
 ```
 
@@ -316,18 +328,50 @@ if (schema.success) {
 }
 ```
 
+### `evaluate(coreIR, functionName, context)`
+
+Evaluate a compiled policy in the browser using the core IR interpreter. This allows full policy execution without network requests.
+
+**Parameters:**
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `coreIR` | `CoreIR` | Yes | The compiled core intermediate representation from `compile()`. |
+| `functionName` | `string` | Yes | Name of the function to invoke. |
+| `context` | `Record<string, unknown>` | Yes | Context object mapping parameter names to values. |
+
+**Returns:** `EvalResult`
+
+**Example:**
+
+```js
+import { compile, evaluate, EN_US } from '@aster-cloud/aster-lang-ts/browser'
+
+const source = `Module demo.
+
+Rule greet given name as Text, produce Text:
+  Return "Hello, " plus name.`
+
+const compiled = compile(source, { lexicon: EN_US, includeIntermediates: true })
+
+if (compiled.success) {
+  const result = evaluate(compiled.core, 'greet', { name: 'World' })
+  console.log(result) // { value: "Hello, World" }
+}
+```
+
 ## When to Use Browser API vs REST API vs GraphQL
 
 | Criterion | Browser API | REST API | GraphQL |
 |-----------|-------------|----------|---------|
 | **Runs where** | Browser or Node.js | Server-side | Server-side |
 | **Network required** | No | Yes | Yes |
-| **Authentication** | None | Bearer token + HMAC | Bearer token |
+| **Authentication** | None | HMAC request signing | HMAC request signing |
 | **Policy storage** | None (stateless) | Versioned, persisted | Versioned, persisted |
-| **Evaluation** | Not supported | Full evaluation with audit | Full evaluation with audit |
+| **Evaluation** | `evaluate` (local, no audit) | Full evaluation with audit | Full evaluation with audit |
 | **Validation** | `validateSyntaxWithSpan` | `/evaluate-source` (dry run) | `validatePolicy` mutation |
 | **Schema extraction** | `extractSchema` | `POST /policies/schema` | `policySchema` query |
-| **Batch evaluation** | Not supported | `POST /evaluate-source-batch` | Not supported |
+| **Batch evaluation** | Not supported | `POST /policies/evaluate/batch` | Not supported |
 | **Audit trail** | Not generated | Automatic SHA-256 chain | Automatic SHA-256 chain |
 | **Best for** | Editors, CI checks, local tooling | Production evaluation, deployment | Flexible queries, dashboards |
 

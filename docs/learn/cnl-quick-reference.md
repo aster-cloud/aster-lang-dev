@@ -104,7 +104,10 @@ Aster CNL provides five built-in primitive types and supports user-defined struc
 | `Float` | Floating-point number | `3.14`, `0.5`, `-1.0` |
 | `Text` | String literal (double-quoted) | `"hello"`, `"gold"` |
 | `Bool` | Boolean value | `true`, `false` |
-| `DateTime` | Date and time value | Used for temporal comparisons |
+
+::: tip DateTime Inference
+DateTime is not a keyword you write in source code. The compiler infers `DateTime` as the type for fields whose names match temporal patterns (e.g. `createdAt`, `birthday`, `expiryDate`). You do not need to declare it explicitly.
+:::
 
 ### Custom Types (Structs)
 
@@ -245,7 +248,7 @@ Aster CNL supports multiple locales. The same logical policy is expressed using 
 | Or | `or` | `或` | `oder` |
 | Is | `is` | `是` | `ist` |
 | Set...to | `set ... to` | `将 ... 设为` | `setze ... auf` |
-| Return | `Return` | `返回` | `Ergebnis` |
+| Return | `Return` | `返回` | `gib zurueck` |
 
 The compiler accepts a `lexicon` parameter that tells it which keyword set to use. All locales compile to the same core representation.
 

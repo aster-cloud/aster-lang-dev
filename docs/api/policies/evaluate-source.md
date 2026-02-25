@@ -20,9 +20,15 @@ Compile and evaluate a CNL (Controlled Natural Language) policy source string on
 
 | Header | Value | Required |
 |--------|-------|----------|
-| `Authorization` | `Bearer <token>` | Yes |
 | `Content-Type` | `application/json` | Yes |
-| `X-Tenant-ID` | Tenant identifier string | Yes |
+| `X-Tenant-Id` | Tenant identifier string | Yes |
+| `X-Aster-Signature` | HMAC-SHA256 hex signature | Yes |
+| `X-Aster-Nonce` | Random string (16+ bytes hex or UUID) | Yes |
+| `X-Aster-Timestamp` | Unix timestamp in **milliseconds** | Yes |
+| `X-User-Role` | Caller's role (`MEMBER`, `ADMIN`, `OWNER`) | Yes |
+| `X-User-Id` | Caller identifier for audit logs | No |
+
+See [Authentication](/getting-started/authentication) for full details on computing the HMAC signature.
 
 ## Request Body
 
@@ -58,7 +64,7 @@ Compile and evaluate a CNL (Controlled Natural Language) policy source string on
 | `result` | `any` | The value returned by the evaluated function. |
 | `executionTimeMs` | `number` | Total wall-clock time in milliseconds including compilation and execution. |
 | `error` | `string \| null` | Parse, compile, or runtime error message; `null` on success. |
-| `decisionTrace` | `object \| null` | Present only when `?trace=true` is set. Contains an ordered list of rule nodes, each recording whether the rule condition matched and its contribution to the final result. `null` when tracing is disabled. |
+| `decisionTrace` | `object \| null` | Present only when `?trace=true` is set. Contains the module name, function name, and an ordered list of trace steps recording rule evaluation. `null` when tracing is disabled. |
 
 ### Decision Trace Structure
 
@@ -66,28 +72,49 @@ When `?trace=true` is used, `decisionTrace` has the following shape:
 
 ```json
 {
+  "moduleName": "string",
   "functionName": "string",
   "steps": [
     {
-      "ruleIndex": 0,
-      "condition": "string",
-      "conditionMet": true,
-      "returnValue": "<any>",
-      "notes": "string"
+      "sequence": 1,
+      "expression": "string",
+      "result": "<any>",
+      "matched": true,
+      "children": []
     }
   ],
-  "finalResult": "<any>"
+  "finalResult": "<any>",
+  "executionTimeMs": 0
 }
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `moduleName` | `string` | The name of the module that was evaluated. |
+| `functionName` | `string` | The name of the function that was invoked. |
+| `steps` | `TraceStep[]` | Ordered list of evaluation steps. |
+| `finalResult` | `any` | The final result of the evaluation. |
+| `executionTimeMs` | `number` | Evaluation time in milliseconds. |
+
+Each `TraceStep` contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `sequence` | `number` | Step number (starting from 1). |
+| `expression` | `string` | The rule or expression description. |
+| `result` | `any` | The evaluated result of this step. |
+| `matched` | `boolean` | Whether this branch was the final match. |
+| `children` | `TraceStep[]` | Nested sub-steps for branching logic (if/else, match). |
 
 ## HTTP Status Codes
 
 | Status | Meaning |
 |--------|---------|
 | `200 OK` | Compilation and evaluation attempted. Check `error` for compile-time or runtime failures. |
-| `400 Bad Request` | Malformed request body or missing required fields. |
-| `401 Unauthorized` | Missing or invalid bearer token. |
-| `403 Forbidden` | Token is valid but the caller lacks the `MEMBER` role. |
+| `400 Bad Request` | Malformed request body, missing required fields, or invalid `X-Tenant-Id`. |
+| `401 Unauthorized` | Missing or invalid HMAC signature headers, or timestamp outside the 5-minute replay window. |
+| `403 Forbidden` | HMAC is valid but the caller lacks the `MEMBER` role. |
+| `409 Conflict` | Nonce has already been used within the replay window. |
 | `500 Internal Server Error` | Unexpected engine failure. |
 
 ## Examples
@@ -97,39 +124,63 @@ When `?trace=true` is used, `decisionTrace` has the following shape:
 ::: code-group
 
 ```bash [curl]
-curl -X POST "https://policy.aster-lang.dev/api/v1/policies/evaluate-source?trace=false" \
-  -H "Authorization: Bearer <token>" \
+TENANT_ID="acme-corp"
+TIMESTAMP=$(($(date +%s) * 1000))
+NONCE=$(openssl rand -hex 16)
+BODY='{"source":"Module Discount.\n\nRule calculate given order as Order, produce Int:\n  If order.total greater than 100\n    Return 10.\n  Return 0.","context":{"order":{"total":150}},"locale":"en-US","functionName":"calculate"}'
+API_SECRET="your-api-secret-here"
+METHOD="POST"
+PATH_URI="/api/v1/policies/evaluate-source"
+QUERY=""
+
+BODY_HASH=$(printf '%s' "${BODY}" | openssl dgst -sha256 | awk '{print $2}')
+CANONICAL="${METHOD}|${PATH_URI}|${QUERY}|${TIMESTAMP}|${NONCE}|${BODY_HASH}"
+SIGNATURE=$(printf '%s' "${CANONICAL}" | openssl dgst -sha256 -hmac "${API_SECRET}" | awk '{print $2}')
+
+curl -X POST "https://policy.aster-lang.dev${PATH_URI}" \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: acme-corp" \
-  -d '{
-    "source": "Module Discount.\nRule calculate given order:\n  If order.total > 100 return 10\n  return 0",
-    "context": { "order": { "total": 150 } },
-    "locale": "en-US",
-    "functionName": "calculate"
-  }'
+  -H "X-Tenant-Id: ${TENANT_ID}" \
+  -H "X-User-Role: MEMBER" \
+  -H "X-Aster-Signature: ${SIGNATURE}" \
+  -H "X-Aster-Nonce: ${NONCE}" \
+  -H "X-Aster-Timestamp: ${TIMESTAMP}" \
+  -d "${BODY}"
 ```
 
 ```js [JavaScript]
+const source = `Module Discount.
+
+Define Order has total as Int.
+
+Rule calculate given order as Order, produce Int:
+  If order.total greater than 100
+    Return 10.
+  Return 0.`
+
+const body = JSON.stringify({
+  source,
+  context: { order: { total: 150 } },
+  locale: 'en-US',
+  functionName: 'calculate',
+})
+
 const response = await fetch(
-  'https://policy.aster-lang.dev/api/v1/policies/evaluate-source?trace=false',
+  'https://policy.aster-lang.dev/api/v1/policies/evaluate-source',
   {
     method: 'POST',
     headers: {
-      Authorization: 'Bearer <token>',
       'Content-Type': 'application/json',
-      'X-Tenant-ID': 'acme-corp',
+      'X-Tenant-Id': 'acme-corp',
+      'X-User-Role': 'MEMBER',
+      'X-Aster-Signature': signature,  // see Authentication docs
+      'X-Aster-Nonce': nonce,
+      'X-Aster-Timestamp': timestamp,
     },
-    body: JSON.stringify({
-      source:
-        'Module Discount.\nRule calculate given order:\n  If order.total > 100 return 10\n  return 0',
-      context: { order: { total: 150 } },
-      locale: 'en-US',
-      functionName: 'calculate',
-    }),
+    body,
   }
-);
+)
 
-const data = await response.json();
+const data = await response.json()
 ```
 
 :::
@@ -139,39 +190,63 @@ const data = await response.json();
 ::: code-group
 
 ```bash [curl]
-curl -X POST "https://policy.aster-lang.dev/api/v1/policies/evaluate-source?trace=true" \
-  -H "Authorization: Bearer <token>" \
+TENANT_ID="acme-corp"
+TIMESTAMP=$(($(date +%s) * 1000))
+NONCE=$(openssl rand -hex 16)
+BODY='{"source":"Module Discount.\n\nDefine Order has total as Int.\n\nRule calculate given order as Order, produce Int:\n  If order.total greater than 100\n    Return 10.\n  Return 0.","context":{"order":{"total":150}},"locale":"en-US","functionName":"calculate"}'
+API_SECRET="your-api-secret-here"
+METHOD="POST"
+PATH_URI="/api/v1/policies/evaluate-source"
+QUERY="trace=true"
+
+BODY_HASH=$(printf '%s' "${BODY}" | openssl dgst -sha256 | awk '{print $2}')
+CANONICAL="${METHOD}|${PATH_URI}|${QUERY}|${TIMESTAMP}|${NONCE}|${BODY_HASH}"
+SIGNATURE=$(printf '%s' "${CANONICAL}" | openssl dgst -sha256 -hmac "${API_SECRET}" | awk '{print $2}')
+
+curl -X POST "https://policy.aster-lang.dev${PATH_URI}?${QUERY}" \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: acme-corp" \
-  -d '{
-    "source": "Module Discount.\nRule calculate given order:\n  If order.total > 100 return 10\n  return 0",
-    "context": { "order": { "total": 150 } },
-    "locale": "en-US",
-    "functionName": "calculate"
-  }'
+  -H "X-Tenant-Id: ${TENANT_ID}" \
+  -H "X-User-Role: MEMBER" \
+  -H "X-Aster-Signature: ${SIGNATURE}" \
+  -H "X-Aster-Nonce: ${NONCE}" \
+  -H "X-Aster-Timestamp: ${TIMESTAMP}" \
+  -d "${BODY}"
 ```
 
 ```js [JavaScript]
+const source = `Module Discount.
+
+Define Order has total as Int.
+
+Rule calculate given order as Order, produce Int:
+  If order.total greater than 100
+    Return 10.
+  Return 0.`
+
+const body = JSON.stringify({
+  source,
+  context: { order: { total: 150 } },
+  locale: 'en-US',
+  functionName: 'calculate',
+})
+
 const response = await fetch(
   'https://policy.aster-lang.dev/api/v1/policies/evaluate-source?trace=true',
   {
     method: 'POST',
     headers: {
-      Authorization: 'Bearer <token>',
       'Content-Type': 'application/json',
-      'X-Tenant-ID': 'acme-corp',
+      'X-Tenant-Id': 'acme-corp',
+      'X-User-Role': 'MEMBER',
+      'X-Aster-Signature': signature,  // see Authentication docs
+      'X-Aster-Nonce': nonce,
+      'X-Aster-Timestamp': timestamp,
     },
-    body: JSON.stringify({
-      source:
-        'Module Discount.\nRule calculate given order:\n  If order.total > 100 return 10\n  return 0',
-      context: { order: { total: 150 } },
-      locale: 'en-US',
-      functionName: 'calculate',
-    }),
+    body,
   }
-);
+)
 
-const data = await response.json();
+const data = await response.json()
 // data.decisionTrace.steps → array of rule evaluation steps
 ```
 
@@ -185,17 +260,19 @@ const data = await response.json();
   "executionTimeMs": 12,
   "error": null,
   "decisionTrace": {
+    "moduleName": "Discount",
     "functionName": "calculate",
     "steps": [
       {
-        "ruleIndex": 0,
-        "condition": "order.total > 100",
-        "conditionMet": true,
-        "returnValue": 10,
-        "notes": "Rule matched — early return"
+        "sequence": 1,
+        "expression": "order.total greater than 100",
+        "result": 10,
+        "matched": true,
+        "children": []
       }
     ],
-    "finalResult": 10
+    "finalResult": 10,
+    "executionTimeMs": 8
   }
 }
 ```

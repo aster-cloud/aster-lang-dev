@@ -1,6 +1,6 @@
 # GraphQL Queries
 
-All queries are read-only operations sent as `POST /graphql`. Queries require at minimum a valid bearer token and `X-Tenant-Id` header. See [Overview](./overview) for request format details.
+All queries are read-only operations sent as `POST /graphql`. Queries require HMAC request signing and an `X-Tenant-Id` header. See [Authentication](/getting-started/authentication) for details on computing the signature, and [Overview](./overview) for request format details.
 
 ---
 
@@ -37,9 +37,12 @@ query GetPolicy($id: ID!) {
 
 ```bash [curl]
 curl -X POST https://policy.aster-lang.dev/graphql \
-  -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -H "X-Tenant-Id: acme-corp" \
+  -H "X-User-Role: VIEWER" \
+  -H "X-Aster-Signature: <signature>" \
+  -H "X-Aster-Nonce: <nonce>" \
+  -H "X-Aster-Timestamp: <timestamp>" \
   -d '{
     "query": "query GetPolicy($id: ID!) { getPolicy(id: $id) { id policyModule policyFunction version status createdAt updatedAt } }",
     "variables": { "id": "pol-abc123" }
@@ -50,9 +53,12 @@ curl -X POST https://policy.aster-lang.dev/graphql \
 const response = await fetch('https://policy.aster-lang.dev/graphql', {
   method: 'POST',
   headers: {
-    Authorization:  'Bearer <token>',
     'Content-Type': 'application/json',
     'X-Tenant-Id':  'acme-corp',
+    'X-User-Role':  'VIEWER',
+    'X-Aster-Signature': signature,
+    'X-Aster-Nonce': nonce,
+    'X-Aster-Timestamp': timestamp,
   },
   body: JSON.stringify({
     query: `
@@ -100,9 +106,12 @@ query ListPolicies {
 
 ```bash [curl]
 curl -X POST https://policy.aster-lang.dev/graphql \
-  -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -H "X-Tenant-Id: acme-corp" \
+  -H "X-User-Role: VIEWER" \
+  -H "X-Aster-Signature: <signature>" \
+  -H "X-Aster-Nonce: <nonce>" \
+  -H "X-Aster-Timestamp: <timestamp>" \
   -d '{ "query": "query { listPolicies { id policyModule policyFunction version status updatedAt } }" }'
 ```
 
@@ -110,9 +119,12 @@ curl -X POST https://policy.aster-lang.dev/graphql \
 const response = await fetch('https://policy.aster-lang.dev/graphql', {
   method: 'POST',
   headers: {
-    Authorization:  'Bearer <token>',
     'Content-Type': 'application/json',
     'X-Tenant-Id':  'acme-corp',
+    'X-User-Role':  'VIEWER',
+    'X-Aster-Signature': signature,
+    'X-Aster-Nonce': nonce,
+    'X-Aster-Timestamp': timestamp,
   },
   body: JSON.stringify({
     query: `
@@ -140,15 +152,18 @@ const { data } = await response.json();
 
 ## Industry-Specific Queries
 
-These queries invoke domain-specific policy evaluation logic and return structured decision results. Each query passes its arguments through the policy engine and returns an industry-appropriate response type.
+These queries invoke domain-specific policy evaluation logic and return structured decision results. Each query passes its arguments through the policy engine as **individual parameters** (not a single input object).
 
 ### generateLifeQuote
 
 Generate a life insurance quote based on applicant parameters.
 
 ```graphql
-query GenerateLifeQuote($input: LifeQuoteInput!) {
-  generateLifeQuote(input: $input) {
+query GenerateLifeQuote(
+  $applicant: LifeInsuranceApplicant!
+  $request: LifeInsurancePolicyRequest!
+) {
+  generateLifeQuote(applicant: $applicant, request: $request) {
     premium
     coverageAmount
     term
@@ -165,8 +180,8 @@ query GenerateLifeQuote($input: LifeQuoteInput!) {
 Calculate a risk score for a life insurance applicant.
 
 ```graphql
-query CalculateLifeRiskScore($input: LifeRiskInput!) {
-  calculateLifeRiskScore(input: $input) {
+query CalculateLifeRiskScore($applicant: LifeInsuranceApplicant!) {
+  calculateLifeRiskScore(applicant: $applicant) {
     score
     band
     factors
@@ -181,8 +196,16 @@ query CalculateLifeRiskScore($input: LifeRiskInput!) {
 Generate an automobile insurance quote.
 
 ```graphql
-query GenerateAutoQuote($input: AutoQuoteInput!) {
-  generateAutoQuote(input: $input) {
+query GenerateAutoQuote(
+  $driver: AutoInsuranceDriver!
+  $vehicle: AutoInsuranceVehicle!
+  $coverageType: String!
+) {
+  generateAutoQuote(
+    driver: $driver
+    vehicle: $vehicle
+    coverageType: $coverageType
+  ) {
     annualPremium
     monthlyPremium
     coverageOptions {
@@ -198,11 +221,14 @@ query GenerateAutoQuote($input: AutoQuoteInput!) {
 
 ### checkServiceEligibility
 
-Determine whether a customer is eligible for a specific service.
+Determine whether a patient is eligible for a specific service.
 
 ```graphql
-query CheckServiceEligibility($input: ServiceEligibilityInput!) {
-  checkServiceEligibility(input: $input) {
+query CheckServiceEligibility(
+  $patient: HealthcarePatient!
+  $service: HealthcareService!
+) {
+  checkServiceEligibility(patient: $patient, service: $service) {
     eligible
     reason
     eligibleServices
@@ -221,8 +247,16 @@ query CheckServiceEligibility($input: ServiceEligibilityInput!) {
 Evaluate and process an insurance or service claim.
 
 ```graphql
-query ProcessClaim($input: ClaimInput!) {
-  processClaim(input: $input) {
+query ProcessClaim(
+  $claim: HealthcareClaim!
+  $provider: HealthcareProvider!
+  $patientCoverage: Int!
+) {
+  processClaim(
+    claim: $claim
+    provider: $provider
+    patientCoverage: $patientCoverage
+  ) {
     approved
     approvedAmount
     denialReason
@@ -239,8 +273,14 @@ query ProcessClaim($input: ClaimInput!) {
 Assess a borrower's eligibility for a loan product.
 
 ```graphql
-query EvaluateLoanEligibility($input: LoanEligibilityInput!) {
-  evaluateLoanEligibility(input: $input) {
+query EvaluateLoanEligibility(
+  $application: LoanApplication!
+  $applicant: LoanApplicant!
+) {
+  evaluateLoanEligibility(
+    application: $application
+    applicant: $applicant
+  ) {
     eligible
     maxApprovedAmount
     interestRate
@@ -258,8 +298,16 @@ query EvaluateLoanEligibility($input: LoanEligibilityInput!) {
 Evaluate a credit card application and determine the approved credit limit.
 
 ```graphql
-query EvaluateCreditCardApplication($input: CreditCardApplicationInput!) {
-  evaluateCreditCardApplication(input: $input) {
+query EvaluateCreditCardApplication(
+  $applicant: CreditCardApplicantInfo!
+  $history: CreditCardFinancialHistory!
+  $offer: CreditCardOffer!
+) {
+  evaluateCreditCardApplication(
+    applicant: $applicant
+    history: $history
+    offer: $offer
+  ) {
     approved
     creditLimit
     interestRate
@@ -277,8 +325,18 @@ query EvaluateCreditCardApplication($input: CreditCardApplicationInput!) {
 Evaluate a commercial or enterprise loan application.
 
 ```graphql
-query EvaluateEnterpriseLoan($input: EnterpriseLoanInput!) {
-  evaluateEnterpriseLoan(input: $input) {
+query EvaluateEnterpriseLoan(
+  $enterprise: EnterpriseInfo!
+  $position: FinancialPosition!
+  $history: BusinessHistory!
+  $application: EnterpriseLoanApplication!
+) {
+  evaluateEnterpriseLoan(
+    enterprise: $enterprise
+    position: $position
+    history: $history
+    application: $application
+  ) {
     eligible
     approvedAmount
     interestRate
@@ -296,8 +354,20 @@ query EvaluateEnterpriseLoan($input: EnterpriseLoanInput!) {
 Evaluate a personal loan application.
 
 ```graphql
-query EvaluatePersonalLoan($input: PersonalLoanInput!) {
-  evaluatePersonalLoan(input: $input) {
+query EvaluatePersonalLoan(
+  $personal: PersonalInfo!
+  $income: IncomeProfile!
+  $credit: CreditProfile!
+  $debt: DebtProfile!
+  $request: PersonalLoanRequest!
+) {
+  evaluatePersonalLoan(
+    personal: $personal
+    income: $income
+    credit: $credit
+    debt: $debt
+    request: $request
+  ) {
     eligible
     approvedAmount
     interestRate
@@ -313,19 +383,20 @@ query EvaluatePersonalLoan($input: PersonalLoanInput!) {
 
 ```bash [curl — evaluatePersonalLoan example]
 curl -X POST https://policy.aster-lang.dev/graphql \
-  -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -H "X-Tenant-Id: acme-corp" \
+  -H "X-User-Role: MEMBER" \
+  -H "X-Aster-Signature: <signature>" \
+  -H "X-Aster-Nonce: <nonce>" \
+  -H "X-Aster-Timestamp: <timestamp>" \
   -d '{
-    "query": "query EvaluatePersonalLoan($input: PersonalLoanInput!) { evaluatePersonalLoan(input: $input) { eligible approvedAmount interestRate monthlyRepayment term } }",
+    "query": "query EvaluatePersonalLoan($personal: PersonalInfo!, $income: IncomeProfile!, $credit: CreditProfile!, $debt: DebtProfile!, $request: PersonalLoanRequest!) { evaluatePersonalLoan(personal: $personal, income: $income, credit: $credit, debt: $debt, request: $request) { eligible approvedAmount interestRate monthlyRepayment term } }",
     "variables": {
-      "input": {
-        "applicantAge": 32,
-        "annualIncome": 68000,
-        "creditScore": 710,
-        "requestedAmount": 15000,
-        "requestedTermMonths": 36
-      }
+      "personal": { "name": "Jane Doe", "age": 32 },
+      "income": { "annualIncome": 68000, "employmentType": "FULL_TIME" },
+      "credit": { "creditScore": 710 },
+      "debt": { "totalMonthlyDebt": 500 },
+      "request": { "requestedAmount": 15000, "requestedTermMonths": 36 }
     }
   }'
 ```
@@ -334,14 +405,29 @@ curl -X POST https://policy.aster-lang.dev/graphql \
 const response = await fetch('https://policy.aster-lang.dev/graphql', {
   method: 'POST',
   headers: {
-    Authorization:  'Bearer <token>',
     'Content-Type': 'application/json',
     'X-Tenant-Id':  'acme-corp',
+    'X-User-Role':  'MEMBER',
+    'X-Aster-Signature': signature,
+    'X-Aster-Nonce': nonce,
+    'X-Aster-Timestamp': timestamp,
   },
   body: JSON.stringify({
     query: `
-      query EvaluatePersonalLoan($input: PersonalLoanInput!) {
-        evaluatePersonalLoan(input: $input) {
+      query EvaluatePersonalLoan(
+        $personal: PersonalInfo!
+        $income: IncomeProfile!
+        $credit: CreditProfile!
+        $debt: DebtProfile!
+        $request: PersonalLoanRequest!
+      ) {
+        evaluatePersonalLoan(
+          personal: $personal
+          income: $income
+          credit: $credit
+          debt: $debt
+          request: $request
+        ) {
           eligible
           approvedAmount
           interestRate
@@ -353,13 +439,11 @@ const response = await fetch('https://policy.aster-lang.dev/graphql', {
       }
     `,
     variables: {
-      input: {
-        applicantAge:        32,
-        annualIncome:        68000,
-        creditScore:         710,
-        requestedAmount:     15000,
-        requestedTermMonths: 36,
-      },
+      personal: { name: 'Jane Doe', age: 32 },
+      income:   { annualIncome: 68000, employmentType: 'FULL_TIME' },
+      credit:   { creditScore: 710 },
+      debt:     { totalMonthlyDebt: 500 },
+      request:  { requestedAmount: 15000, requestedTermMonths: 36 },
     },
   }),
 });

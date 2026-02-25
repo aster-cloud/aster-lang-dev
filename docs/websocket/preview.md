@@ -1,6 +1,6 @@
 # WebSocket Preview Endpoint
 
-The preview WebSocket endpoint allows developers to evaluate CNL policy source in real time without deploying it to the engine. It is intended for interactive tooling such as editors, playgrounds, and CI preview jobs. The connection runs under a hardcoded `preview` tenant and does not require a tenant ID header.
+The preview WebSocket endpoint allows developers to evaluate CNL policy source in real time without deploying it to the engine. It is intended for interactive tooling such as editors, playgrounds, and CI preview jobs. The connection runs under a hardcoded `preview` tenant and does not require authentication.
 
 ::: warning Preview Tenant
 All evaluation on this endpoint is executed under the built-in `preview` tenant. Results are isolated from production tenant data and deployed policies. Do not use this endpoint in production workflows.
@@ -14,10 +14,11 @@ For TLS-secured deployments use `wss://`.
 
 ## Authentication
 
-A valid bearer token must be passed during the WebSocket handshake. The mechanism depends on the client:
+This endpoint does **not** require authentication. The WebSocket handshake completes without any token or HMAC headers. All requests are executed under the fixed `preview` tenant context.
 
-- **Browser WebSocket API**: Pass the token as a subprotocol or via a query parameter (e.g. `ws://host/ws/preview?token=<token>`) since browsers do not support custom handshake headers.
-- **Native / server-side clients**: Pass the token in the `Authorization: Bearer <token>` upgrade header.
+::: tip
+Because the preview endpoint bypasses the standard HMAC signing and RBAC enforcement, it should only be exposed in development or behind an internal network boundary. It is not intended for production use.
+:::
 
 ## Protocol
 
@@ -99,15 +100,12 @@ Sent once immediately after the handshake succeeds.
 5. Steps 3-4 repeat for the duration of the session.
 6. Either party may close the connection at any time.
 
-The server may close the connection with a standard WebSocket close code if the bearer token expires or becomes invalid during the session.
-
 ## Examples
 
 ::: code-group
 
 ```js [Browser]
-const token = '<token>';
-const ws = new WebSocket(`wss://policy.aster-lang.dev/ws/preview?token=${token}`);
+const ws = new WebSocket('wss://policy.aster-lang.dev/ws/preview');
 
 ws.addEventListener('open', () => {
   console.log('WebSocket open — awaiting connected message');
@@ -148,9 +146,7 @@ ws.addEventListener('close', (event) => {
 ```js [Node.js (ws)]
 import WebSocket from 'ws';
 
-const ws = new WebSocket('wss://policy.aster-lang.dev/ws/preview', {
-  headers: { Authorization: 'Bearer <token>' },
-});
+const ws = new WebSocket('wss://policy.aster-lang.dev/ws/preview');
 
 ws.on('message', (data) => {
   const msg = JSON.parse(data.toString());
@@ -187,5 +183,4 @@ ws.on('error', console.error);
 | Code | Meaning |
 |------|---------|
 | `1000` | Normal closure — client or server closed the connection intentionally. |
-| `1008` | Policy violation — authentication failed or token expired. |
 | `1011` | Unexpected server error — internal engine failure. |
