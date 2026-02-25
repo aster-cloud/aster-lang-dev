@@ -5,14 +5,14 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@aster-cloud/aster-lang-ts': ^0.1.1
+  '@aster-cloud/aster-lang-ts': ^0.1.2
 
 importers:
 
   .:
     dependencies:
       '@aster-cloud/aster-lang-ts':
-        specifier: ^0.1.1
+        specifier: ^0.1.2
         version: 0.1.2
       '@codemirror/commands':
         specifier: ^6.8.0
