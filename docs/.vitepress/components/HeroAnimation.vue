@@ -1,167 +1,167 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const lines = [
-  { text: 'Module Pricing.', cls: 'kw' },
-  { text: '', cls: '' },
-  { text: 'Rule approve given order:', cls: 'kw' },
-  { text: '  order.total < 1000', cls: 'expr' },
-  { text: '  order.region = "US"', cls: 'expr' },
+interface CodeLine {
+  text: string
+  cls: string
+  indent?: number
+}
+
+interface Card {
+  label: string
+  subtitle: string
+  lines: CodeLine[]
+}
+
+const cards: Card[] = [
+  {
+    label: 'Evaluate',
+    subtitle: 'POST /api/v1/policies/evaluate',
+    lines: [
+      { text: 'POST', cls: 'kw', indent: 0 },
+      { text: '/api/v1/policies/{id}/evaluate', cls: 'str', indent: 0 },
+      { text: '', cls: '', indent: 0 },
+      { text: '{', cls: 'punc', indent: 0 },
+      { text: '"context":', cls: 'key', indent: 1 },
+      { text: '{ "total": 500,', cls: 'val', indent: 2 },
+      { text: '"region": "US" }', cls: 'val', indent: 2 },
+      { text: '}', cls: 'punc', indent: 0 },
+      { text: '', cls: '', indent: 0 },
+      { text: '// Response', cls: 'comment', indent: 0 },
+      { text: '{ "result": true,', cls: 'res', indent: 0 },
+      { text: '  "durationMs": 3 }', cls: 'res', indent: 0 },
+    ],
+  },
+  {
+    label: 'Source',
+    subtitle: 'POST /api/v1/policies/evaluate-source',
+    lines: [
+      { text: 'POST', cls: 'kw', indent: 0 },
+      { text: '/api/v1/policies/evaluate-source', cls: 'str', indent: 0 },
+      { text: '', cls: '', indent: 0 },
+      { text: '{', cls: 'punc', indent: 0 },
+      { text: '"source":', cls: 'key', indent: 1 },
+      { text: '"Module Pricing.\\n', cls: 'val', indent: 2 },
+      { text: ' Rule approve given order:\\n', cls: 'val', indent: 2 },
+      { text: '   order.total < 1000"', cls: 'val', indent: 2 },
+      { text: '"context": { "total": 200 }', cls: 'key', indent: 1 },
+      { text: '}', cls: 'punc', indent: 0 },
+      { text: '', cls: '', indent: 0 },
+      { text: '// => { "result": true }', cls: 'comment', indent: 0 },
+    ],
+  },
+  {
+    label: 'Batch',
+    subtitle: 'POST /api/v1/policies/batch',
+    lines: [
+      { text: 'POST', cls: 'kw', indent: 0 },
+      { text: '/api/v1/policies/batch', cls: 'str', indent: 0 },
+      { text: '', cls: '', indent: 0 },
+      { text: '{', cls: 'punc', indent: 0 },
+      { text: '"policyId": "pricing-v2",', cls: 'key', indent: 1 },
+      { text: '"requests": [', cls: 'key', indent: 1 },
+      { text: '{ "total": 500 },', cls: 'val', indent: 2 },
+      { text: '{ "total": 2000 },', cls: 'val', indent: 2 },
+      { text: '{ "total": 100 }', cls: 'val', indent: 2 },
+      { text: ']', cls: 'punc', indent: 1 },
+      { text: '}', cls: 'punc', indent: 0 },
+      { text: '// => [true, false, true]', cls: 'comment', indent: 0 },
+    ],
+  },
 ]
 
-const requestLines = [
-  'POST /api/v1/evaluate',
-  'Content-Type: application/json',
-  '',
-  '{ "context": {',
-  '    "total": 500,',
-  '    "region": "US"',
-  '  }',
-  '}',
-]
+const badges = ['REST API', 'Type-Safe', 'Multi-tenant']
 
-const responseLines = [
-  '200 OK',
-  '',
-  '{ "result": true,',
-  '  "matched": "approve",',
-  '  "durationMs": 3',
-  '}',
-]
+const active = ref(0)
+let interval: ReturnType<typeof setInterval> | null = null
 
-const phase = ref(0) // 0=typing policy, 1=sending request, 2=showing response, 3=pause
-const visibleLines = ref(0)
-const requestVisible = ref(0)
-const responseVisible = ref(0)
-const showCursor = ref(true)
-const showArrow = ref(false)
-const showResponseArrow = ref(false)
+function setActive(index: number) {
+  active.value = index
+  restartInterval()
+}
 
-let timer: ReturnType<typeof setTimeout> | null = null
-let cursorTimer: ReturnType<typeof setInterval> | null = null
-
-function step() {
-  if (phase.value === 0) {
-    if (visibleLines.value < lines.length) {
-      visibleLines.value++
-      timer = setTimeout(step, 280)
-    } else {
-      showArrow.value = true
-      phase.value = 1
-      timer = setTimeout(step, 600)
-    }
-  } else if (phase.value === 1) {
-    if (requestVisible.value < requestLines.length) {
-      requestVisible.value++
-      timer = setTimeout(step, 180)
-    } else {
-      showResponseArrow.value = true
-      phase.value = 2
-      timer = setTimeout(step, 500)
-    }
-  } else if (phase.value === 2) {
-    if (responseVisible.value < responseLines.length) {
-      responseVisible.value++
-      timer = setTimeout(step, 180)
-    } else {
-      phase.value = 3
-      timer = setTimeout(step, 3000)
-    }
-  } else {
-    // 重置循环
-    visibleLines.value = 0
-    requestVisible.value = 0
-    responseVisible.value = 0
-    showArrow.value = false
-    showResponseArrow.value = false
-    phase.value = 0
-    timer = setTimeout(step, 500)
-  }
+function restartInterval() {
+  if (interval) clearInterval(interval)
+  interval = setInterval(() => {
+    active.value = (active.value + 1) % cards.length
+  }, 3000)
 }
 
 onMounted(() => {
-  timer = setTimeout(step, 800)
-  cursorTimer = setInterval(() => {
-    showCursor.value = !showCursor.value
-  }, 530)
+  restartInterval()
 })
 
 onUnmounted(() => {
-  if (timer) clearTimeout(timer)
-  if (cursorTimer) clearInterval(cursorTimer)
+  if (interval) clearInterval(interval)
 })
 </script>
 
 <template>
   <div class="hero-animation">
-    <!-- 策略编辑器 -->
-    <div class="anim-card editor-card">
-      <div class="card-header">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
-        <span class="card-title">policy.aster</span>
-      </div>
-      <div class="card-body code">
-        <div
-          v-for="(line, i) in lines"
-          :key="i"
-          class="code-line"
-          :class="{ visible: i < visibleLines, [line.cls]: true }"
-        >
-          <span class="line-num">{{ i + 1 }}</span>
-          <span class="line-text">{{ line.text }}</span>
-        </div>
-        <span v-if="phase === 0" class="cursor" :class="{ blink: showCursor }">|</span>
-      </div>
-    </div>
+    <div class="card-wrapper">
+      <!-- 倾斜背景层 -->
+      <div class="bg-tilt"></div>
+      <!-- 主卡片 -->
+      <div class="main-card">
+        <div class="card-inner">
+          <!-- 窗口控制按钮 -->
+          <div class="window-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
 
-    <!-- 箭头: 策略 → API -->
-    <div class="arrow-row">
-      <svg class="arrow-svg" :class="{ visible: showArrow }" viewBox="0 0 40 24" fill="none">
-        <path d="M4 12h28m0 0l-6-5m6 5l-6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+          <!-- API 标签切换 -->
+          <div class="tabs">
+            <button
+              v-for="(card, i) in cards"
+              :key="i"
+              class="tab"
+              :class="{ active: active === i }"
+              @click="setActive(i)"
+            >
+              {{ card.label }}
+            </button>
+          </div>
 
-    <!-- API 请求 -->
-    <div class="anim-card request-card">
-      <div class="card-header">
-        <span class="badge post">POST</span>
-        <span class="card-title">/api/v1/evaluate</span>
-      </div>
-      <div class="card-body code small">
-        <div
-          v-for="(line, i) in requestLines"
-          :key="'r' + i"
-          class="code-line"
-          :class="{ visible: i < requestVisible }"
-        >
-          <span class="line-text">{{ line }}</span>
-        </div>
-      </div>
-    </div>
+          <!-- 代码卡片容器 -->
+          <div class="code-container">
+            <div
+              v-for="(card, ci) in cards"
+              :key="ci"
+              class="code-card"
+              :class="{ visible: active === ci, hidden: active !== ci }"
+            >
+              <div class="code-subtitle">
+                api-request <span class="subtitle-accent">— {{ card.subtitle }}</span>
+              </div>
+              <div class="code-lines">
+                <div
+                  v-for="(line, li) in card.lines"
+                  :key="li"
+                  class="code-line"
+                  :style="{ paddingLeft: (line.indent || 0) * 16 + 'px' }"
+                >
+                  <span :class="['token', line.cls]">{{ line.text }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <!-- 箭头: API → 响应 -->
-    <div class="arrow-row">
-      <svg class="arrow-svg" :class="{ visible: showResponseArrow }" viewBox="0 0 40 24" fill="none">
-        <path d="M4 12h28m0 0l-6-5m6 5l-6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
+          <!-- 功能徽章 -->
+          <div class="badge-row">
+            <span v-for="badge in badges" :key="badge" class="badge">{{ badge }}</span>
+          </div>
 
-    <!-- API 响应 -->
-    <div class="anim-card response-card">
-      <div class="card-header">
-        <span class="badge ok">200</span>
-        <span class="card-title">Response</span>
-      </div>
-      <div class="card-body code small">
-        <div
-          v-for="(line, i) in responseLines"
-          :key="'s' + i"
-          class="code-line"
-          :class="{ visible: i < responseVisible }"
-        >
-          <span class="line-text">{{ line }}</span>
+          <!-- 进度条 -->
+          <div class="progress-row">
+            <span
+              v-for="(_, i) in cards"
+              :key="i"
+              class="progress-dot"
+              :class="{ active: active === i }"
+            ></span>
+          </div>
         </div>
       </div>
     </div>
@@ -170,155 +170,234 @@ onUnmounted(() => {
 
 <style scoped>
 .hero-animation {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 340px;
-  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
   user-select: none;
 }
 
-.anim-card {
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg-soft);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.card-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
 }
 
-.card-header {
+/* 倾斜背景层 */
+.bg-tilt {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+  border-radius: 24px;
+  transform: rotate(3deg);
+}
+
+.dark .bg-tilt {
+  background: linear-gradient(135deg, #2e1065, #1e1b4b);
+}
+
+/* 主卡片 */
+.main-card {
+  position: absolute;
+  inset: 0;
+  background: var(--vp-c-bg);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--vp-c-divider);
+  transform: rotate(-1deg);
+  overflow: hidden;
+}
+
+.dark .main-card {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.card-inner {
+  padding: 28px 28px 20px;
+  height: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+}
+
+/* 窗口圆点 */
+.window-dots {
+  display: flex;
   gap: 6px;
-  padding: 8px 12px;
-  background: var(--vp-c-bg-alt);
-  border-bottom: 1px solid var(--vp-c-divider);
-  font-size: 12px;
+  margin-bottom: 16px;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
-.dot.red { background: #ef4444; }
-.dot.yellow { background: #f59e0b; }
-.dot.green { background: #22c55e; }
+.dot.red { background: #f87171; }
+.dot.yellow { background: #fbbf24; }
+.dot.green { background: #4ade80; }
 
-.card-title {
-  color: var(--vp-c-text-2);
-  font-size: 12px;
-}
-
-.badge {
-  padding: 1px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-.badge.post {
-  background: #dbeafe;
-  color: #2563eb;
-}
-.badge.ok {
-  background: #dcfce7;
-  color: #16a34a;
-}
-
-.dark .badge.post {
-  background: #1e3a5f;
-  color: #60a5fa;
-}
-.dark .badge.ok {
-  background: #14532d;
-  color: #4ade80;
-}
-
-.card-body {
-  padding: 10px 12px;
-  min-height: 40px;
-}
-
-.card-body.code {
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.card-body.small {
-  font-size: 11.5px;
-  line-height: 1.5;
-}
-
-.code-line {
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  white-space: pre;
+/* 标签切换 */
+.tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  margin-bottom: 16px;
 }
 
-.code-line.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.line-num {
+.tab {
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--vp-c-default-soft);
   color: var(--vp-c-text-3);
-  width: 16px;
-  text-align: right;
-  flex-shrink: 0;
-  font-size: 11px;
 }
 
-.line-text {
-  color: var(--vp-c-text-1);
-}
-
-.code-line.kw .line-text {
+.tab.active {
+  background: #ede9fe;
   color: #6366f1;
+  font-weight: 500;
 }
 
-.dark .code-line.kw .line-text {
+.dark .tab.active {
+  background: #2e1065;
   color: #a5b4fc;
 }
 
-.code-line.expr .line-text {
-  color: var(--vp-c-text-1);
+/* 代码区域 */
+.code-container {
+  position: relative;
+  flex: 1;
+  min-height: 0;
 }
 
-.cursor {
-  color: #6366f1;
-  font-weight: 700;
-  opacity: 0;
-  transition: opacity 0.1s;
-}
-.cursor.blink {
-  opacity: 1;
+.code-card {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.arrow-row {
-  display: flex;
-  justify-content: center;
-  height: 24px;
-}
-
-.arrow-svg {
-  width: 40px;
-  height: 24px;
-  color: var(--vp-c-text-3);
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-.arrow-svg.visible {
+.code-card.visible {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
-/* 响应式：在小屏幕隐藏 */
+.code-card.hidden {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+.code-subtitle {
+  font-size: 11px;
+  color: var(--vp-c-text-3);
+  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  margin-bottom: 12px;
+}
+
+.subtitle-accent {
+  color: #6366f1;
+}
+
+.dark .subtitle-accent {
+  color: #a5b4fc;
+}
+
+.code-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.code-line {
+  white-space: pre;
+  min-height: 1.7em;
+}
+
+/* 语法高亮 token */
+.token.kw { color: #7c3aed; font-weight: 600; }
+.token.str { color: var(--vp-c-text-2); }
+.token.key { color: #6366f1; }
+.token.val { color: var(--vp-c-text-1); }
+.token.punc { color: var(--vp-c-text-2); }
+.token.comment { color: var(--vp-c-text-3); font-style: italic; }
+.token.res { color: #16a34a; }
+
+.dark .token.kw { color: #a78bfa; }
+.dark .token.key { color: #a5b4fc; }
+.dark .token.res { color: #4ade80; }
+
+/* 徽章 */
+.badge-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  padding: 3px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.dark .badge {
+  background: #2e1065;
+  color: #c4b5fd;
+}
+
+.badge:nth-child(2) {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.dark .badge:nth-child(2) {
+  background: #14532d;
+  color: #86efac;
+}
+
+.badge:nth-child(3) {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.dark .badge:nth-child(3) {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+
+/* 进度条 */
+.progress-row {
+  display: flex;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.progress-dot {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--vp-c-default-soft);
+  width: 16px;
+  transition: all 0.3s;
+}
+
+.progress-dot.active {
+  width: 32px;
+  background: #6366f1;
+}
+
+.dark .progress-dot.active {
+  background: #a5b4fc;
+}
+
+/* 响应式 */
 @media (max-width: 960px) {
   .hero-animation {
     display: none;
