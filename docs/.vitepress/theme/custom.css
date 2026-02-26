@@ -447,3 +447,13 @@
   color: var(--vp-c-text-3);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
+
+/* ── i18n responsive adjustments ── */
+.playground-toolbar label {
+  white-space: nowrap;
+}
+
+.playground-tab {
+  white-space: nowrap;
+  min-width: 0;
+}

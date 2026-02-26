@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, shallowRef, onMounted, onUnmounted, watch, computed } from 'vue';
 import { templates } from './playground-templates';
+import { useUiStrings } from '../i18n/ui';
 
 const props = withDefaults(defineProps<{
   initialLexicon?: string;
@@ -35,6 +36,9 @@ let asterLang: any = null;
 let cmView: any = null;
 let cmState: any = null;
 let cmCommands: any = null;
+
+const strings = useUiStrings();
+const t = computed(() => strings.value.playground);
 
 const currentTemplates = computed(() => templates[lexiconId.value] || templates.EN_US);
 
@@ -141,7 +145,7 @@ function onRun() {
   try {
     context = JSON.parse(editableInputs.value);
   } catch (err: any) {
-    evalError.value = `Invalid JSON input: ${err.message}`;
+    evalError.value = t.value.messages.invalidJson(err.message);
     evalResult.value = null;
     evalTime.value = null;
     activeTab.value = 'console';
@@ -293,12 +297,12 @@ function formatResult(value: any): string {
 }
 
 const footerText = computed(() => {
-  if (isRunning.value) return 'Analyzing...';
+  if (isRunning.value) return t.value.status.analyzing;
   if (lastError.value) return lastError.value;
   const errCount = diagnostics.value.length;
-  if (errCount > 0) return `${errCount} error${errCount > 1 ? 's' : ''} found`;
-  if (compileResult.value?.success) return 'Compiled successfully';
-  return 'Ready';
+  if (errCount > 0) return t.value.status.errors(errCount);
+  if (compileResult.value?.success) return t.value.status.compiled;
+  return t.value.status.ready;
 });
 
 const footerClass = computed(() => {
@@ -312,27 +316,27 @@ const footerClass = computed(() => {
   <div class="playground-container">
     <div class="playground-toolbar">
       <label>
-        Language:
-        <select :value="lexiconId" @change="onLexiconChange">
+        {{ t.toolbar.language }}:
+        <select :value="lexiconId" @change="onLexiconChange" aria-label="Policy Language">
           <option value="EN_US">English</option>
           <option value="ZH_CN">中文</option>
           <option value="DE_DE">Deutsch</option>
         </select>
       </label>
       <label>
-        Template:
+        {{ t.toolbar.template }}:
         <select @change="onTemplateChange">
           <option
-            v-for="t in currentTemplates"
-            :key="t.id"
-            :value="t.id"
+            v-for="tmpl in currentTemplates"
+            :key="tmpl.id"
+            :value="tmpl.id"
           >
-            {{ t.name }}
+            {{ tmpl.name }}
           </option>
         </select>
       </label>
-      <button class="run-btn" :disabled="!canRun" @click="onRun">Run ▶</button>
-      <button class="secondary" @click="onReset">Reset</button>
+      <button class="run-btn" :disabled="!canRun" @click="onRun">{{ t.toolbar.run }}</button>
+      <button class="secondary" @click="onReset">{{ t.toolbar.reset }}</button>
     </div>
     <div class="playground-grid" :style="{ height: height }">
       <div class="playground-editor" ref="editorContainer"></div>
@@ -343,7 +347,7 @@ const footerClass = computed(() => {
             :class="{ active: activeTab === 'diagnostics' }"
             @click="activeTab = 'diagnostics'"
           >
-            Diagnostics
+            {{ t.tabs.diagnostics }}
             <span v-if="diagnostics.length > 0">({{ diagnostics.length }})</span>
           </button>
           <button
@@ -351,28 +355,28 @@ const footerClass = computed(() => {
             :class="{ active: activeTab === 'schema' }"
             @click="activeTab = 'schema'"
           >
-            Schema
+            {{ t.tabs.schema }}
           </button>
           <button
             class="playground-tab"
             :class="{ active: activeTab === 'ast' }"
             @click="activeTab = 'ast'"
           >
-            Core IR
+            {{ t.tabs.coreIr }}
           </button>
           <button
             class="playground-tab"
             :class="{ active: activeTab === 'inputs' }"
             @click="activeTab = 'inputs'"
           >
-            Inputs
+            {{ t.tabs.inputs }}
           </button>
           <button
             class="playground-tab"
             :class="{ active: activeTab === 'console' }"
             @click="activeTab = 'console'"
           >
-            Console
+            {{ t.tabs.console }}
           </button>
         </div>
         <div class="playground-tab-content">
@@ -387,7 +391,7 @@ const footerClass = computed(() => {
                 <span class="diagnostic-message">{{ d.message }}</span>
               </li>
             </ul>
-            <p v-else style="color: var(--playground-success);">No errors found.</p>
+            <p v-else style="color: var(--playground-success);">{{ t.messages.noErrors }}</p>
           </div>
           <!-- Schema -->
           <div v-if="activeTab === 'schema'">
@@ -413,13 +417,13 @@ const footerClass = computed(() => {
               <p v-else>No parameters.</p>
             </div>
             <p v-else-if="schemaResult?.error" class="error">{{ schemaResult.error }}</p>
-            <p v-else style="color: var(--vp-c-text-3);">Run analysis to see schema.</p>
+            <p v-else style="color: var(--vp-c-text-3);">{{ t.messages.runToSeeSchema }}</p>
           </div>
           <!-- AST / Core IR -->
           <div v-if="activeTab === 'ast'">
             <pre v-if="compileResult?.core">{{ formatJson(compileResult.core) }}</pre>
             <pre v-else-if="compileResult?.parseErrors">{{ formatJson(compileResult.parseErrors) }}</pre>
-            <p v-else style="color: var(--vp-c-text-3);">Run analysis to see Core IR.</p>
+            <p v-else style="color: var(--vp-c-text-3);">{{ t.messages.runToSeeCore }}</p>
           </div>
           <!-- Inputs (editable) -->
           <div v-if="activeTab === 'inputs'">
@@ -430,7 +434,7 @@ const footerClass = computed(() => {
                 spellcheck="false"
               ></textarea>
             </div>
-            <p v-else style="color: var(--vp-c-text-3);">Compile successfully to edit inputs.</p>
+            <p v-else style="color: var(--vp-c-text-3);">{{ t.messages.compileToEdit }}</p>
           </div>
           <!-- Console -->
           <div v-if="activeTab === 'console'" class="console-output">
@@ -443,15 +447,15 @@ const footerClass = computed(() => {
                 Error: {{ evalError }}
               </div>
               <div v-else class="console-result">
-                <span class="console-label">Result:</span>
+                <span class="console-label">{{ t.messages.result }}</span>
                 <pre class="console-value">{{ formatResult(evalResult) }}</pre>
               </div>
               <div v-if="evalTime !== null" class="console-time">
-                Execution time: {{ evalTime }}ms
+                {{ t.messages.execTime(evalTime) }}
               </div>
             </div>
             <p v-else class="console-placeholder">
-              Click <strong>Run ▶</strong> to execute the policy and see results here.
+              {{ t.messages.runPrompt }}
             </p>
           </div>
         </div>

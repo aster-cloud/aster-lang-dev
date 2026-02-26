@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useUiStrings } from '../i18n/ui'
 
 interface CodeLine {
   text: string
@@ -62,7 +63,9 @@ const cards: Card[] = [
   },
 ]
 
-const badges = ['REST API', 'Type-Safe', 'Multi-tenant']
+const strings = useUiStrings()
+const badges = computed(() => strings.value.hero.badges)
+const requestLabel = computed(() => strings.value.hero.requestLabel)
 
 const active = ref(0)
 let interval: ReturnType<typeof setInterval> | null = null
@@ -125,7 +128,7 @@ onUnmounted(() => {
               :class="{ visible: active === ci, hidden: active !== ci }"
             >
               <div class="code-subtitle">
-                api-request <span class="subtitle-accent">— {{ card.subtitle }}</span>
+                {{ requestLabel }} <span class="subtitle-accent">— {{ card.subtitle }}</span>
               </div>
               <div class="code-lines">
                 <div

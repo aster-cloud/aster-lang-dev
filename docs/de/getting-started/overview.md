@@ -1,0 +1,74 @@
+# Überblick
+
+Die Aster Policy Engine ist ein produktionsreifer REST-Dienst zur Evaluierung von Geschäftsregeln, die in **Aster CNL** (Controlled Natural Language) geschrieben sind. Sie basiert auf [Quarkus](https://quarkus.io/) und ist für latenzarme, mandantenfähige Bereitstellungen konzipiert.
+
+## Basis-URL
+
+```
+https://policy.aster-lang.dev
+```
+
+Alle API-Pfade beginnen mit `/api/v1/`.
+
+## Unterstützte Protokolle
+
+| Protokoll  | Endpunkt-Präfix               | Anwendungsfall                                       |
+|-----------|-------------------------------|------------------------------------------------|
+| REST      | `/api/v1/`                    | Standard-Anfrage/Antwort-Evaluierung           |
+| GraphQL   | `/graphql`                    | Flexible Abfragen und Mutationen                 |
+| WebSocket | `/ws/v1/evaluate`             | Streaming-Evaluierung und Live-Richtlinienaktualisierungen   |
+
+## Anfrageanforderungen
+
+Jede API-Anfrage muss die folgenden Anforderungen erfüllen.
+
+### Erforderliche Header
+
+| Header           | Beschreibung                                               |
+|------------------|-----------------------------------------------------------|
+| `Content-Type`   | Muss `application/json` für alle POST/PUT-Anfragen sein      |
+| `X-Tenant-Id`    | Identifiziert den Mandantenkontext der Anfrage             |
+
+### Optionale Sicherheits-Header
+
+Anfragen, die den Zustand ändern oder sensible Eingaben enthalten, sollten zusätzlich HMAC-Signatur-Header enthalten. Das vollständige Signierprotokoll finden Sie unter [Authentifizierung](./authentication).
+
+| Header               | Beschreibung                                    |
+|----------------------|------------------------------------------------|
+| `X-Aster-Signature`  | HMAC-SHA256-Signatur des Anfragekörpers      |
+| `X-Aster-Nonce`      | Zufälliger Nonce für die Signaturberechnung     |
+| `X-Aster-Timestamp`  | Unix-Zeitstempel (Sekunden) zum Zeitpunkt der Signierung    |
+| `X-User-Role`        | Rollenanspruch für RBAC-Durchsetzung           |
+
+## API-Versionierung
+
+Die aktuelle API-Version ist **v1**. Die Version ist im URL-Pfad kodiert (`/api/v1/`), nicht in einem Header oder Abfrageparameter. Breaking Changes werden unter einem neuen Versionspräfix (`/api/v2/`) eingeführt, mit einer Überlappungsperiode bevor die alte Version eingestellt wird.
+
+## Inhaltstyp
+
+Alle Anfrage- und Antwortkörper verwenden `application/json`. Anfragen ohne `Content-Type: application/json` an POST- oder PUT-Endpunkten erhalten eine `400 Bad Request`-Antwort.
+
+## Ratenbegrenzung
+
+Die Ratenbegrenzung wird pro Mandant angewendet. Anfragen, die das Limit überschreiten, erhalten eine `429 Too Many Requests`-Antwort mit einem `Retry-After`-Header, der angibt, wann das Fenster zurückgesetzt wird.
+
+## Was ist Aster CNL?
+
+Aster CNL ist eine Teilmenge des Englischen (mit Lokalisierungsunterstützung für andere Sprachen wie vereinfachtes Chinesisch), die darauf ausgelegt ist, Geschäftsregeln eindeutig auszudrücken. Eine minimale Richtlinie sieht so aus:
+
+```
+Module pricing.
+
+Rule discounted-price given amount as Number, tier as Text, produce Number:
+  If tier is "gold":
+    Return amount * 0.8.
+  Return amount.
+```
+
+Richtlinien werden entweder als Quelltext eingereicht (spontan evaluiert) oder als gespeicherte, vorkompilierte und zwischengespeicherte Richtlinienobjekte. Details finden Sie in der [API-Referenz](/api/policies/evaluate).
+
+## Nächste Schritte
+
+- [Authentifizierung](./authentication) — Mandanten-IDs, HMAC-Signierung und RBAC-Rollen konfigurieren
+- [Schnellstart](./quickstart) — Ihre erste Richtlinienevaluierung in unter fünf Minuten
+- [Fehlerbehandlung](./errors) — Fehlerantwortformate und häufige Fehlermodi verstehen
