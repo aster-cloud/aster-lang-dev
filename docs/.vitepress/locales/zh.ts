@@ -69,6 +69,7 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: '演练场', link: '/zh/learn/playground' },
       { text: 'REST API', link: '/api/policies/evaluate' },
       { text: 'GraphQL', link: '/graphql/overview' },
+      { text: '社区', link: '/zh/community/' },
       { text: '语言文档', link: 'https://aster-lang.org' },
       { text: 'GitHub', link: 'https://github.com/aster-cloud/aster-lang-dev' },
     ],

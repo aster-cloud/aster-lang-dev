@@ -9,6 +9,7 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: 'Playground', link: '/learn/playground' },
       { text: 'REST API', link: '/api/policies/evaluate' },
       { text: 'GraphQL', link: '/graphql/overview' },
+      { text: 'Community', link: '/community/' },
       { text: 'Language Docs', link: 'https://aster-lang.org' },
       { text: 'GitHub', link: 'https://github.com/aster-cloud/aster-lang-dev' },
     ],

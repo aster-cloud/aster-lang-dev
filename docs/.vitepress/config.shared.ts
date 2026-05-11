@@ -2,7 +2,7 @@ import type { UserConfig } from 'vitepress'
 
 export const sharedConfig: UserConfig = {
   base: '/',
-  ignoreDeadLinks: true,
+  ignoreDeadLinks: false,
   markdown: {
     theme: {
       light: 'github-light',

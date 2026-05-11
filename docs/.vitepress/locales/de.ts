@@ -69,6 +69,7 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: 'Spielplatz', link: '/de/learn/playground' },
       { text: 'REST API', link: '/api/policies/evaluate' },
       { text: 'GraphQL', link: '/graphql/overview' },
+      { text: 'Community', link: '/de/community/' },
       { text: 'Sprachdokumentation', link: 'https://aster-lang.org' },
       { text: 'GitHub', link: 'https://github.com/aster-cloud/aster-lang-dev' },
     ],

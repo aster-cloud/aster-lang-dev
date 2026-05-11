@@ -5,3 +5,5 @@ docs/.vitepress/dist/
 *.log
 .claude
 *.iml
+.ace-tool/
+.idea/
