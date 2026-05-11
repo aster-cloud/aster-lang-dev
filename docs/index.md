@@ -64,7 +64,7 @@ You want to integrate policy evaluation into your service. REST in 5 minutes, Gr
 
 → [**5-Minute Quick Start**](/getting-started/quickstart)
 → [REST API Reference](/api/policies/evaluate)
-→ [GraphQL Schema](/graphql/)
+→ [GraphQL Schema](/graphql/overview)
 
 </div>
 
