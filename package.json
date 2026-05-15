@@ -17,7 +17,7 @@
     "@codemirror/theme-one-dark": "^6.1.0",
     "@codemirror/view": "^6.36.0",
     "@lezer/highlight": "^1.2.0",
-    "@aster/tokens": "file:../aster-design-system/packages/tokens"
+    "@aster-cloud/tokens": "^0.1.0"
   },
   "devDependencies": {
     "vitepress": "^1.6.3",

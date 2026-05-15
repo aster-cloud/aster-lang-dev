@@ -14,9 +14,9 @@ importers:
       '@aster-cloud/aster-lang-ts':
         specifier: ^0.1.5
         version: 0.1.5
-      '@aster/tokens':
-        specifier: file:../aster-design-system/packages/tokens
-        version: file:../aster-design-system/packages/tokens
+      '@aster-cloud/tokens':
+        specifier: ^0.1.0
+        version: 0.1.0
       '@codemirror/commands':
         specifier: ^6.8.0
         version: 6.10.2
@@ -138,8 +138,8 @@ packages:
     engines: {node: '>=24.0.0'}
     hasBin: true
 
-  '@aster/tokens@file:../aster-design-system/packages/tokens':
-    resolution: {directory: ../aster-design-system/packages/tokens, type: directory}
+  '@aster-cloud/tokens@0.1.0':
+    resolution: {integrity: sha512-4feBxNMLSAaFBXUzrzNGmiVMtmKLVfIWO6Mci43BEb8QLHHM5gO8wJtce56ssHvROgIp7o34qCAVdOzZqAvM0w==, tarball: https://npm.pkg.github.com/download/@aster-cloud/tokens/0.1.0/a5744e7dd84a25c870a4da1afbc6251d8a7f466f}
 
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
@@ -1175,7 +1175,7 @@ snapshots:
       - ws
       - zod
 
-  '@aster/tokens@file:../aster-design-system/packages/tokens': {}
+  '@aster-cloud/tokens@0.1.0': {}
 
   '@babel/helper-string-parser@7.27.1': {}
 
