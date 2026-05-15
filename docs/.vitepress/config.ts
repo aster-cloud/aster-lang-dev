@@ -18,6 +18,15 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/aster-cloud/aster-lang-dev' },
     ],
+    // Right-rail table of contents. The VitePress default shows H2 only,
+    // which is too coarse for API reference pages with H2 endpoint + H3
+    // parameters/responses. [2, 3] gives a 2-level hierarchy; deeper
+    // (h4) would be noisy on dense pages. The 'On this page' label is
+    // the conventional cross-docs phrasing.
+    outline: {
+      level: [2, 3],
+      label: 'On this page',
+    },
   },
   transformHead: (ctx) => buildHreflangLinks(ctx),
 })
