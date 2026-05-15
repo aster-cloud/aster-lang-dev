@@ -1,0 +1,103 @@
+/*
+ * Aster brand layer for VitePress.
+ *
+ * Strategy:
+ *   1. Pull in @aster/tokens for the raw brand CSS variables.
+ *   2. Pull in brand fonts (Fraunces / Inter / JetBrains Mono).
+ *   3. Remap VitePress's --vp-c-brand-* and --vp-font-family-* onto the
+ *      Aster tokens so every default VitePress component (links, code
+ *      blocks, nav highlights, sidebar active states) inherits the
+ *      brand automatically — no custom component overrides needed.
+ *
+ * This file is imported BEFORE custom.css in theme/index.ts so any
+ * --vp-c-brand-1 references inside custom.css already point at Aster.
+ *
+ * Migration safety:
+ *   - VitePress exposes ~70 --vp-* variables; we only remap the brand /
+ *     font ones. Backgrounds, layout, and default neutral text stay on
+ *     VitePress's own scale to avoid breaking dense doc layouts.
+ *   - When the W1.5 baseline is approved and we ready W2, we'll widen
+ *     this remap to cover bg/text/border so aster-lang-dev's neutral
+ *     surfaces also match aster-cloud exactly.
+ */
+
+@import '@aster/tokens/tokens.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ===== VitePress brand color slots → Aster violet ramp ===== */
+  --vp-c-brand-1:           var(--aster-color-violet-600);
+  --vp-c-brand-2:           var(--aster-color-violet-500);
+  --vp-c-brand-3:           var(--aster-color-violet-400);
+  --vp-c-brand-soft:        var(--aster-color-violet-100);
+  --vp-c-brand-mute:        var(--aster-color-violet-50);
+
+  /* ===== Hover variants ===== */
+  --vp-c-brand-light:       var(--aster-color-violet-500);
+  --vp-c-brand-lighter:     var(--aster-color-violet-400);
+  --vp-c-brand-dark:        var(--aster-color-violet-700);
+  --vp-c-brand-darker:      var(--aster-color-violet-800);
+
+  /* ===== Sponsor / tip / accent — point at Aster sky ===== */
+  --vp-c-sponsor:           var(--aster-color-sky-500);
+
+  /* ===== Fonts ===== */
+  --vp-font-family-base:    var(--aster-font-sans);
+  --vp-font-family-mono:    var(--aster-font-mono);
+
+  /* ===== Hero gradient → Aster violet → sky ===== */
+  --vp-home-hero-name-color:           transparent;
+  --vp-home-hero-name-background:      -webkit-linear-gradient(120deg, var(--aster-color-violet-600) 30%, var(--aster-color-sky-500));
+  --vp-home-hero-image-background-image: linear-gradient(-45deg, var(--aster-color-violet-500) 50%, var(--aster-color-sky-500) 50%);
+  --vp-home-hero-image-filter:          blur(44px);
+
+  /* ===== Button (CTA) ===== */
+  --vp-button-brand-border:       var(--aster-color-violet-600);
+  --vp-button-brand-text:         #ffffff;
+  --vp-button-brand-bg:           var(--aster-color-violet-600);
+  --vp-button-brand-hover-border: var(--aster-color-violet-500);
+  --vp-button-brand-hover-text:   #ffffff;
+  --vp-button-brand-hover-bg:     var(--aster-color-violet-500);
+  --vp-button-brand-active-border:var(--aster-color-violet-700);
+  --vp-button-brand-active-bg:    var(--aster-color-violet-700);
+
+  /* ===== Code block tint ===== */
+  --vp-code-color:          var(--aster-color-violet-600);
+
+  /* ===== Headings — Fraunces for display weight ===== */
+}
+
+.dark {
+  --vp-c-brand-1:    var(--aster-color-violet-400);
+  --vp-c-brand-2:    var(--aster-color-violet-500);
+  --vp-c-brand-3:    var(--aster-color-violet-600);
+  --vp-c-brand-soft: rgb(139 92 246 / 0.16);
+  --vp-c-brand-mute: rgb(139 92 246 / 0.08);
+
+  --vp-button-brand-border:       var(--aster-color-violet-500);
+  --vp-button-brand-text:         #ffffff;
+  --vp-button-brand-bg:           var(--aster-color-violet-500);
+  --vp-button-brand-hover-border: var(--aster-color-violet-400);
+  --vp-button-brand-hover-bg:     var(--aster-color-violet-400);
+  --vp-button-brand-active-bg:    var(--aster-color-violet-600);
+}
+
+/*
+ * VitePress default sets headings in --vp-font-family-base. Switch them to
+ * Fraunces selectively — only h1/h2 — so the editorial display weight
+ * shows up on landing + section headings without overpowering dense doc
+ * pages (h3/h4 stay in Inter for legibility at small sizes).
+ */
+:root {
+  --vp-font-family-display: var(--aster-font-display);
+}
+
+.VPHero .name,
+.VPHero .text,
+.vp-doc h1,
+.vp-doc h2 {
+  font-family: var(--vp-font-family-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
