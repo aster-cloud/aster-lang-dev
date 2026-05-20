@@ -7,3 +7,8 @@ docs/.vitepress/dist/
 *.iml
 .ace-tool/
 .idea/
+
+# Glossary Contract (v7) — CI-populated artifacts
+.glossary/cache/
+glossary-findings.json
+locale-parity-findings.json

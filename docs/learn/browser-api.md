@@ -4,7 +4,9 @@ outline: deep
 
 # Browser API Reference
 
+<!-- glossary:block id=browser-api-browser-api-reference-paragraph-1 -->
 The `@aster-cloud/aster-lang-ts` package provides the full Aster CNL compiler as a JavaScript library. Use it to compile, validate, and analyze policies directly in the browser or in Node.js without making network requests.
+<!-- /glossary:block -->
 
 ## Installation
 
@@ -14,7 +16,9 @@ npm install @aster-cloud/aster-lang-ts
 
 ## Imports
 
+<!-- glossary:block id=browser-api-imports-paragraph-2 -->
 All functions and lexicon objects are exported from the `/browser` subpath:
+<!-- /glossary:block -->
 
 ```js
 import {
@@ -33,13 +37,17 @@ import {
 
 ## Lexicons
 
+<!-- glossary:block id=browser-api-lexicons-paragraph-3 -->
 A lexicon defines the keyword set for a specific locale. Pass a lexicon to any function that accepts the `lexicon` parameter. When omitted, the compiler defaults to English (`EN_US`).
+<!-- /glossary:block -->
 
+<!-- glossary:block id=browser-api-lexicons-paragraph-4 -->
 | Lexicon | Locale | Language |
 |---------|--------|----------|
 | `EN_US` | `en-US` | English |
 | `ZH_CN` | `zh-CN` | Simplified Chinese |
 | `DE_DE` | `de-DE` | German |
+<!-- /glossary:block -->
 
 ```js
 import { compile, EN_US, ZH_CN } from '@aster-cloud/aster-lang-ts/browser'
@@ -55,18 +63,24 @@ compile(chineseSource, { lexicon: ZH_CN })
 
 ### `validateSyntaxWithSpan(source, lexicon?)`
 
+<!-- glossary:block id=browser-api--paragraph-5 -->
 Parse the source and return an array of syntax errors. Returns an empty array when the source is valid.
+<!-- /glossary:block -->
 
 **Parameters:**
 
+<!-- glossary:block id=browser-api--paragraph-6 -->
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `source` | `string` | Yes | The CNL source text to validate. |
 | `lexicon` | `Lexicon` | No | Keyword set to use. Defaults to `EN_US`. |
+<!-- /glossary:block -->
 
 **Returns:** `ValidationError[]`
 
+<!-- glossary:block id=browser-api--paragraph-7 -->
 Each `ValidationError` has the following shape:
+<!-- /glossary:block -->
 
 ```ts
 interface ValidationError {
@@ -102,24 +116,32 @@ if (errors.length === 0) {
 
 ### `compile(source, options?)`
 
+<!-- glossary:block id=browser-api--paragraph-8 -->
 Compile a CNL source string into the core intermediate representation.
+<!-- /glossary:block -->
 
 **Parameters:**
 
+<!-- glossary:block id=browser-api--paragraph-9 -->
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `source` | `string` | Yes | The CNL source text. |
 | `options` | `object` | No | Compilation options (see below). |
+<!-- /glossary:block -->
 
 **Options:**
 
+<!-- glossary:block id=browser-api--paragraph-10 -->
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `lexicon` | `Lexicon` | `EN_US` | Keyword set for parsing. |
 | `domain` | `string` | `undefined` | Optional domain hint for compilation. |
 | `includeIntermediates` | `boolean` | `false` | When `true`, the result includes the intermediate core representation as a JSON structure. |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=browser-api--paragraph-11 -->
 **Returns:** A result object with at least `success: boolean`. When `success` is `true`, the compiled output is available. When `includeIntermediates` is `true`, the result contains a `core` field with the intermediate representation.
+<!-- /glossary:block -->
 
 **Example:**
 
@@ -148,11 +170,15 @@ if (result.success) {
 
 ### `compileAndTypecheck(source, options?)`
 
+<!-- glossary:block id=browser-api--paragraph-12 -->
 Compile the source and run the type checker in a single call. This is a convenience function that combines `compile` with type verification.
+<!-- /glossary:block -->
 
 **Parameters:** Same as `compile`.
 
+<!-- glossary:block id=browser-api--paragraph-13 -->
 **Returns:** Same as `compile`, with additional type-checking diagnostics when type errors are found.
+<!-- /glossary:block -->
 
 **Example:**
 
@@ -168,21 +194,27 @@ if (result.success) {
 
 ### `extractSchema(source, options?)`
 
+<!-- glossary:block id=browser-api--paragraph-14 -->
 Parse the source and extract the parameter schema for a specific function (or the first function if none is specified).
+<!-- /glossary:block -->
 
 **Parameters:**
 
+<!-- glossary:block id=browser-api--paragraph-15 -->
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `source` | `string` | Yes | The CNL source text. |
 | `options` | `object` | No | Extraction options (see below). |
+<!-- /glossary:block -->
 
 **Options:**
 
+<!-- glossary:block id=browser-api--paragraph-16 -->
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `lexicon` | `Lexicon` | `EN_US` | Keyword set for parsing. |
 | `functionName` | `string` | `undefined` | Name of the function to extract. Defaults to the first function in the module. |
+<!-- /glossary:block -->
 
 **Returns:** `SchemaResult`
 
@@ -252,18 +284,24 @@ if (schema.success) {
 
 ### `tokenize(source, lexicon?)`
 
+<!-- glossary:block id=browser-api--paragraph-17 -->
 Break the source into a flat array of tokens. Useful for syntax highlighting, tooling integration, or debugging the lexer.
+<!-- /glossary:block -->
 
 **Parameters:**
 
+<!-- glossary:block id=browser-api--paragraph-18 -->
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `source` | `string` | Yes | The CNL source text. |
 | `lexicon` | `Lexicon` | No | Keyword set. Defaults to `EN_US`. |
+<!-- /glossary:block -->
 
 **Returns:** `Token[]`
 
+<!-- glossary:block id=browser-api--paragraph-19 -->
 Each token includes the token type, raw text value, and position information.
+<!-- /glossary:block -->
 
 **Example:**
 
@@ -284,18 +322,24 @@ tokens.forEach(t => {
 
 ### `generateInputValues(parameters, lexicon?)`
 
+<!-- glossary:block id=browser-api--paragraph-20 -->
 Generate a set of plausible sample input values from a parameter schema array. This is useful for populating test forms, generating documentation examples, or prefilling the `context` object in API requests.
+<!-- /glossary:block -->
 
 **Parameters:**
 
+<!-- glossary:block id=browser-api--paragraph-21 -->
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `parameters` | `ParameterSchema[]` | Yes | The parameter array from an `extractSchema` result. |
 | `lexicon` | `Lexicon` | No | Keyword set. Defaults to `EN_US`. |
+<!-- /glossary:block -->
 
 **Returns:** `Record<string, unknown>`
 
+<!-- glossary:block id=browser-api--paragraph-22 -->
 A plain object mapping parameter names to generated values. Struct parameters are expanded into nested objects.
+<!-- /glossary:block -->
 
 **Example:**
 
@@ -330,15 +374,19 @@ if (schema.success) {
 
 ### `evaluate(coreIR, functionName, context)`
 
+<!-- glossary:block id=browser-api--paragraph-23 -->
 Evaluate a compiled policy in the browser using the core IR interpreter. This allows full policy execution without network requests.
+<!-- /glossary:block -->
 
 **Parameters:**
 
+<!-- glossary:block id=browser-api--paragraph-24 -->
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `coreIR` | `CoreIR` | Yes | The compiled core intermediate representation from `compile()`. |
 | `functionName` | `string` | Yes | Name of the function to invoke. |
 | `context` | `Record<string, unknown>` | Yes | Context object mapping parameter names to values. |
+<!-- /glossary:block -->
 
 **Returns:** `EvalResult`
 
@@ -362,6 +410,7 @@ if (compiled.success) {
 
 ## When to Use Browser API vs REST API vs GraphQL
 
+<!-- glossary:block id=browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-paragraph-25 -->
 | Criterion | Browser API | REST API | GraphQL |
 |-----------|-------------|----------|---------|
 | **Runs where** | Browser or Node.js | Server-side | Server-side |
@@ -374,16 +423,25 @@ if (compiled.success) {
 | **Batch evaluation** | Not supported | `POST /policies/evaluate/batch` | Not supported |
 | **Audit trail** | Not generated | Automatic SHA-256 chain | Automatic SHA-256 chain |
 | **Best for** | Editors, CI checks, local tooling | Production evaluation, deployment | Flexible queries, dashboards |
+<!-- /glossary:block -->
 
 **Decision guide:**
 
+<!-- glossary:block id=browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-list-item-26 -->
 - Use the **Browser API** when you need fast, offline validation and schema extraction -- for example, in an in-browser editor, a CI lint step, or a local development script.
+<!-- /glossary:block -->
+<!-- glossary:block id=browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-list-item-27 -->
 - Use the **REST API** when you need to deploy, evaluate, version, and audit policies in production. The REST API is the primary interface for runtime policy execution.
+<!-- /glossary:block -->
+<!-- glossary:block id=browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-list-item-28 -->
 - Use **GraphQL** when you need flexible queries across policies, versions, and audit records -- for example, when building an admin dashboard that fetches only the fields it needs.
+<!-- /glossary:block -->
 
 ## Typical Workflow
 
+<!-- glossary:block id=browser-api-typical-workflow-paragraph-29 -->
 Combine the Browser API and REST API for a complete development cycle:
+<!-- /glossary:block -->
 
 ```js
 import {
@@ -427,8 +485,18 @@ console.log('Smoke test result:', result)
 
 ## Related Pages
 
+<!-- glossary:block id=browser-api-related-pages-list-item-30 -->
 - [Playground](./playground) -- try the Browser API interactively in your browser.
+<!-- /glossary:block -->
+<!-- glossary:block id=browser-api-related-pages-list-item-31 -->
 - [CNL Quick Reference](./cnl-quick-reference) -- complete syntax guide for Aster CNL.
+<!-- /glossary:block -->
+<!-- glossary:block id=browser-api-related-pages-list-item-32 -->
 - [Deployment Guide](./deployment-guide) -- end-to-end guide from source to production.
+<!-- /glossary:block -->
+<!-- glossary:block id=browser-api-related-pages-list-item-33 -->
 - [API: Extract Schema](/api/policies/schema) -- REST API equivalent of `extractSchema`.
+<!-- /glossary:block -->
+<!-- glossary:block id=browser-api-related-pages-list-item-34 -->
 - [API: Validate Policy](/api/policies/validate) -- check if a deployed policy is callable.
+<!-- /glossary:block -->

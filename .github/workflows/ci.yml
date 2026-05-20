@@ -1,0 +1,43 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    name: Glossary Contract + Locale Parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+
+      - name: Locale parity (en backbone → zh + de mirrors must exist)
+        run: pnpm run check:locale-parity
+
+      # Glossary Contract (v7) — Stage 1 of 4-stage remediation: report-only.
+      # See aster-cloud/.claude/plan/glossary-contract.md §5 + glossary.config.yaml.
+      # Flips to `check:glossary:strict` (no `|| true`, no continue-on-error) in
+      # the Stage 4 PR after G8a publishes @aster-cloud/glossary to npm AND
+      # the structural-mismatch sync work in zh/de docs is complete.
+      - name: Glossary contract (Stage 1 — report-only)
+        run: pnpm run check:glossary || true
+        continue-on-error: true
+
+      - name: Upload glossary findings artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: glossary-findings
+          path: |
+            glossary-findings.json
+            locale-parity-findings.json
+          if-no-files-found: ignore
+
+      - name: VitePress build (sanity)
+        run: pnpm docs:build

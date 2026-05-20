@@ -4,11 +4,15 @@ outline: deep
 
 # CNL Quick Reference
 
+<!-- glossary:block id=cnl-quick-reference-cnl-quick-reference-paragraph-1 -->
 This page is a comprehensive reference for Aster CNL (Controlled Natural Language) syntax. All examples use the English (`EN_US`) keyword set unless noted otherwise.
+<!-- /glossary:block -->
 
 ## Module Declaration
 
+<!-- glossary:block id=cnl-quick-reference-module-declaration-paragraph-2 -->
 Every policy begins with exactly one module declaration. The module name is a dot-separated identifier that ends with a period.
+<!-- /glossary:block -->
 
 ```
 Module <Name>.
@@ -22,22 +26,36 @@ Module Loan.Approval.
 Module Insurance.Auto.Quote.
 ```
 
+<!-- glossary:block id=cnl-quick-reference-module-declaration-paragraph-3 -->
 The module name is used to address the policy when deploying and evaluating via the REST API.
+<!-- /glossary:block -->
 
 ## Rule Definition
 
+<!-- glossary:block id=cnl-quick-reference-rule-definition-paragraph-4 -->
 A rule is a named function with typed parameters and a return type. The body is an indented block of statements.
+<!-- /glossary:block -->
 
 ```
 Rule <name> given <param> as <Type>, produce <ReturnType>:
   <body>
 ```
 
+<!-- glossary:block id=cnl-quick-reference-rule-definition-list-item-5 -->
 - `given` introduces the parameter list.
+<!-- /glossary:block -->
+<!-- glossary:block id=cnl-quick-reference-rule-definition-list-item-6 -->
 - Each parameter is written as `<name> as <Type>`.
+<!-- /glossary:block -->
+<!-- glossary:block id=cnl-quick-reference-rule-definition-list-item-7 -->
 - Multiple parameters are separated by commas.
+<!-- /glossary:block -->
+<!-- glossary:block id=cnl-quick-reference-rule-definition-list-item-8 -->
 - `produce` declares the return type.
+<!-- /glossary:block -->
+<!-- glossary:block id=cnl-quick-reference-rule-definition-list-item-9 -->
 - The colon at the end of the signature opens the body block.
+<!-- /glossary:block -->
 
 Example:
 
@@ -52,7 +70,9 @@ Rule calculateDiscount given amount as Int, tier as Text, produce Int:
 
 ### Rules with No Parameters
 
+<!-- glossary:block id=cnl-quick-reference-rules-with-no-parameters-paragraph-10 -->
 When a rule takes no parameters, omit the `given` clause:
+<!-- /glossary:block -->
 
 ```
 Rule defaultRate produce Float:
@@ -61,7 +81,9 @@ Rule defaultRate produce Float:
 
 ### Rules with Struct Parameters
 
+<!-- glossary:block id=cnl-quick-reference-rules-with-struct-parameters-paragraph-11 -->
 Parameters can use user-defined struct types:
+<!-- /glossary:block -->
 
 ```
 Rule evaluateApplicant given applicant as Applicant, produce Bool:
@@ -72,7 +94,9 @@ Rule evaluateApplicant given applicant as Applicant, produce Bool:
 
 ## Data / Struct Definitions
 
+<!-- glossary:block id=cnl-quick-reference-data-struct-definitions-paragraph-12 -->
 Use `Define` to declare a named record type with typed fields. Fields are separated by commas. The definition ends with a period.
+<!-- /glossary:block -->
 
 ```
 Define <Name> has <field> as <Type>, <field2> as <Type2>.
@@ -86,7 +110,9 @@ Define Vehicle has make as Text, year as Int, value as Int.
 Define Address has street as Text, city as Text, postalCode as Text.
 ```
 
+<!-- glossary:block id=cnl-quick-reference-data-struct-definitions-paragraph-13 -->
 Struct types can be used as parameter types, return types, and field types in other structs:
+<!-- /glossary:block -->
 
 ```
 Define Customer has name as Text, address as Address.
@@ -94,24 +120,32 @@ Define Customer has name as Text, address as Address.
 
 ## Type System
 
+<!-- glossary:block id=cnl-quick-reference-type-system-paragraph-14 -->
 Aster CNL provides five built-in primitive types and supports user-defined struct types.
+<!-- /glossary:block -->
 
 ### Primitive Types
 
+<!-- glossary:block id=cnl-quick-reference-primitive-types-paragraph-15 -->
 | Type | Description | Example values |
 |------|-------------|----------------|
 | `Int` | Integer number | `0`, `42`, `-7` |
 | `Float` | Floating-point number | `3.14`, `0.5`, `-1.0` |
 | `Text` | String literal (double-quoted) | `"hello"`, `"gold"` |
 | `Bool` | Boolean value | `true`, `false` |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=cnl-quick-reference-primitive-types-paragraph-16 -->
 ::: tip DateTime Inference
 DateTime is not a keyword you write in source code. The compiler infers `DateTime` as the type for fields whose names match temporal patterns (e.g. `createdAt`, `birthday`, `expiryDate`). You do not need to declare it explicitly.
 :::
+<!-- /glossary:block -->
 
 ### Custom Types (Structs)
 
+<!-- glossary:block id=cnl-quick-reference-custom-types-structs-paragraph-17 -->
 Any name introduced by a `Define` declaration becomes a valid type:
+<!-- /glossary:block -->
 
 ```
 Define Policy has premium as Int, deductible as Int.
@@ -126,14 +160,18 @@ Rule quote given age as Int, produce Policy:
 
 ### If Statements
 
+<!-- glossary:block id=cnl-quick-reference-if-statements-paragraph-18 -->
 Conditional logic uses `If` followed by a condition. The body must be indented.
+<!-- /glossary:block -->
 
 ```
 If <condition>
   <body>
 ```
 
+<!-- glossary:block id=cnl-quick-reference-if-statements-paragraph-19 -->
 `If` statements can be chained. The first branch whose condition evaluates to `true` executes, and its `Return` statement returns a value from the rule.
+<!-- /glossary:block -->
 
 ```
 Rule classify given score as Int, produce Text:
@@ -148,7 +186,9 @@ Rule classify given score as Int, produce Text:
 
 ### Nested Conditions
 
+<!-- glossary:block id=cnl-quick-reference-nested-conditions-paragraph-20 -->
 Conditions can be nested by increasing indentation:
+<!-- /glossary:block -->
 
 ```
 Rule evaluate given applicant as Applicant, tier as Text, produce Bool:
@@ -162,17 +202,22 @@ Rule evaluate given applicant as Applicant, tier as Text, produce Bool:
 
 ### Arithmetic Operators
 
+<!-- glossary:block id=cnl-quick-reference-arithmetic-operators-paragraph-21 -->
 | Operator | Description | Example |
 |----------|-------------|---------|
 | `plus` | Addition | `amount plus 10` |
 | `minus` | Subtraction | `price minus discount` |
 | `times` | Multiplication | `quantity times unitPrice` |
 | `divided by` | Division | `total divided by count` |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=cnl-quick-reference-arithmetic-operators-paragraph-22 -->
 Arithmetic expressions follow standard precedence: `times` and `divided by` bind tighter than `plus` and `minus`. Use grouping where needed for clarity.
+<!-- /glossary:block -->
 
 ### Comparison Operators
 
+<!-- glossary:block id=cnl-quick-reference-comparison-operators-paragraph-23 -->
 | Operator | Description | Example |
 |----------|-------------|---------|
 | `greater than` | Greater than | `age greater than 18` |
@@ -181,16 +226,21 @@ Arithmetic expressions follow standard precedence: `times` and `divided by` bind
 | `at most` | Less than or equal | `balance at most 0` |
 | `is` | Equality | `tier is "gold"` |
 | `equals to` | Equality (numeric) | `count equals to 5` |
+<!-- /glossary:block -->
 
 ### Logical Operators
 
+<!-- glossary:block id=cnl-quick-reference-logical-operators-paragraph-24 -->
 | Operator | Description | Example |
 |----------|-------------|---------|
 | `and` | Logical AND | `age at least 18 and income at least 30000` |
 | `or` | Logical OR | `tier is "gold" or tier is "platinum"` |
 | `not` | Logical NOT | `not isExpired` |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=cnl-quick-reference-logical-operators-paragraph-25 -->
 Logical operators can be combined in a single condition:
+<!-- /glossary:block -->
 
 ```
 If applicant.age at least 18 and applicant.creditScore at least 650 and applicant.income at least 25000
@@ -199,7 +249,9 @@ If applicant.age at least 18 and applicant.creditScore at least 650 and applican
 
 ## Construction Expressions
 
+<!-- glossary:block id=cnl-quick-reference-construction-expressions-paragraph-26 -->
 To return a value of a struct type, use a construction expression with `with <field> set to <value>`:
+<!-- /glossary:block -->
 
 ```
 <TypeName> with <field> set to <value>, <field2> set to <value2>
@@ -216,11 +268,15 @@ Rule calculateQuote given vehicleValue as Int, year as Int, produce Quote:
   Return Quote with premium set to vehicleValue times 3 divided by 100, deductible set to 500.
 ```
 
+<!-- glossary:block id=cnl-quick-reference-construction-expressions-paragraph-27 -->
 Each `<field> set to <value>` clause assigns one field. Multiple clauses are separated by commas after the `with` keyword. All fields declared on the struct should be assigned.
+<!-- /glossary:block -->
 
 ## Field Access
 
+<!-- glossary:block id=cnl-quick-reference-field-access-paragraph-28 -->
 Access fields on a struct parameter using dot notation:
+<!-- /glossary:block -->
 
 ```
 applicant.creditScore
@@ -228,12 +284,17 @@ vehicle.year
 address.city
 ```
 
+<!-- glossary:block id=cnl-quick-reference-field-access-paragraph-29 -->
 Field access can be used in conditions, arithmetic, and as arguments to construction expressions.
+<!-- /glossary:block -->
 
 ## Multi-Language Support
 
+<!-- glossary:block id=cnl-quick-reference-multi-language-support-paragraph-30 -->
 Aster CNL supports multiple locales. The same logical policy is expressed using locale-specific keywords. The following table shows keyword equivalents across supported locales.
+<!-- /glossary:block -->
 
+<!-- glossary:block id=cnl-quick-reference-multi-language-support-paragraph-31 -->
 | Concept | English (`EN_US`) | Chinese (`ZH_CN`) | German (`DE_DE`) |
 |---------|-------------------|--------------------|-------------------|
 | Module | `Module` | `模块` | `Modul` |
@@ -249,14 +310,19 @@ Aster CNL supports multiple locales. The same logical policy is expressed using 
 | Is | `is` | `是` | `ist` |
 | Set...to | `set ... to` | `将 ... 设为` | `setze ... auf` |
 | Return | `Return` | `返回` | `gib zurueck` |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=cnl-quick-reference-multi-language-support-paragraph-32 -->
 The compiler accepts a `lexicon` parameter that tells it which keyword set to use. All locales compile to the same core representation.
+<!-- /glossary:block -->
 
 ## Complete Examples
 
 ### Example 1: Loan Eligibility
 
+<!-- glossary:block id=cnl-quick-reference-example-1-loan-eligibility-paragraph-33 -->
 A rule that checks multiple criteria before approving a loan application.
+<!-- /glossary:block -->
 
 ```
 Module Loan.Approval.
@@ -275,7 +341,9 @@ Rule isEligible given applicant as Applicant, requestedAmount as Int, produce Bo
 
 ### Example 2: Insurance Quote with Struct Return
 
+<!-- glossary:block id=cnl-quick-reference-example-2-insurance-quote-with-struct-return-paragraph-34 -->
 A rule that calculates an insurance quote and returns a structured result.
+<!-- /glossary:block -->
 
 ```
 Module Insurance.Auto.
@@ -295,7 +363,9 @@ Rule generateQuote given vehicle as Vehicle, driverAge as Int, produce Quote:
 
 ### Example 3: Tiered Pricing with Multiple Rules
 
+<!-- glossary:block id=cnl-quick-reference-example-3-tiered-pricing-with-multiple-rules-paragraph-35 -->
 A module with a struct definition and a pricing rule that uses text comparison.
+<!-- /glossary:block -->
 
 ```
 Module Pricing.Subscription.
@@ -312,7 +382,9 @@ Rule resolvePlan given tier as Text, produce Plan:
 
 ### Example 4: Chinese Locale
 
+<!-- glossary:block id=cnl-quick-reference-example-4-chinese-locale-paragraph-36 -->
 The same pricing logic expressed with Chinese keywords.
+<!-- /glossary:block -->
 
 ```
 模块 定价。
@@ -329,6 +401,7 @@ The same pricing logic expressed with Chinese keywords.
 
 ## Syntax Summary
 
+<!-- glossary:block id=cnl-quick-reference-syntax-summary-paragraph-37 -->
 | Construct | Pattern |
 |-----------|---------|
 | Module declaration | `Module <Name>.` |
@@ -344,3 +417,4 @@ The same pricing logic expressed with Chinese keywords.
 | Equality test | `<expr> is <expr>` |
 | Logical AND | `<expr> and <expr>` |
 | Logical OR | `<expr> or <expr>` |
+<!-- /glossary:block -->

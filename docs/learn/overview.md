@@ -4,13 +4,19 @@ outline: deep
 
 # Learn Aster Lang
 
+<!-- glossary:block id=overview-learn-aster-lang-paragraph-1 -->
 Aster CNL (Controlled Natural Language) is a purpose-built language for expressing business rules in readable, auditable sentences. Policies written in Aster CNL compile to a deterministic core representation that can be evaluated via REST API, GraphQL, WebSocket, or directly in the browser.
+<!-- /glossary:block -->
 
+<!-- glossary:block id=overview-learn-aster-lang-paragraph-2 -->
 This section covers everything you need to go from first contact to production deployment.
+<!-- /glossary:block -->
 
 ## What is Aster CNL?
 
+<!-- glossary:block id=overview-what-is-aster-cnl-paragraph-3 -->
 Aster CNL sits between plain English and traditional programming languages. It is restrictive enough for a machine to parse unambiguously, yet natural enough for domain experts -- underwriters, compliance officers, product managers -- to read and author without developer assistance.
+<!-- /glossary:block -->
 
 A minimal policy looks like this:
 
@@ -25,19 +31,29 @@ Rule discountedPrice given amount as Int, tier as Text, produce Int:
 
 Key properties of Aster CNL:
 
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-4 -->
 - **Deterministic** -- the same input always produces the same output with no side effects.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-5 -->
 - **Typed** -- every parameter and return value carries an explicit type (`Int`, `Float`, `Text`, `Bool`, `DateTime`, or a user-defined struct).
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-6 -->
 - **Multi-language** -- policies can be authored in English (`EN_US`), Simplified Chinese (`ZH_CN`), or German (`DE_DE`) using localized keywords.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-7 -->
 - **Auditable** -- the engine records a tamper-evident decision trace for every evaluation.
+<!-- /glossary:block -->
 
 ## Where to Start
 
+<!-- glossary:block id=overview-where-to-start-paragraph-8 -->
 | Goal | Page |
 |------|------|
 | Try Aster CNL in your browser right now | [Playground](./playground) |
 | Learn the full syntax with examples | [CNL Quick Reference](./cnl-quick-reference) |
 | Compile and validate policies in JavaScript/TypeScript | [Browser API Reference](./browser-api) |
 | Deploy policies to the engine and call them at scale | [Deployment Guide](./deployment-guide) |
+<!-- /glossary:block -->
 
 ## How Aster CNL Fits Together
 
@@ -56,15 +72,27 @@ Key properties of Aster CNL:
                                  +------------------+
 ```
 
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-9 -->
 1. **Author** -- write policies in Aster CNL using the playground or any text editor.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-10 -->
 2. **Validate** -- use the Browser API or the playground to catch syntax errors before deployment.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-11 -->
 3. **Deploy** -- submit the policy source to the REST API. The engine compiles and stores it.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-12 -->
 4. **Evaluate** -- call the deployed policy with input data. The engine returns a typed result and an audit record.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-13 -->
 5. **Monitor** -- query version history, audit logs, and anomaly detection endpoints to maintain compliance.
+<!-- /glossary:block -->
 
 ## Multi-Language Support
 
+<!-- glossary:block id=overview-multi-language-support-paragraph-14 -->
 Aster CNL is not English-only. The same logical policy can be expressed in any supported locale:
+<!-- /glossary:block -->
 
 ::: code-group
 
@@ -97,11 +125,21 @@ Regel rabattPreis gegeben betrag als Ganzzahl, liefert Ganzzahl:
 
 :::
 
+<!-- glossary:block id=overview-multi-language-support-paragraph-15 -->
 The Browser API and REST API accept a `locale` or `lexicon` parameter that tells the compiler which keyword set to use. All locales compile to the same core representation.
+<!-- /glossary:block -->
 
 ## Next Steps
 
+<!-- glossary:block id=overview-next-steps-list-item-16 -->
 - [Playground](./playground) -- experiment with live compilation and schema extraction.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-next-steps-list-item-17 -->
 - [CNL Quick Reference](./cnl-quick-reference) -- the complete syntax in one page.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-next-steps-list-item-18 -->
 - [Browser API Reference](./browser-api) -- integrate Aster CNL into your frontend or Node.js tooling.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-next-steps-list-item-19 -->
 - [Deployment Guide](./deployment-guide) -- take a policy from source to production.
+<!-- /glossary:block -->

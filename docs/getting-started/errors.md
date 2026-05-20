@@ -1,10 +1,14 @@
 # Error Handling
 
+<!-- glossary:block id=errors-error-handling-paragraph-1 -->
 The Aster Policy Engine uses standard HTTP status codes and a consistent JSON response envelope for all error conditions.
+<!-- /glossary:block -->
 
 ## Standard Error Response Format
 
+<!-- glossary:block id=errors-standard-error-response-format-paragraph-2 -->
 All error responses — whether from the application layer or from policy evaluation failures — use the following structure:
+<!-- /glossary:block -->
 
 ```json
 {
@@ -14,24 +18,31 @@ All error responses — whether from the application layer or from policy evalua
 }
 ```
 
+<!-- glossary:block id=errors-standard-error-response-format-paragraph-3 -->
 | Field             | Type           | Description                                                     |
 |-------------------|----------------|-----------------------------------------------------------------|
 | `result`          | null           | Always `null` when an error occurs                              |
 | `error`           | string         | A human-readable message describing what went wrong             |
 | `executionTimeMs` | number         | Elapsed time in milliseconds; `0` for errors detected pre-execution |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=errors-standard-error-response-format-paragraph-4 -->
 ::: tip Distinguishing evaluation errors from HTTP errors
 HTTP 4xx/5xx status codes indicate infrastructure-level failures (missing headers, authorization, server fault). An HTTP `200` response with a non-null `error` field indicates that the policy was parsed and dispatched successfully but the evaluation itself produced an error (e.g., a runtime exception inside the rule logic).
 :::
+<!-- /glossary:block -->
 
 ## HTTP Status Codes
 
 ### 400 Bad Request
 
+<!-- glossary:block id=errors-400-bad-request-paragraph-5 -->
 Returned when the request is structurally invalid or is missing required information.
+<!-- /glossary:block -->
 
 **Common causes:**
 
+<!-- glossary:block id=errors-400-bad-request-paragraph-6 -->
 | Scenario                           | Example `error` message                                      |
 |------------------------------------|--------------------------------------------------------------|
 | Missing `X-Tenant-Id` header       | `"X-Tenant-Id header is required"`                           |
@@ -39,6 +50,7 @@ Returned when the request is structurally invalid or is missing required informa
 | Missing `Content-Type` header      | `"Content-Type must be application/json"`                    |
 | Malformed JSON body                | `"Request body could not be parsed as JSON"`                 |
 | Missing required body field        | `"Field 'functionName' is required"`                         |
+<!-- /glossary:block -->
 
 **Example — missing tenant header:**
 
@@ -60,16 +72,20 @@ HTTP/1.1 400 Bad Request
 
 ### 403 Forbidden
 
+<!-- glossary:block id=errors-403-forbidden-paragraph-7 -->
 Returned when the caller lacks the required permissions for the requested operation.
+<!-- /glossary:block -->
 
 **Common causes:**
 
+<!-- glossary:block id=errors-403-forbidden-paragraph-8 -->
 | Scenario                                  | Example `error` message                                    |
 |-------------------------------------------|------------------------------------------------------------|
 | `X-User-Role` too low for the endpoint    | `"Role VIEWER is insufficient; MEMBER required"`           |
 | Invalid or expired HMAC signature         | `"HMAC signature verification failed"`                     |
 | Timestamp outside the 5-minute window     | `"Request timestamp is outside the acceptable window"`     |
 | Nonce already used within replay window   | `"Nonce has already been used; possible replay attack"`    |
+<!-- /glossary:block -->
 
 **Example — insufficient role:**
 
@@ -93,7 +109,9 @@ HTTP/1.1 403 Forbidden
 
 ### 404 Not Found
 
+<!-- glossary:block id=errors-404-not-found-paragraph-9 -->
 Returned when a referenced resource (e.g., a stored policy ID) does not exist within the current tenant's scope.
+<!-- /glossary:block -->
 
 ```json
 HTTP/1.1 404 Not Found
@@ -107,7 +125,9 @@ HTTP/1.1 404 Not Found
 
 ### 429 Too Many Requests
 
+<!-- glossary:block id=errors-429-too-many-requests-paragraph-10 -->
 Returned when the tenant has exceeded its rate limit. The response includes a `Retry-After` header.
+<!-- /glossary:block -->
 
 ```
 HTTP/1.1 429 Too Many Requests
@@ -124,7 +144,9 @@ Retry-After: 30
 
 ### 500 Internal Server Error
 
+<!-- glossary:block id=errors-500-internal-server-error-paragraph-11 -->
 Returned for unexpected server-side failures. These errors are automatically logged and should be reported to support if they persist.
+<!-- /glossary:block -->
 
 ```json
 HTTP/1.1 500 Internal Server Error
@@ -136,16 +158,21 @@ HTTP/1.1 500 Internal Server Error
 }
 ```
 
+<!-- glossary:block id=errors-500-internal-server-error-paragraph-12 -->
 ::: warning If you receive a 500
 Note the `Reference ID` in the error message and include it when contacting support. It uniquely identifies the log entry for your request.
 :::
+<!-- /glossary:block -->
 
 ## Evaluation-Level Errors (HTTP 200 with `error` non-null)
 
+<!-- glossary:block id=errors-evaluation-level-errors-http-200-with-non-null-paragraph-13 -->
 Even when a request is structurally valid and authorised, the policy evaluation itself may fail. In these cases the HTTP status code is `200` but the response body has a non-null `error` field.
+<!-- /glossary:block -->
 
 **Common causes:**
 
+<!-- glossary:block id=errors-evaluation-level-errors-http-200-with-non-null-paragraph-14 -->
 | Scenario                                    | Example `error` message                                         |
 |---------------------------------------------|-----------------------------------------------------------------|
 | Syntax error in CNL source                  | `"Parse error at line 3: unexpected token 'produce'"`           |
@@ -153,6 +180,7 @@ Even when a request is structurally valid and authorised, the policy evaluation 
 | Type mismatch in context input              | `"Expected Number for parameter 'amount', got String"`          |
 | Runtime exception inside rule logic         | `"Division by zero in rule 'split-cost' at line 7"`             |
 | Locale not supported                        | `"Unsupported locale 'fr-FR'"`                                  |
+<!-- /glossary:block -->
 
 **Example — rule not found:**
 
@@ -181,10 +209,18 @@ HTTP/1.1 200 OK
 
 ## Error Handling Best Practices
 
+<!-- glossary:block id=errors-error-handling-best-practices-list-item-15 -->
 1. **Always check both the HTTP status code and the `error` field.** A `200` response does not guarantee a successful evaluation.
+<!-- /glossary:block -->
 
+<!-- glossary:block id=errors-error-handling-best-practices-list-item-16 -->
 2. **Implement retry logic for `429` and `500` responses.** Use the `Retry-After` header for rate-limit errors and exponential backoff for server errors.
+<!-- /glossary:block -->
 
+<!-- glossary:block id=errors-error-handling-best-practices-list-item-17 -->
 3. **Do not retry `400` or `403` responses without fixing the underlying cause.** These errors indicate a client-side issue that will not resolve on its own.
+<!-- /glossary:block -->
 
+<!-- glossary:block id=errors-error-handling-best-practices-list-item-18 -->
 4. **For batch evaluations**, inspect each item in the `results` array individually — a failure in one item does not affect the others.
+<!-- /glossary:block -->

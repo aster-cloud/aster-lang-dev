@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "fmt-config-version": 1,
+  "blocks": {
+    "wanted-languages-paid-lexicon-authorship-paragraph-6": {
+      "created-at": "2026-05-20T11:45:24.728Z",
+      "created-by": "glossary-fmt sync v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 32
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-how-priorities-are-set-paragraph-5": {
+      "created-at": "2026-05-20T11:45:24.728Z",
+      "created-by": "glossary-fmt sync v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 28
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-don-t-see-your-language-paragraph-4": {
+      "created-at": "2026-05-20T11:45:24.728Z",
+      "created-by": "glossary-fmt sync v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 24
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-phase-2-3-candidates-paragraph-3": {
+      "created-at": "2026-05-20T11:45:24.728Z",
+      "created-by": "glossary-fmt sync v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 9
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-wanted-languages-paragraph-2": {
+      "created-at": "2026-05-20T11:45:24.728Z",
+      "created-by": "glossary-fmt sync v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 5
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-wanted-languages-blockquote-1": {
+      "created-at": "2026-05-20T11:45:24.728Z",
+      "created-by": "glossary-fmt sync v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 3
+        }
+      },
+      "alias-of": null
+    }
+  }
+}

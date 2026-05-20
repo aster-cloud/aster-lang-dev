@@ -1,0 +1,1186 @@
+{
+  "version": 1,
+  "fmt-config-version": 1,
+  "blocks": {
+    "browser-api-browser-api-reference-paragraph-1": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 7
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-imports-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 17
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-lexicons-paragraph-3": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 36
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-lexicons-paragraph-4": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 38
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-5": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 58
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-6": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 62
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-7": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 69
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-8": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 105
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-9": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 109
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-10": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 116
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-11": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 122
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-12": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 151
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-13": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 155
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-14": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 171
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-15": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 175
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-16": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 182
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-17": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 255
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-18": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 259
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-19": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 266
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-20": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 287
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-21": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 291
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-22": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 298
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-23": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 333
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api--paragraph-24": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 337
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-paragraph-25": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 365
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-list-item-26": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 380
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-list-item-27": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 381
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-when-to-use-browser-api-vs-rest-api-vs-graphql-list-item-28": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 382
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-typical-workflow-paragraph-29": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 386
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-related-pages-list-item-30": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 430
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-related-pages-list-item-31": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 431
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-related-pages-list-item-32": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 432
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-related-pages-list-item-33": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 433
+        }
+      },
+      "alias-of": null
+    },
+    "browser-api-related-pages-list-item-34": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "browser-api.md": {
+          "line-hint": 434
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-cnl-quick-reference-paragraph-1": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 7
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-module-declaration-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 11
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-module-declaration-paragraph-3": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 25
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rule-definition-paragraph-4": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 29
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rule-definition-list-item-5": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 36
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rule-definition-list-item-6": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 37
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rule-definition-list-item-7": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 38
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rule-definition-list-item-8": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 39
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rule-definition-list-item-9": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 40
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rules-with-no-parameters-paragraph-10": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 55
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-rules-with-struct-parameters-paragraph-11": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 64
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-data-struct-definitions-paragraph-12": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 75
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-data-struct-definitions-paragraph-13": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 89
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-type-system-paragraph-14": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 97
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-primitive-types-paragraph-15": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 101
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-primitive-types-paragraph-16": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 108
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-custom-types-structs-paragraph-17": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 114
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-if-statements-paragraph-18": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 129
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-if-statements-paragraph-19": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 136
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-nested-conditions-paragraph-20": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 151
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-arithmetic-operators-paragraph-21": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 165
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-arithmetic-operators-paragraph-22": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 172
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-comparison-operators-paragraph-23": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 176
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-logical-operators-paragraph-24": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 187
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-logical-operators-paragraph-25": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 193
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-construction-expressions-paragraph-26": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 202
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-construction-expressions-paragraph-27": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 219
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-field-access-paragraph-28": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 223
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-field-access-paragraph-29": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 231
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-multi-language-support-paragraph-30": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 235
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-multi-language-support-paragraph-31": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 237
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-multi-language-support-paragraph-32": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 253
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-example-1-loan-eligibility-paragraph-33": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 259
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-example-2-insurance-quote-with-struct-return-paragraph-34": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 278
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-example-3-tiered-pricing-with-multiple-rules-paragraph-35": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 298
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-example-4-chinese-locale-paragraph-36": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 315
+        }
+      },
+      "alias-of": null
+    },
+    "cnl-quick-reference-syntax-summary-paragraph-37": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "cnl-quick-reference.md": {
+          "line-hint": 332
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-deployment-guide-paragraph-1": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 7
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-policy-lifecycle-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 19
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-1-author-the-policy-paragraph-3": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 23
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-1-author-the-policy-paragraph-4": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 40
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-2-validate-locally-paragraph-5": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 44
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-2-validate-locally-paragraph-6": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 65
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-2-validate-locally-paragraph-7": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 80
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-3-extract-the-schema-paragraph-8": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 84
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-3-extract-the-schema-paragraph-9": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 98
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-4-deploy-the-policy-paragraph-10": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 102
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-4-deploy-the-policy-paragraph-11": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 116
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-4-deploy-the-policy-paragraph-12": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 128
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-5-execute-the-policy-paragraph-13": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 132
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-step-5-execute-the-policy-paragraph-14": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 164
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-view-audit-logs-paragraph-15": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 170
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-verify-hash-chain-integrity-paragraph-16": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 181
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-list-versions-paragraph-17": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 195
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-deploy-a-new-version-paragraph-18": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 206
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-rollback-to-a-previous-version-paragraph-19": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 222
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-rollback-to-a-previous-version-paragraph-20": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 236
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-deployment-checklist-paragraph-21": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 240
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-deployment-checklist-paragraph-22": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 242
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-related-pages-list-item-23": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 253
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-related-pages-list-item-24": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 254
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-related-pages-list-item-25": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 255
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-related-pages-list-item-26": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 256
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-related-pages-list-item-27": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 257
+        }
+      },
+      "alias-of": null
+    },
+    "deployment-guide-related-pages-list-item-28": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "deployment-guide.md": {
+          "line-hint": 258
+        }
+      },
+      "alias-of": null
+    },
+    "overview-learn-aster-lang-paragraph-1": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 7
+        }
+      },
+      "alias-of": null
+    },
+    "overview-learn-aster-lang-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 9
+        }
+      },
+      "alias-of": null
+    },
+    "overview-what-is-aster-cnl-paragraph-3": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 13
+        }
+      },
+      "alias-of": null
+    },
+    "overview-what-is-aster-cnl-list-item-4": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 28
+        }
+      },
+      "alias-of": null
+    },
+    "overview-what-is-aster-cnl-list-item-5": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 29
+        }
+      },
+      "alias-of": null
+    },
+    "overview-what-is-aster-cnl-list-item-6": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 30
+        }
+      },
+      "alias-of": null
+    },
+    "overview-what-is-aster-cnl-list-item-7": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 31
+        }
+      },
+      "alias-of": null
+    },
+    "overview-where-to-start-paragraph-8": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 35
+        }
+      },
+      "alias-of": null
+    },
+    "overview-how-aster-cnl-fits-together-list-item-9": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 59
+        }
+      },
+      "alias-of": null
+    },
+    "overview-how-aster-cnl-fits-together-list-item-10": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 60
+        }
+      },
+      "alias-of": null
+    },
+    "overview-how-aster-cnl-fits-together-list-item-11": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 61
+        }
+      },
+      "alias-of": null
+    },
+    "overview-how-aster-cnl-fits-together-list-item-12": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 62
+        }
+      },
+      "alias-of": null
+    },
+    "overview-how-aster-cnl-fits-together-list-item-13": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 63
+        }
+      },
+      "alias-of": null
+    },
+    "overview-multi-language-support-paragraph-14": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 67
+        }
+      },
+      "alias-of": null
+    },
+    "overview-multi-language-support-paragraph-15": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 100
+        }
+      },
+      "alias-of": null
+    },
+    "overview-next-steps-list-item-16": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 104
+        }
+      },
+      "alias-of": null
+    },
+    "overview-next-steps-list-item-17": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 105
+        }
+      },
+      "alias-of": null
+    },
+    "overview-next-steps-list-item-18": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 106
+        }
+      },
+      "alias-of": null
+    },
+    "overview-next-steps-list-item-19": {
+      "created-at": "2026-05-20T11:42:48.161Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "overview.md": {
+          "line-hint": 107
+        }
+      },
+      "alias-of": null
+    }
+  }
+}

@@ -1,0 +1,396 @@
+{
+  "version": 1,
+  "fmt-config-version": 1,
+  "blocks": {
+    "contribute-how-to-contribute-blockquote-1": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 3
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-code-of-conduct-dco-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 31
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-code-of-conduct-dco-list-item-3": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 34
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-code-of-conduct-dco-list-item-4": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 35
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-rewards-list-item-5": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 39
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-rewards-list-item-6": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 40
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-rewards-list-item-7": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 41
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-rewards-list-item-8": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 42
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-rewards-list-item-9": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 43
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-need-help-list-item-10": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 47
+        }
+      },
+      "alias-of": null
+    },
+    "contribute-need-help-list-item-11": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "contribute.md": {
+          "line-hint": 48
+        }
+      },
+      "alias-of": null
+    },
+    "index-aster-lang-community-blockquote-1": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 3
+        }
+      },
+      "alias-of": null
+    },
+    "index-what-is-the-lexicon-ecosystem-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 7
+        }
+      },
+      "alias-of": null
+    },
+    "index-what-is-the-lexicon-ecosystem-list-item-3": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 11
+        }
+      },
+      "alias-of": null
+    },
+    "index-what-is-the-lexicon-ecosystem-list-item-4": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 12
+        }
+      },
+      "alias-of": null
+    },
+    "index-what-is-the-lexicon-ecosystem-list-item-5": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 13
+        }
+      },
+      "alias-of": null
+    },
+    "index-what-is-the-lexicon-ecosystem-list-item-6": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 14
+        }
+      },
+      "alias-of": null
+    },
+    "index-get-started-list-item-7": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 18
+        }
+      },
+      "alias-of": null
+    },
+    "index-get-started-list-item-8": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 19
+        }
+      },
+      "alias-of": null
+    },
+    "index-get-started-list-item-9": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 20
+        }
+      },
+      "alias-of": null
+    },
+    "index-status-list-item-10": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 24
+        }
+      },
+      "alias-of": null
+    },
+    "index-status-list-item-11": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 25
+        }
+      },
+      "alias-of": null
+    },
+    "index-status-list-item-12": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 26
+        }
+      },
+      "alias-of": null
+    },
+    "index-status-list-item-13": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 27
+        }
+      },
+      "alias-of": null
+    },
+    "index-status-list-item-14": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 28
+        }
+      },
+      "alias-of": null
+    },
+    "index-sponsors-acknowledgements-paragraph-15": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "index.md": {
+          "line-hint": 32
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-existing-lexicons-blockquote-1": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 3
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-official-lexicons-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 7
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-official-lexicons-paragraph-3": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 9
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-in-progress-paragraph-4": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 17
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-planned-phase-4-paragraph-5": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 24
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-adding-your-lexicon-to-this-list-paragraph-6": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 28
+        }
+      },
+      "alias-of": null
+    },
+    "lexicons-adding-your-lexicon-to-this-list-paragraph-7": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "lexicons.md": {
+          "line-hint": 30
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-wanted-languages-blockquote-1": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 3
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-wanted-languages-paragraph-2": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 5
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-phase-2-3-candidates-paragraph-3": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 9
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-don-t-see-your-language-paragraph-4": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 24
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-how-priorities-are-set-paragraph-5": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 28
+        }
+      },
+      "alias-of": null
+    },
+    "wanted-languages-paid-lexicon-authorship-paragraph-6": {
+      "created-at": "2026-05-20T11:42:48.302Z",
+      "created-by": "glossary-fmt insert v0.1.0",
+      "occurrences": {
+        "wanted-languages.md": {
+          "line-hint": 32
+        }
+      },
+      "alias-of": null
+    }
+  }
+}

@@ -1,46 +1,63 @@
 # Authentication
 
+<!-- glossary:block id=authentication-authentication-paragraph-1 -->
 The Aster Policy Engine enforces a three-layer security model on every request. Each layer is independent; all three must be satisfied for a request to succeed.
+<!-- /glossary:block -->
 
 ## Layer 1 — Tenant Isolation (`X-Tenant-Id`)
 
+<!-- glossary:block id=authentication-layer-1-tenant-isolation-paragraph-2 -->
 Every request must carry an `X-Tenant-Id` header. This header establishes the tenant context for the request: policies, audit records, and all data are scoped to the specified tenant and are never visible to other tenants.
+<!-- /glossary:block -->
 
 **Format:** `^[a-zA-Z0-9_-]{1,64}$`
 
+<!-- glossary:block id=authentication-layer-1-tenant-isolation-paragraph-3 -->
 A missing or malformed `X-Tenant-Id` returns `400 Bad Request` immediately, before any other validation is performed.
+<!-- /glossary:block -->
 
 ```bash
 curl https://policy.aster-lang.dev/api/v1/policies \
   -H "X-Tenant-Id: acme-corp"
 ```
 
+<!-- glossary:block id=authentication-layer-1-tenant-isolation-paragraph-4 -->
 ::: tip Tenant ID conventions
 Use a stable, human-readable identifier such as your organisation slug or environment name (e.g. `acme-corp`, `acme-corp-staging`). Tenant IDs are case-sensitive.
 :::
+<!-- /glossary:block -->
 
 ## Layer 2 — HMAC Request Signing
 
+<!-- glossary:block id=authentication-layer-2-hmac-request-signing-paragraph-5 -->
 Every request must include HMAC signature headers. The server validates the signature before processing the request, preventing tampering in transit and protecting against replay attacks.
+<!-- /glossary:block -->
 
 ### Required Headers
 
+<!-- glossary:block id=authentication-required-headers-paragraph-6 -->
 | Header               | Description                                                          |
 |----------------------|----------------------------------------------------------------------|
 | `X-Aster-Signature`  | Hex-encoded HMAC-SHA256 of the canonical message (see below)        |
 | `X-Aster-Nonce`      | A randomly-generated string (recommend 16+ bytes, hex or UUID)      |
 | `X-Aster-Timestamp`  | Unix timestamp in **milliseconds** at the moment of signing          |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=authentication-required-headers-paragraph-7 -->
 A request missing any of these three headers returns `401 Unauthorized`.
+<!-- /glossary:block -->
 
 ### Canonical Message Format
 
+<!-- glossary:block id=authentication-canonical-message-format-paragraph-8 -->
 The HMAC is computed over the following pipe-delimited string:
+<!-- /glossary:block -->
 
 ```
 {HTTP-method}|{path}|{query}|{X-Aster-Timestamp}|{X-Aster-Nonce}|{body-sha256}
 ```
 
+<!-- glossary:block id=authentication-canonical-message-format-paragraph-9 -->
 | Component | Description | Example |
 |-----------|-------------|---------|
 | `HTTP-method` | Uppercase HTTP method | `POST` |
@@ -49,11 +66,18 @@ The HMAC is computed over the following pipe-delimited string:
 | `X-Aster-Timestamp` | Timestamp value from header | `1708776000000` |
 | `X-Aster-Nonce` | Nonce value from header | `c3ab8ff13720e8ad9047dd39466b3c89` |
 | `body-sha256` | Lowercase hex SHA-256 hash of the raw request body | `a1b2c3d4...` |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=authentication-canonical-message-format-paragraph-10 -->
 The HMAC key is the **API secret** issued to your tenant. The secret is resolved in priority order:
+<!-- /glossary:block -->
 
+<!-- glossary:block id=authentication-canonical-message-format-list-item-11 -->
 1. Environment variable `ASTER_HMAC_SECRET_{TENANT_ID}` (tenant ID uppercased, dashes replaced with underscores)
+<!-- /glossary:block -->
+<!-- glossary:block id=authentication-canonical-message-format-list-item-12 -->
 2. Configuration property `aster.security.hmac.secret-key`
+<!-- /glossary:block -->
 
 ### Example: Computing the Signature (Bash)
 
@@ -83,29 +107,38 @@ curl -X POST "https://policy.aster-lang.dev${PATH_URI}" \
 
 ### Replay Prevention
 
+<!-- glossary:block id=authentication-replay-prevention-paragraph-13 -->
 The server rejects requests where `X-Aster-Timestamp` is more than **5 minutes** (300,000 milliseconds) in the past or future, returning `401 Unauthorized`. Additionally, each nonce is stored for the duration of the replay window; a second request using the same nonce within the window is rejected with `409 Conflict`.
+<!-- /glossary:block -->
 
 ## Layer 3 — Role-Based Access Control (`X-User-Role`)
 
+<!-- glossary:block id=authentication-layer-3-role-based-access-control-paragraph-14 -->
 The `X-User-Role` header carries the caller's role claim. The server enforces a strict role hierarchy:
+<!-- /glossary:block -->
 
 ```
 OWNER > ADMIN > MEMBER > VIEWER
 ```
 
+<!-- glossary:block id=authentication-layer-3-role-based-access-control-paragraph-15 -->
 Each role is additive: a higher role inherits all permissions of roles below it.
+<!-- /glossary:block -->
 
 ### Role Permissions
 
+<!-- glossary:block id=authentication-role-permissions-paragraph-16 -->
 | Role     | Permitted actions                                                         |
 |----------|---------------------------------------------------------------------------|
 | `VIEWER` | Read stored policies (GET)                                                |
 | `MEMBER` | All VIEWER permissions + evaluate policies (POST to evaluation endpoints) |
 | `ADMIN`  | All MEMBER permissions + read and verify audit logs                       |
 | `OWNER`  | All ADMIN permissions + manage tenant settings and RBAC assignments       |
+<!-- /glossary:block -->
 
 ### Endpoint Requirements
 
+<!-- glossary:block id=authentication-endpoint-requirements-paragraph-17 -->
 | Endpoint category        | Minimum required role |
 |--------------------------|-----------------------|
 | Policy evaluation        | `MEMBER`              |
@@ -113,14 +146,19 @@ Each role is additive: a higher role inherits all permissions of roles below it.
 | Audit log read           | `ADMIN`               |
 | Audit log verification   | `ADMIN`               |
 | Tenant administration    | `OWNER`               |
+<!-- /glossary:block -->
 
+<!-- glossary:block id=authentication-endpoint-requirements-paragraph-18 -->
 A request with an insufficient role returns `403 Forbidden`.
+<!-- /glossary:block -->
 
 ### Optional Headers
 
+<!-- glossary:block id=authentication-optional-headers-paragraph-19 -->
 | Header | Description | Default |
 |--------|-------------|---------|
 | `X-User-Id` | Identifies the caller in audit logs | `anonymous` |
+<!-- /glossary:block -->
 
 ### Example: Full Request with All Layers
 
@@ -149,9 +187,11 @@ curl -X POST "https://policy.aster-lang.dev${PATH_URI}" \
 
 ## Summary
 
+<!-- glossary:block id=authentication-summary-paragraph-20 -->
 | Layer | Header(s)                                              | Required  | Failure response      |
 |-------|--------------------------------------------------------|-----------|-----------------------|
 | 1     | `X-Tenant-Id`                                          | Always    | `400 Bad Request`     |
 | 2     | `X-Aster-Signature`, `X-Aster-Nonce`, `X-Aster-Timestamp` | Always | `401 Unauthorized`  |
 | 3     | `X-User-Role`                                          | Always    | `403 Forbidden`       |
 | —     | `X-User-Id`                                            | Optional  | Defaults to `anonymous` |
+<!-- /glossary:block -->

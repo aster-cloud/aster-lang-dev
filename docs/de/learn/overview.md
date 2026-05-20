@@ -4,13 +4,19 @@ outline: deep
 
 # Aster Lang lernen
 
+<!-- glossary:block id=overview-learn-aster-lang-paragraph-1 -->
 Aster CNL (Controlled Natural Language) ist eine speziell entwickelte Sprache zur Formulierung von Geschäftsregeln in lesbaren, auditierbaren Sätzen. In Aster CNL geschriebene Richtlinien kompilieren zu einer deterministischen Kerndarstellung, die über REST API, GraphQL, WebSocket oder direkt im Browser evaluiert werden kann.
+<!-- /glossary:block -->
 
+<!-- glossary:block id=overview-learn-aster-lang-paragraph-2 -->
 Dieser Abschnitt deckt alles ab, was Sie vom ersten Kontakt bis zur Produktionsbereitstellung benötigen.
+<!-- /glossary:block -->
 
 ## Was ist Aster CNL?
 
+<!-- glossary:block id=overview-what-is-aster-cnl-paragraph-3 -->
 Aster CNL liegt zwischen reinem Englisch und traditionellen Programmiersprachen. Es ist restriktiv genug, damit eine Maschine es eindeutig parsen kann, und gleichzeitig natürlich genug, damit Domänenexperten — Versicherer, Compliance-Beauftragte, Produktmanager — es ohne Entwicklerunterstützung lesen und verfassen können.
+<!-- /glossary:block -->
 
 Eine minimale Richtlinie sieht so aus:
 
@@ -25,19 +31,29 @@ Rule discountedPrice given amount as Int, tier as Text, produce Int:
 
 Schlüsseleigenschaften von Aster CNL:
 
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-4 -->
 - **Deterministisch** — dieselbe Eingabe erzeugt immer dieselbe Ausgabe ohne Seiteneffekte.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-5 -->
 - **Typisiert** — jeder Parameter und Rückgabewert trägt einen expliziten Typ (`Int`, `Float`, `Text`, `Bool`, `DateTime` oder eine benutzerdefinierte Struktur).
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-6 -->
 - **Mehrsprachig** — Richtlinien können in Englisch (`EN_US`), vereinfachtem Chinesisch (`ZH_CN`) oder Deutsch (`DE_DE`) mit lokalisierten Schlüsselwörtern verfasst werden.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-what-is-aster-cnl-list-item-7 -->
 - **Auditierbar** — die Engine zeichnet eine manipulationssichere Entscheidungsverfolgung für jede Evaluierung auf.
+<!-- /glossary:block -->
 
 ## Wo anfangen
 
+<!-- glossary:block id=overview-where-to-start-paragraph-8 -->
 | Ziel | Seite |
 |------|------|
 | Aster CNL jetzt im Browser ausprobieren | [Spielplatz](./playground) |
 | Die vollständige Syntax mit Beispielen lernen | [CNL-Kurzreferenz](./cnl-quick-reference) |
 | Richtlinien in JavaScript/TypeScript kompilieren und validieren | [Browser-API-Referenz](./browser-api) |
 | Richtlinien zur Engine bereitstellen und im großen Maßstab aufrufen | [Bereitstellungsanleitung](./deployment-guide) |
+<!-- /glossary:block -->
 
 ## Wie Aster CNL zusammenpasst
 
@@ -56,15 +72,27 @@ Schlüsseleigenschaften von Aster CNL:
                                  +------------------+
 ```
 
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-9 -->
 1. **Verfassen** — Schreiben Sie Richtlinien in Aster CNL mit dem Spielplatz oder einem beliebigen Texteditor.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-10 -->
 2. **Validieren** — Verwenden Sie die Browser-API oder den Spielplatz, um Syntaxfehler vor der Bereitstellung zu erkennen.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-11 -->
 3. **Bereitstellen** — Übermitteln Sie den Richtlinienquellcode an die REST API. Die Engine kompiliert und speichert ihn.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-12 -->
 4. **Evaluieren** — Rufen Sie die bereitgestellte Richtlinie mit Eingabedaten auf. Die Engine gibt ein typisiertes Ergebnis und einen Audit-Datensatz zurück.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-how-aster-cnl-fits-together-list-item-13 -->
 5. **Überwachen** — Fragen Sie Versionshistorie, Audit-Protokolle und Anomalie-Erkennungsendpunkte ab, um die Compliance aufrechtzuerhalten.
+<!-- /glossary:block -->
 
 ## Mehrsprachige Unterstützung
 
+<!-- glossary:block id=overview-multi-language-support-paragraph-14 -->
 Aster CNL ist nicht nur auf Englisch beschränkt. Dieselbe logische Richtlinie kann in jeder unterstützten Locale ausgedrückt werden:
+<!-- /glossary:block -->
 
 ::: code-group
 
@@ -97,11 +125,21 @@ Regel rabattPreis gegeben betrag als Ganzzahl, liefert Ganzzahl:
 
 :::
 
+<!-- glossary:block id=overview-multi-language-support-paragraph-15 -->
 Die Browser-API und REST API akzeptieren einen `locale`- oder `lexicon`-Parameter, der dem Compiler mitteilt, welchen Schlüsselwortsatz er verwenden soll. Alle Locales kompilieren zur selben Kerndarstellung.
+<!-- /glossary:block -->
 
 ## Nächste Schritte
 
+<!-- glossary:block id=overview-next-steps-list-item-16 -->
 - [Spielplatz](./playground) — experimentieren Sie mit Live-Kompilierung und Schema-Extraktion.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-next-steps-list-item-17 -->
 - [CNL-Kurzreferenz](./cnl-quick-reference) — die vollständige Syntax auf einer Seite.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-next-steps-list-item-18 -->
 - [Browser-API-Referenz](./browser-api) — integrieren Sie Aster CNL in Ihr Frontend oder Node.js-Tooling.
+<!-- /glossary:block -->
+<!-- glossary:block id=overview-next-steps-list-item-19 -->
 - [Bereitstellungsanleitung](./deployment-guide) — bringen Sie eine Richtlinie vom Quellcode in die Produktion.
+<!-- /glossary:block -->

@@ -1,0 +1,63 @@
+# Glossary Contract — consumer-side configuration for aster-lang-dev.
+# Plan: aster-cloud/.claude/plan/glossary-contract.md (v7) §1.4 + §5.
+#
+# Stage 1: tier=community, report-only.
+# Stage 4 (post-strict-flip): tier=official.
+
+version: 1
+tier: community
+localesVersion: 1
+
+glossary-pin:
+  version: 0.1.0
+  npm-integrity: pending-g8a-publish
+  maven-sha256: pending-g8a-publish
+
+surfaces:
+  docs:
+    type: markdown
+    paths: docs/**/*.md
+    locale-from-frontmatter: true
+    fallback-locale: en-US
+    alignment: block-id
+    block-map: docs/.glossary/block-map.json
+
+# v7 §5.1 — API/GraphQL/WebSocket reference is auto-generated from
+# OpenAPI; carved out of glossary scanning. Hand-written content under
+# getting-started/learn/community is fully covered.
+ignored-surfaces:
+  - path: docs/api/**/*.md
+    reason: OpenAPI-generated reference; en-only by policy
+    expires: never
+  - path: docs/graphql/**/*.md
+    reason: GraphQL schema docs; en-only by policy
+    expires: never
+  - path: docs/websocket/**/*.md
+    reason: WebSocket protocol reference; en-only by policy
+    expires: never
+  - path: docs/.vitepress/**/*
+    reason: site config, not user-facing prose
+    expires: never
+  - path: docs/public/**/*
+    reason: static assets
+    expires: never
+
+untranslated-tokens:
+  - Aster
+  - VitePress
+  - CodeMirror
+  - GitHub
+  - GDPR
+  - REST
+  - GraphQL
+  - WebSocket
+  - JSON
+  - YAML
+  - HTTP
+  - HTTPS
+  - API
+  - SDK
+  - SSE
+
+overlay-classification:
+  unmanaged-policy: warn
