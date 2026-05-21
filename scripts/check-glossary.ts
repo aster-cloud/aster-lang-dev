@@ -64,27 +64,32 @@ interface Issue {
 const __filename = fileURLToPath(import.meta.url);
 const repoRoot = resolvePath(dirname(__filename), '..');
 
-// ─── resolve glossary ───
-function resolveGlossary(): GlossaryExport {
-  const candidates = [
-    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'glossary.export.json'),
-    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'glossary.export.json'),
-  ];
-  for (const p of candidates) {
-    if (existsSync(p)) {
-      if (p.includes('aster-design-system')) {
-        console.warn(`[check-glossary] Stage 1: resolving glossary from ${relative(repoRoot, p)}`);
-      }
-      return JSON.parse(readFileSync(p, 'utf8')) as GlossaryExport;
-    }
-  }
-  throw new Error('[check-glossary] @aster-cloud/glossary not found in node_modules or workspace sibling');
+/**
+ * Resolve the @aster-cloud/glossary package root ONCE so every artifact
+ * (export.json, scanner.js, schema.js, locale-utils.js) comes from the
+ * same package version. Loading them from independent candidate paths
+ * can silently mix versions in a workspace where node_modules and the
+ * sibling checkout disagree.
+ *
+ * Resolution order:
+ *   1. node_modules/@aster-cloud/glossary (post-G8a publish)
+ *   2. ../aster-design-system/packages/glossary/dist (dev path)
+ */
+interface GlossaryPackage {
+  root: string;
+  scan: CanonicalScan;
+  glossaryExport: GlossaryExport;
+  configSchema: { safeParse: (raw: unknown) => { success: boolean; data?: unknown; error?: { issues: Array<{ path: PropertyKey[]; message: string }> } } };
+  /** Locale utilities (BCP-47) — see @aster-cloud/glossary/locale-utils. */
+  localeUtils: {
+    parseLocaleTag: (tag: string) => null | { language: string; script?: string; region?: string };
+    matchLocaleSegment: (segment: string, locales: ReadonlyArray<{ id: string; bcp47?: string; role?: string }>) => string | null;
+    localeFromPathSegment: (path: string, rootDir: string, locales: ReadonlyArray<{ id: string }>) => string | null;
+    stripLocaleSegment: (path: string, rootDir: string, locales: ReadonlyArray<{ id: string }>) => string;
+    shortLocaleTokens: (locales: ReadonlyArray<{ id: string }>) => { tokens: Set<string>; ambiguous: Set<string> };
+  };
 }
 
-/**
- * Resolve the canonical scanner from the same locations as resolveGlossary.
- * Matching semantics live there; this driver only handles I/O.
- */
 type CanonicalScan = (input: any, config: { glossary: GlossaryExport; strict?: boolean }) => {
   issues: Array<{
     severity: 'error' | 'warning';
@@ -99,45 +104,105 @@ type CanonicalScan = (input: any, config: { glossary: GlossaryExport; strict?: b
   warningCount: number;
 };
 
-async function resolveScanner(): Promise<{ scan: CanonicalScan }> {
-  const candidates = [
-    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'scanner.js'),
-    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'scanner.js'),
+async function resolveGlossaryPackage(): Promise<GlossaryPackage> {
+  // node_modules takes priority — once @aster-cloud/glossary is published this
+  // is the production path. Sibling checkout is the Stage-1 dev fallback.
+  const roots = [
+    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary'),
+    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary'),
   ];
-  for (const p of candidates) {
-    if (existsSync(p)) {
-      const mod = await import(pathToFileURL(p).href);
-      return { scan: mod.scan };
+  for (const root of roots) {
+    const dist = join(root, 'dist');
+    if (!existsSync(join(dist, 'scanner.js'))) continue;
+    if (root.includes('aster-design-system')) {
+      console.warn(`[check-glossary] Stage 1: resolving @aster-cloud/glossary from ${relative(repoRoot, root)}`);
     }
-  }
-  throw new Error('[check-glossary] canonical scanner not found; run `pnpm build` in aster-design-system/packages/glossary');
-}
-
-async function loadConfig(): Promise<Config> {
-  const raw = parseYaml(readFileSync(join(repoRoot, 'glossary.config.yaml'), 'utf8'));
-  const schemaCandidates = [
-    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'schema.js'),
-    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'schema.js'),
-  ];
-  for (const sp of schemaCandidates) {
-    if (existsSync(sp)) {
-      const mod = await import(pathToFileURL(sp).href);
-      const parsed = mod.GlossaryConfigSchema.safeParse(raw);
-      if (!parsed.success) {
-        throw new Error(
-          `[check-glossary] glossary.config.yaml failed schema validation:\n  ${parsed.error.issues
-            .map((i: any) => `${i.path.join('.')}: ${i.message}`)
-            .join('\n  ')}`,
-        );
-      }
-      return parsed.data as Config;
-    }
+    return loadPackageArtifacts(root);
   }
   throw new Error(
-    '[check-glossary] @aster-cloud/glossary dist/schema.js not found; ' +
-    'cannot validate glossary.config.yaml. Run `pnpm build` in ' +
-    'aster-design-system/packages/glossary before invoking this script.',
+    '[check-glossary] @aster-cloud/glossary not found. ' +
+    'Run `pnpm install` (after the package publishes) or `pnpm build` in ' +
+    '`aster-design-system/packages/glossary` for the dev path.',
   );
+}
+
+async function loadPackageArtifacts(root: string): Promise<GlossaryPackage> {
+  const dist = join(root, 'dist');
+  const exportPath = join(dist, 'glossary.export.json');
+  const scannerPath = join(dist, 'scanner.js');
+  const schemaPath = join(dist, 'schema.js');
+  const localeUtilsPath = join(dist, 'locale-utils.js');
+  const loaderPath = join(dist, 'loader.js');
+
+  for (const [label, p] of [
+    ['glossary.export.json', exportPath],
+    ['scanner.js', scannerPath],
+    ['schema.js', schemaPath],
+    ['locale-utils.js', localeUtilsPath],
+    ['loader.js', loaderPath],
+  ] as const) {
+    if (!existsSync(p)) {
+      throw new Error(`[check-glossary] @aster-cloud/glossary at ${root} is missing ${label}; rebuild the package.`);
+    }
+  }
+
+  const rawExport = JSON.parse(readFileSync(exportPath, 'utf8'));
+  const scannerMod = await import(pathToFileURL(scannerPath).href);
+  const schemaMod = await import(pathToFileURL(schemaPath).href);
+  const localeUtilsMod = await import(pathToFileURL(localeUtilsPath).href);
+  const loaderMod = await import(pathToFileURL(loaderPath).href);
+
+  // Runtime contract checks — catches stale or mismatched dist files with a
+  // specific error rather than a downstream TypeError.
+  assertExport(scannerMod, 'scan', 'function', `${root}/dist/scanner.js`);
+  assertExport(schemaMod, 'GlossaryConfigSchema', 'object', `${root}/dist/schema.js`);
+  if (typeof schemaMod.GlossaryConfigSchema?.safeParse !== 'function') {
+    throw new Error(`[check-glossary] ${root}/dist/schema.js exports GlossaryConfigSchema but it is not a Zod schema`);
+  }
+  for (const fn of ['parseLocaleTag', 'matchLocaleSegment', 'localeFromPathSegment', 'stripLocaleSegment', 'shortLocaleTokens']) {
+    assertExport(localeUtilsMod, fn, 'function', `${root}/dist/locale-utils.js`);
+  }
+  assertExport(loaderMod, 'validateGlossaryExportShape', 'function', `${root}/dist/loader.js`);
+  loaderMod.validateGlossaryExportShape(rawExport, exportPath);
+  const glossaryExport = rawExport as GlossaryExport;
+
+  return {
+    root,
+    scan: scannerMod.scan as CanonicalScan,
+    glossaryExport,
+    configSchema: schemaMod.GlossaryConfigSchema,
+    localeUtils: {
+      parseLocaleTag: localeUtilsMod.parseLocaleTag,
+      matchLocaleSegment: localeUtilsMod.matchLocaleSegment,
+      localeFromPathSegment: localeUtilsMod.localeFromPathSegment,
+      stripLocaleSegment: localeUtilsMod.stripLocaleSegment,
+      shortLocaleTokens: localeUtilsMod.shortLocaleTokens,
+    },
+  };
+}
+
+function assertExport(mod: any, name: string, kind: 'function' | 'object', source: string): void {
+  const v = mod[name];
+  const ok = kind === 'function' ? typeof v === 'function' : (v !== null && typeof v === 'object');
+  if (!ok) {
+    throw new Error(
+      `[check-glossary] contract break: ${source} does not export ${kind} '${name}'. ` +
+      `Likely a stale build or an incompatible @aster-cloud/glossary version.`,
+    );
+  }
+}
+
+function loadConfig(pkg: GlossaryPackage): Config {
+  const raw = parseYaml(readFileSync(join(repoRoot, 'glossary.config.yaml'), 'utf8'));
+  const parsed = pkg.configSchema.safeParse(raw) as { success: boolean; data?: Config; error?: { issues: Array<{ path: PropertyKey[]; message: string }> } };
+  if (!parsed.success) {
+    throw new Error(
+      `[check-glossary] glossary.config.yaml failed schema validation:\n  ${parsed.error!.issues
+        .map((i) => `${i.path.join('.')}: ${i.message}`)
+        .join('\n  ')}`,
+    );
+  }
+  return parsed.data as Config;
 }
 
 // ─── glob ─→ regex (handles **/ for zero-depth match) ───
@@ -195,59 +260,28 @@ function extractFrontmatterLocale(md: string): string | null {
   return line ? line[1]! : null;
 }
 
-/**
- * Derive the full locale id from a VitePress-style path using the glossary's
- * registered locales. `docs/<short>/...` maps to the full locale id whose
- * short token matches; otherwise the backbone locale.
- *
- * Replaces the hardcoded `docs/zh/` / `docs/de/` checks so new locales
- * automatically participate without editing this script.
- */
-function localeFromPath(p: string, shortToFull: Map<string, string>, backboneLocale: string): string {
-  const m = /^docs\/([a-z]{2,3}(-[a-z]{2,4})?)\//i.exec(p);
-  if (m) {
-    const short = m[1]!.toLowerCase().split('-')[0]!;
-    const full = shortToFull.get(short);
-    if (full) return full;
-  }
-  return backboneLocale;
-}
-
-/**
- * Strip a registered-locale directory segment from a path so cross-locale
- * mirrors produce identical pairKeys. Only strips known locale tokens —
- * `docs/api/` stays intact. Token set derived from glossary.locales, so
- * adding a new locale to the glossary auto-extends this without consumer
- * edits.
- */
-function stripLocaleSegment(p: string, knownLocaleTokens: ReadonlySet<string>): string {
-  const m = /^docs\/([a-z]{2,3}(-[a-z]{2,4})?)\//i.exec(p);
-  if (!m) return p.replace(/^docs\//, '');
-  const short = m[1]!.toLowerCase().split('-')[0]!;
-  if (knownLocaleTokens.has(short)) {
-    return p.replace(/^docs\/[a-z]{2,3}(-[a-z]{2,4})?\//i, '');
-  }
-  return p.replace(/^docs\//, '');
-}
+// localeFromPath / stripLocaleSegment now come from @aster-cloud/glossary/locale-utils
+// (see resolveGlossaryPackage). The previous hand-rolled regexes only handled
+// `xx[-XXXX]` and collapsed `zh-CN` and `zh-TW` to the same token; the
+// canonical helpers parse full BCP-47 tags.
 
 // ─── main ───
 async function main(): Promise<void> {
   const strict = process.argv.includes('--strict');
-  const glossary = resolveGlossary();
-  const config = await loadConfig();
-  const { scan } = await resolveScanner();
+  const pkg = await resolveGlossaryPackage();
+  const glossary = pkg.glossaryExport;
+  const config = loadConfig(pkg);
+  const { scan } = pkg;
+  const { matchLocaleSegment, stripLocaleSegment } = pkg.localeUtils;
   const issues: Issue[] = [];
 
   console.log(`[check-glossary] glossary v${glossary.localesVersion} loaded ${Object.keys(glossary.terms).length} terms × ${glossary.locales.length} locales`);
   console.log(`[check-glossary] config tier=${config.tier} strict=${strict}`);
 
-  // Locale tokens derived from glossary — single source of truth.
-  // shortToFull: 'zh' → 'zh-CN', 'de' → 'de-DE', 'en' → 'en-US'.
-  const shortToFull = new Map<string, string>();
-  for (const l of glossary.locales) shortToFull.set(l.id.toLowerCase().split('-')[0]!, l.id);
-  const knownLocaleTokens = new Set(shortToFull.keys());
   const registeredFullLocales = new Set(glossary.locales.map((l) => l.id));
   const backboneLocale = glossary.locales.find((l) => l.role === 'backbone')?.id ?? 'en-US';
+  const officialTier = config.tier === 'official';
+  const localeMismatchSeverity: 'error' | 'warning' = (strict || officialTier) ? 'error' : 'warning';
 
   // Build ScanInput from markdown surfaces. The canonical scan() handles
   // forbidden-alias detection AND cross-locale parity (which the previous
@@ -262,23 +296,42 @@ async function main(): Promise<void> {
 
     for (const f of annotated) {
       const content = readFileSync(join(repoRoot, f), 'utf8');
-      const fileLocale = extractFrontmatterLocale(content) ?? localeFromPath(f, shortToFull, backboneLocale);
-      if (!registeredFullLocales.has(fileLocale)) {
+      const declared = extractFrontmatterLocale(content);
+      // Try the declared locale first; fall back to deriving from path under
+      // `docs/<locale>/...` using the canonical BCP-47 matcher.
+      const candidate = declared ?? deriveLocaleFromPath(f);
+      const fileLocale = candidate && registeredFullLocales.has(candidate)
+        ? candidate
+        : backboneLocale;
+      if (candidate && !registeredFullLocales.has(candidate)) {
+        // Surface the typo loudly. In strict/official we DO NOT skip the
+        // file — we still scan it under backboneLocale so the diagnostic
+        // doesn't suppress alias/parity findings.
         issues.push({
-          severity: 'warning',
+          severity: localeMismatchSeverity,
           rule: 'surface-coverage',
           path: f,
-          detail: `markdown frontmatter locale "${fileLocale}" not registered in glossary.locales (known: ${[...registeredFullLocales].join(', ')}) — possible typo`,
+          detail: `markdown locale "${candidate}" not registered in glossary.locales (known: ${[...registeredFullLocales].join(', ')}); falling back to backbone for scanning`,
         });
-        continue;
       }
       // pairKey scope: `<surfaceName>:<path with locale segment stripped>`.
-      // Locale tokens come from glossary, so adding a new locale to the glossary
-      // automatically extends the strip set with no consumer-side edit needed.
-      const relativeWithoutLocale = stripLocaleSegment(f, knownLocaleTokens);
+      // stripLocaleSegment now uses the canonical full-BCP-47 matcher from
+      // @aster-cloud/glossary/locale-utils — `zh-CN` and `zh-TW` no longer
+      // collapse onto the same key.
+      const relativeWithoutLocale = stripLocaleSegment(f, 'docs', glossary.locales as any);
       const pairKey = `${surfaceName}:${relativeWithoutLocale}`;
       markdownSurfaces.push({ path: f, locale: fileLocale, content, pairKey });
     }
+  }
+
+  function deriveLocaleFromPath(p: string): string | null {
+    // Treat the first path segment after `docs/` as a candidate locale tag.
+    // Returns null if it doesn't parse as a BCP-47 tag at all, which lets
+    // `docs/api/`, `docs/learn/`, etc. fall through cleanly.
+    const m = /^docs\/([^/]+)\//.exec(p);
+    if (!m) return null;
+    const seg = m[1]!;
+    return matchLocaleSegment(seg, glossary.locales as any);
   }
 
   const scanResult = scan({ markdownSurfaces }, { glossary, strict });

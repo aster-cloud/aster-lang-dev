@@ -1,20 +1,23 @@
 /**
  * check-locale-parity.ts — for each hand-written English `*.md` (not in
- * ignored-surfaces), require `docs/zh/<same-relpath>.md` and
- * `docs/de/<same-relpath>.md` to exist.
+ * ignored-surfaces), require a mirror at `docs/<locale>/<same-relpath>.md`
+ * for every locale registered in `@aster-cloud/glossary`.
  *
  * Plan: aster-cloud/.claude/plan/glossary-contract.md §5.3.
  *
- * The English path under `docs/` (NOT under `docs/zh/` or `docs/de/`)
- * is the source-of-truth. Translated mirrors live at
- * `docs/<lang>/<same-relpath>`.
+ * The English path under `docs/` (NOT under any locale subtree) is the
+ * source-of-truth. Translated mirrors live at `docs/<locale>/<same-relpath>`.
  *
- * Returns exit code 0 if every covered hand-written file has both
- * mirrors; 1 otherwise.
+ * Locale set is derived from `glossary.export.json`. Optionally, the
+ * config's `locale-dirs` field can pin an explicit allowlist — but it
+ * MUST be a subset of the glossary-registered locales (drift detection).
+ *
+ * Returns exit code 0 if every backbone file has every locale mirror;
+ * 1 otherwise.
  */
 
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join, relative, resolve as resolvePath } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 
@@ -34,54 +37,101 @@ interface LocaleParityConfig extends Config {
 }
 
 /**
- * Discover non-backbone locale directories under docs/. The locale token
- * set is derived from `@aster-cloud/glossary`'s `glossary.export.json` —
- * single source of truth. Adding a new locale to the glossary
- * automatically extends parity coverage with no script edits.
+ * Discover non-backbone locale directories under docs/. Uses the
+ * canonical `matchLocaleSegment` from `@aster-cloud/glossary/locale-utils`
+ * so:
+ *   - Two locales sharing a primary subtag (e.g. zh-CN and zh-TW) do NOT
+ *     collide: a docs subtree named `zh-TW` matches only the registered
+ *     locale `zh-TW`, not `zh-CN`.
+ *   - Configured `locale-dirs` entries are validated against the FULL
+ *     glossary locale set, not a primary-subtag projection.
+ *
+ * `locale-dirs` (when present) acts as an explicit allowlist; entries not
+ * registered in `glossary.locales` cause a hard error.
+ *
+ * The returned list contains the discovered/declared directory NAMES (as
+ * they appear under `docs/`), not the resolved full locale ids.
  */
-function discoverLocaleDirs(cfg: LocaleParityConfig): string[] {
-  // 1. Explicit config wins (recommended post-rollout).
-  if (Array.isArray(cfg['locale-dirs']) && cfg['locale-dirs'].length > 0) {
-    return [...cfg['locale-dirs']].sort();
-  }
-  // 2. Derive locale tokens from the glossary, then filesystem-scan.
-  const knownTokens = loadGlossaryLocaleTokens();
+async function discoverLocaleDirs(cfg: LocaleParityConfig): Promise<string[]> {
+  const { glossaryRoot, glossaryExport, matchLocaleSegment } = await loadGlossaryArtifacts();
+  const backboneId = glossaryExport.locales.find((l) => l.role === 'backbone')?.id;
+
+  // Filesystem-discover candidate directory names; each is mapped through
+  // matchLocaleSegment to confirm it resolves to a registered FULL locale id
+  // OTHER than the backbone.
+  const fsDiscovered: string[] = [];
   const docsDir = join(repoRoot, 'docs');
-  if (!existsSync(docsDir)) return [];
-  const out: string[] = [];
-  for (const name of readdirSync(docsDir)) {
-    if (name.startsWith('.')) continue;
-    const abs = join(docsDir, name);
-    let s; try { s = statSync(abs); } catch { continue; }
-    if (!s.isDirectory()) continue;
-    const m = /^([a-z]{2,3})(?:-[a-z]{2,4})?$/i.exec(name);
-    if (m && knownTokens.has(m[1]!.toLowerCase()) && name !== 'en') {
-      out.push(name);
+  if (existsSync(docsDir)) {
+    for (const name of readdirSync(docsDir)) {
+      if (name.startsWith('.')) continue;
+      const abs = join(docsDir, name);
+      let s; try { s = statSync(abs); } catch { continue; }
+      if (!s.isDirectory()) continue;
+      const matched = matchLocaleSegment(name, glossaryExport.locales);
+      if (matched && matched !== backboneId) {
+        fsDiscovered.push(name);
+      }
     }
   }
-  return out.sort();
+
+  if (Array.isArray(cfg['locale-dirs']) && cfg['locale-dirs'].length > 0) {
+    const invalid = cfg['locale-dirs'].filter((d) => matchLocaleSegment(d, glossaryExport.locales) === null);
+    if (invalid.length > 0) {
+      throw new Error(
+        `[check-locale-parity] config 'locale-dirs' contains entries not registered in glossary.locales: ${invalid.join(', ')}; ` +
+        `known glossary locale ids: ${glossaryExport.locales.map((l) => l.id).sort().join(', ')}`,
+      );
+    }
+    void glossaryRoot;
+    return [...cfg['locale-dirs']].sort();
+  }
+  return fsDiscovered.sort();
+}
+
+interface GlossaryExportShape {
+  localesVersion: number;
+  locales: Array<{ id: string; role?: 'backbone'; bcp47?: string }>;
+}
+
+interface GlossaryArtifacts {
+  glossaryRoot: string;
+  glossaryExport: GlossaryExportShape;
+  matchLocaleSegment: (segment: string, locales: ReadonlyArray<{ id: string }>) => string | null;
 }
 
 /**
- * Read short-locale tokens (e.g. 'zh', 'de') from the glossary export.
- * Fails closed if the glossary isn't built — the parity check shouldn't
- * silently run with an empty locale set.
+ * Resolve the @aster-cloud/glossary package once and load both the export
+ * JSON and the canonical locale-utils. Both come from the same package
+ * root, avoiding cross-version mixing.
  */
-function loadGlossaryLocaleTokens(): Set<string> {
-  const candidates = [
-    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'glossary.export.json'),
-    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'glossary.export.json'),
+async function loadGlossaryArtifacts(): Promise<GlossaryArtifacts> {
+  const roots = [
+    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary'),
+    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary'),
   ];
-  for (const p of candidates) {
-    if (existsSync(p)) {
-      const raw = JSON.parse(readFileSync(p, 'utf8')) as { locales: Array<{ id: string }> };
-      const tokens = new Set<string>();
-      for (const l of raw.locales) tokens.add(l.id.toLowerCase().split('-')[0]!);
-      return tokens;
+  for (const root of roots) {
+    const exportPath = join(root, 'dist', 'glossary.export.json');
+    const localeUtilsPath = join(root, 'dist', 'locale-utils.js');
+    const loaderPath = join(root, 'dist', 'loader.js');
+    if (!existsSync(exportPath) || !existsSync(localeUtilsPath) || !existsSync(loaderPath)) continue;
+    const raw = JSON.parse(readFileSync(exportPath, 'utf8'));
+    const loaderMod = await import(pathToFileURL(loaderPath).href);
+    if (typeof loaderMod.validateGlossaryExportShape !== 'function') {
+      throw new Error(`[check-locale-parity] ${loaderPath} does not export validateGlossaryExportShape — rebuild @aster-cloud/glossary`);
     }
+    loaderMod.validateGlossaryExportShape(raw, exportPath);
+    const mod = await import(pathToFileURL(localeUtilsPath).href);
+    if (typeof mod.matchLocaleSegment !== 'function') {
+      throw new Error(`[check-locale-parity] ${localeUtilsPath} does not export matchLocaleSegment — rebuild @aster-cloud/glossary`);
+    }
+    return {
+      glossaryRoot: root,
+      glossaryExport: raw as unknown as GlossaryExportShape,
+      matchLocaleSegment: mod.matchLocaleSegment,
+    };
   }
   throw new Error(
-    '[check-locale-parity] glossary.export.json not found; cannot derive locale set. ' +
+    '[check-locale-parity] @aster-cloud/glossary dist not found. ' +
     'Run `pnpm build` in aster-design-system/packages/glossary first.',
   );
 }
@@ -97,20 +147,18 @@ function globToRegex(glob: string): RegExp {
   return new RegExp(`^${escaped}$`);
 }
 
-const config = loadConfig();
-const ignoreRes = (config['ignored-surfaces'] ?? []).map((s) => globToRegex(s.path));
-function isIgnored(p: string): boolean {
-  return ignoreRes.some((re) => re.test(p));
-}
+async function main(): Promise<void> {
+  const config = loadConfig();
+  const ignoreRes = (config['ignored-surfaces'] ?? []).map((s) => globToRegex(s.path));
+  const isIgnored = (p: string): boolean => ignoreRes.some((re) => re.test(p));
 
-const locales = discoverLocaleDirs(config as LocaleParityConfig);
-console.log(`[check-locale-parity] discovered locale directories: ${locales.join(', ') || '(none)'}`);
+  const locales = await discoverLocaleDirs(config as LocaleParityConfig);
+  console.log(`[check-locale-parity] discovered locale directories: ${locales.join(', ') || '(none)'}`);
 
-// Collect every backbone English .md under docs/ that's not under a locale
-// subtree, and not in ignored-surfaces.
-function listBackboneEnglishMd(): string[] {
-  const out: string[] = [];
+  // Collect every backbone English .md under docs/ that's not under a locale
+  // subtree, and not in ignored-surfaces.
   const localePrefixes = locales.map((l) => `docs/${l}`);
+  const backboneFiles: string[] = [];
   const walk = (dir: string): void => {
     let entries: string[];
     try { entries = readdirSync(dir); } catch { return; }
@@ -119,52 +167,48 @@ function listBackboneEnglishMd(): string[] {
       const abs = join(dir, name);
       let s; try { s = statSync(abs); } catch { continue; }
       const rel = relative(repoRoot, abs);
-      // Skip locale subtrees — those are the mirrors, not backbone.
-      if (localePrefixes.some((p) => rel === p || rel.startsWith(`${p}/`))) {
-        continue;
-      }
+      if (localePrefixes.some((p) => rel === p || rel.startsWith(`${p}/`))) continue;
       if (s.isDirectory()) walk(abs);
       else if (name.endsWith('.md') && rel.startsWith('docs/') && !isIgnored(rel)) {
-        out.push(rel);
+        backboneFiles.push(rel);
       }
     }
   };
   walk(repoRoot);
-  return out;
-}
 
-const backboneFiles = listBackboneEnglishMd();
-const missing: Array<{ backbone: string; locale: string; expected: string }> = [];
-
-for (const f of backboneFiles) {
-  // f looks like "docs/getting-started/quickstart.md"
-  // Need "docs/<locale>/getting-started/quickstart.md" for every discovered locale.
-  const relUnderDocs = f.replace(/^docs\//, '');
-  for (const locale of locales) {
-    const expected = `docs/${locale}/${relUnderDocs}`;
-    if (!existsSync(join(repoRoot, expected))) {
-      missing.push({ backbone: f, locale, expected });
+  const missing: Array<{ backbone: string; locale: string; expected: string }> = [];
+  for (const f of backboneFiles) {
+    const relUnderDocs = f.replace(/^docs\//, '');
+    for (const locale of locales) {
+      const expected = `docs/${locale}/${relUnderDocs}`;
+      if (!existsSync(join(repoRoot, expected))) {
+        missing.push({ backbone: f, locale, expected });
+      }
     }
   }
-}
 
-console.log(`[check-locale-parity] backbone English files: ${backboneFiles.length}`);
-console.log(`[check-locale-parity] expected mirrors per backbone: ${locales.length} (${locales.join(', ') || 'none'}) = ${backboneFiles.length * locales.length} total`);
-console.log(`[check-locale-parity] missing mirrors: ${missing.length}`);
+  console.log(`[check-locale-parity] backbone English files: ${backboneFiles.length}`);
+  console.log(`[check-locale-parity] expected mirrors per backbone: ${locales.length} (${locales.join(', ') || 'none'}) = ${backboneFiles.length * locales.length} total`);
+  console.log(`[check-locale-parity] missing mirrors: ${missing.length}`);
 
-if (missing.length > 0) {
-  for (const m of missing.slice(0, 100)) {
-    console.error(`  [missing-mirror] ${m.locale}: ${m.expected} (backbone: ${m.backbone})`);
+  if (missing.length > 0) {
+    for (const m of missing.slice(0, 100)) {
+      console.error(`  [missing-mirror] ${m.locale}: ${m.expected} (backbone: ${m.backbone})`);
+    }
+    if (missing.length > 100) console.error(`  … and ${missing.length - 100} more`);
   }
-  if (missing.length > 100) console.error(`  … and ${missing.length - 100} more`);
+
+  writeFileSync(join(repoRoot, 'locale-parity-findings.json'), JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    backboneFileCount: backboneFiles.length,
+    missingCount: missing.length,
+    missing,
+  }, null, 2));
+
+  process.exit(missing.length === 0 ? 0 : 1);
 }
 
-// Always write report for CI artifact.
-writeFileSync(join(repoRoot, 'locale-parity-findings.json'), JSON.stringify({
-  generatedAt: new Date().toISOString(),
-  backboneFileCount: backboneFiles.length,
-  missingCount: missing.length,
-  missing,
-}, null, 2));
-
-process.exit(missing.length === 0 ? 0 : 1);
+main().catch((err) => {
+  console.error('[check-locale-parity] fatal:', err instanceof Error ? err.message : err);
+  process.exit(1);
+});
