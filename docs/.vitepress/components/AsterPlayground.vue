@@ -273,13 +273,25 @@ async function initEditor() {
   runAnalysis();
 }
 
+/**
+ * Extract the 1-based line number from a diagnostic. validateSyntaxWithSpan
+ * returns spans shaped `{ start: { line, col } }` (see
+ * `aster-lang-ts/src/browser.ts ValidationError`); other code paths might
+ * pass `{ line }` directly, so both shapes are accepted. Returning -1 on
+ * miss lets the caller skip rather than mis-map to line 1.
+ */
+function diagnosticLine(d: any): number {
+  const candidate = d?.span?.start?.line ?? d?.span?.line ?? d?.line;
+  return typeof candidate === 'number' && candidate > 0 ? candidate : -1;
+}
+
 /** Update the gutter markers to reflect current diagnostics. */
 function syncDiagnosticGutter() {
   if (!editorView.value || !diagnosticEffect) return;
   const lines = new Set<number>();
   for (const d of diagnostics.value) {
-    const lineNo = d?.span?.line ?? d?.line;
-    if (typeof lineNo === 'number' && lineNo > 0) lines.add(lineNo);
+    const n = diagnosticLine(d);
+    if (n > 0) lines.add(n);
   }
   editorView.value.dispatch({
     effects: diagnosticEffect.of([...lines]),
@@ -289,8 +301,8 @@ function syncDiagnosticGutter() {
 /** Click handler used by the diagnostic list — jump editor to the diagnostic's line. */
 function jumpToDiagnostic(d: any) {
   if (!editorView.value) return;
-  const lineNo = d?.span?.line ?? d?.line;
-  if (typeof lineNo !== 'number' || lineNo < 1) return;
+  const lineNo = diagnosticLine(d);
+  if (lineNo < 1) return;
   const line = editorView.value.state.doc.line(lineNo);
   editorView.value.dispatch({
     selection: { anchor: line.from },
@@ -458,13 +470,13 @@ const footerClass = computed(() => {
                 v-for="(d, i) in diagnostics"
                 :key="i"
                 class="diagnostic-item"
-                :class="{ clickable: !!(d.span?.start?.line ?? d.line) }"
+                :class="{ clickable: diagnosticLine(d) > 0 }"
                 role="button"
                 tabindex="0"
-                :title="(d.span?.start?.line ?? d.line) ? 'Click to jump to line' : ''"
-                @click="jumpToDiagnostic({ line: d.span?.start?.line ?? d.line })"
-                @keydown.enter="jumpToDiagnostic({ line: d.span?.start?.line ?? d.line })"
-                @keydown.space.prevent="jumpToDiagnostic({ line: d.span?.start?.line ?? d.line })"
+                :title="diagnosticLine(d) > 0 ? 'Click to jump to line' : ''"
+                @click="jumpToDiagnostic(d)"
+                @keydown.enter="jumpToDiagnostic(d)"
+                @keydown.space.prevent="jumpToDiagnostic(d)"
               >
                 <span class="diagnostic-severity error">ERROR</span>
                 <span v-if="d.span" class="diagnostic-location">
