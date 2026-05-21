@@ -29,32 +29,23 @@ function loadConfig(): Config {
   return parseYaml(readFileSync(join(repoRoot, 'glossary.config.yaml'), 'utf8')) as Config;
 }
 
-/**
- * Discover non-backbone locale directories under docs/. Avoids hardcoding
- * `['zh', 'de']` so adding a new locale's docs subtree (e.g. `docs/ja/`)
- * auto-extends the parity check.
- *
- * Approach: read the allowlist from `glossary.config.yaml`'s `locale-dirs`
- * field if present; otherwise fall back to a curated set of known ISO-639
- * locale codes to avoid false-positives like `docs/api/`.
- */
-const KNOWN_LOCALE_CODES = new Set([
-  // ISO-639-1 codes likely to be used as docs/ subtree names.
-  // Add new locales here when onboarding a new locale tree.
-  'zh', 'de', 'ja', 'ko', 'fr', 'es', 'pt', 'it', 'ru', 'ar', 'hi',
-]);
-
 interface LocaleParityConfig extends Config {
   'locale-dirs'?: string[];
 }
 
+/**
+ * Discover non-backbone locale directories under docs/. The locale token
+ * set is derived from `@aster-cloud/glossary`'s `glossary.export.json` —
+ * single source of truth. Adding a new locale to the glossary
+ * automatically extends parity coverage with no script edits.
+ */
 function discoverLocaleDirs(cfg: LocaleParityConfig): string[] {
-  // 1. Explicit config wins. This is the recommended path post-rollout.
+  // 1. Explicit config wins (recommended post-rollout).
   if (Array.isArray(cfg['locale-dirs']) && cfg['locale-dirs'].length > 0) {
     return [...cfg['locale-dirs']].sort();
   }
-  // 2. Filesystem discovery filtered by KNOWN_LOCALE_CODES to avoid
-  //    matching content directories like `docs/api/` or `docs/learn/`.
+  // 2. Derive locale tokens from the glossary, then filesystem-scan.
+  const knownTokens = loadGlossaryLocaleTokens();
   const docsDir = join(repoRoot, 'docs');
   if (!existsSync(docsDir)) return [];
   const out: string[] = [];
@@ -63,14 +54,36 @@ function discoverLocaleDirs(cfg: LocaleParityConfig): string[] {
     const abs = join(docsDir, name);
     let s; try { s = statSync(abs); } catch { continue; }
     if (!s.isDirectory()) continue;
-    // Only accept names that look like locale codes AND are in the
-    // curated set. Region subtag (e.g. `zh-CN`) accepted if base is known.
     const m = /^([a-z]{2,3})(?:-[a-z]{2,4})?$/i.exec(name);
-    if (m && KNOWN_LOCALE_CODES.has(m[1]!.toLowerCase()) && name !== 'en') {
+    if (m && knownTokens.has(m[1]!.toLowerCase()) && name !== 'en') {
       out.push(name);
     }
   }
   return out.sort();
+}
+
+/**
+ * Read short-locale tokens (e.g. 'zh', 'de') from the glossary export.
+ * Fails closed if the glossary isn't built — the parity check shouldn't
+ * silently run with an empty locale set.
+ */
+function loadGlossaryLocaleTokens(): Set<string> {
+  const candidates = [
+    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'glossary.export.json'),
+    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'glossary.export.json'),
+  ];
+  for (const p of candidates) {
+    if (existsSync(p)) {
+      const raw = JSON.parse(readFileSync(p, 'utf8')) as { locales: Array<{ id: string }> };
+      const tokens = new Set<string>();
+      for (const l of raw.locales) tokens.add(l.id.toLowerCase().split('-')[0]!);
+      return tokens;
+    }
+  }
+  throw new Error(
+    '[check-locale-parity] glossary.export.json not found; cannot derive locale set. ' +
+    'Run `pnpm build` in aster-design-system/packages/glossary first.',
+  );
 }
 
 function globToRegex(glob: string): RegExp {

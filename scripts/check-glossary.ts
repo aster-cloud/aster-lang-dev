@@ -133,8 +133,11 @@ async function loadConfig(): Promise<Config> {
       return parsed.data as Config;
     }
   }
-  console.warn('[check-glossary] schema module not built; skipping config Zod validation');
-  return raw as Config;
+  throw new Error(
+    '[check-glossary] @aster-cloud/glossary dist/schema.js not found; ' +
+    'cannot validate glossary.config.yaml. Run `pnpm build` in ' +
+    'aster-design-system/packages/glossary before invoking this script.',
+  );
 }
 
 // ─── glob ─→ regex (handles **/ for zero-depth match) ───
@@ -192,11 +195,39 @@ function extractFrontmatterLocale(md: string): string | null {
   return line ? line[1]! : null;
 }
 
-// VitePress uses path-based locale conventions: docs/zh/foo.md is zh-CN, docs/de/foo.md is de-DE.
-function localeFromPath(p: string): string {
-  if (p.startsWith('docs/zh/')) return 'zh-CN';
-  if (p.startsWith('docs/de/')) return 'de-DE';
-  return 'en-US';
+/**
+ * Derive the full locale id from a VitePress-style path using the glossary's
+ * registered locales. `docs/<short>/...` maps to the full locale id whose
+ * short token matches; otherwise the backbone locale.
+ *
+ * Replaces the hardcoded `docs/zh/` / `docs/de/` checks so new locales
+ * automatically participate without editing this script.
+ */
+function localeFromPath(p: string, shortToFull: Map<string, string>, backboneLocale: string): string {
+  const m = /^docs\/([a-z]{2,3}(-[a-z]{2,4})?)\//i.exec(p);
+  if (m) {
+    const short = m[1]!.toLowerCase().split('-')[0]!;
+    const full = shortToFull.get(short);
+    if (full) return full;
+  }
+  return backboneLocale;
+}
+
+/**
+ * Strip a registered-locale directory segment from a path so cross-locale
+ * mirrors produce identical pairKeys. Only strips known locale tokens —
+ * `docs/api/` stays intact. Token set derived from glossary.locales, so
+ * adding a new locale to the glossary auto-extends this without consumer
+ * edits.
+ */
+function stripLocaleSegment(p: string, knownLocaleTokens: ReadonlySet<string>): string {
+  const m = /^docs\/([a-z]{2,3}(-[a-z]{2,4})?)\//i.exec(p);
+  if (!m) return p.replace(/^docs\//, '');
+  const short = m[1]!.toLowerCase().split('-')[0]!;
+  if (knownLocaleTokens.has(short)) {
+    return p.replace(/^docs\/[a-z]{2,3}(-[a-z]{2,4})?\//i, '');
+  }
+  return p.replace(/^docs\//, '');
 }
 
 // ─── main ───
@@ -209,6 +240,14 @@ async function main(): Promise<void> {
 
   console.log(`[check-glossary] glossary v${glossary.localesVersion} loaded ${Object.keys(glossary.terms).length} terms × ${glossary.locales.length} locales`);
   console.log(`[check-glossary] config tier=${config.tier} strict=${strict}`);
+
+  // Locale tokens derived from glossary — single source of truth.
+  // shortToFull: 'zh' → 'zh-CN', 'de' → 'de-DE', 'en' → 'en-US'.
+  const shortToFull = new Map<string, string>();
+  for (const l of glossary.locales) shortToFull.set(l.id.toLowerCase().split('-')[0]!, l.id);
+  const knownLocaleTokens = new Set(shortToFull.keys());
+  const registeredFullLocales = new Set(glossary.locales.map((l) => l.id));
+  const backboneLocale = glossary.locales.find((l) => l.role === 'backbone')?.id ?? 'en-US';
 
   // Build ScanInput from markdown surfaces. The canonical scan() handles
   // forbidden-alias detection AND cross-locale parity (which the previous
@@ -223,13 +262,20 @@ async function main(): Promise<void> {
 
     for (const f of annotated) {
       const content = readFileSync(join(repoRoot, f), 'utf8');
-      const fileLocale = extractFrontmatterLocale(content) ?? localeFromPath(f);
+      const fileLocale = extractFrontmatterLocale(content) ?? localeFromPath(f, shortToFull, backboneLocale);
+      if (!registeredFullLocales.has(fileLocale)) {
+        issues.push({
+          severity: 'warning',
+          rule: 'surface-coverage',
+          path: f,
+          detail: `markdown frontmatter locale "${fileLocale}" not registered in glossary.locales (known: ${[...registeredFullLocales].join(', ')}) — possible typo`,
+        });
+        continue;
+      }
       // pairKey scope: `<surfaceName>:<path with locale segment stripped>`.
-      // Cross-surface namespacing prevents two surfaces that happen to share
-      // a relative path from being falsely paired (Round-3 codex finding).
-      const relativeWithoutLocale = f
-        .replace(/^docs\/(zh|de|ja|ko|fr|es|pt|it|ru|ar|hi)(-[a-z]{2,4})?\//i, 'docs/')
-        .replace(/^docs\//, '');
+      // Locale tokens come from glossary, so adding a new locale to the glossary
+      // automatically extends the strip set with no consumer-side edit needed.
+      const relativeWithoutLocale = stripLocaleSegment(f, knownLocaleTokens);
       const pairKey = `${surfaceName}:${relativeWithoutLocale}`;
       markdownSurfaces.push({ path: f, locale: fileLocale, content, pairKey });
     }
