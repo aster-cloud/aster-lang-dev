@@ -73,6 +73,19 @@ Rule calculateQuote given vehicle as Vehicle, produce Quote:
     返回 假。
   返回 真。`,
     },
+    {
+      id: 'struct-types',
+      name: '结构类型',
+      source: `模块 保险。
+
+定义 车辆类型 包含 品牌 作为 文本，年份 作为 整数，价值 作为 整数。
+定义 报价类型 包含 保费 作为 整数，免赔额 作为 整数。
+
+规则 计算报价 给定 车辆 作为 车辆类型，产出 报价类型：
+  如果 车辆.年份 小于 2015
+    返回 报价类型 设置 保费 为 车辆.价值 乘 5 除以 100，免赔额 为 1000。
+  返回 报价类型 设置 保费 为 车辆.价值 乘 3 除以 100，免赔额 为 500。`,
+    },
   ],
   DE_DE: [
     {
@@ -84,6 +97,35 @@ Regel berechnePreis gegeben betrag als Ganzzahl, liefert Ganzzahl:
   wenn betrag groesser als 100
     gib zurueck betrag mal 90 geteilt durch 100.
   gib zurueck betrag.`,
+    },
+    {
+      id: 'eligibility',
+      name: 'Berechtigungspruefung',
+      source: `Modul kredit.
+
+definiere Antragsteller hat bonitaet als Ganzzahl, einkommen als Ganzzahl, alter als Ganzzahl.
+
+Regel pruefeBerechtigung gegeben antragsteller als Antragsteller, liefert Wahrheit:
+  wenn antragsteller.bonitaet kleiner als 600
+    gib zurueck falsch.
+  wenn antragsteller.einkommen kleiner als 30000
+    gib zurueck falsch.
+  wenn antragsteller.alter kleiner als 18
+    gib zurueck falsch.
+  gib zurueck wahr.`,
+    },
+    {
+      id: 'struct-types',
+      name: 'Strukturtypen',
+      source: `Modul versicherung.
+
+definiere Fahrzeug hat marke als Text, baujahr als Ganzzahl, wert als Ganzzahl.
+definiere Angebot hat praemie als Ganzzahl, selbstbehalt als Ganzzahl.
+
+Regel berechneAngebot gegeben fahrzeug als Fahrzeug, liefert Angebot:
+  wenn fahrzeug.baujahr kleiner als 2015
+    gib zurueck Angebot mit praemie gesetzt auf fahrzeug.wert mal 5 geteilt durch 100, selbstbehalt gesetzt auf 1000.
+  gib zurueck Angebot mit praemie gesetzt auf fahrzeug.wert mal 3 geteilt durch 100, selbstbehalt gesetzt auf 500.`,
     },
   ],
 };

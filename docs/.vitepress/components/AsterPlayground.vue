@@ -129,6 +129,9 @@ async function runAnalysis() {
     } else if (schemaResult.value?.success && activeTab.value === 'diagnostics') {
       activeTab.value = 'schema';
     }
+
+    // Push diagnostics into the editor gutter so users see inline markers.
+    syncDiagnosticGutter();
   } catch (err: any) {
     lastError.value = err.message || String(err);
   } finally {
@@ -172,6 +175,12 @@ function onRun() {
   activeTab.value = 'console';
 }
 
+// Module-level handles to gutter effect + state — set during initEditor and
+// referenced by setDiagnosticGutter() so diagnostics from runAnalysis flow
+// into the editor's left-rail marker.
+let diagnosticEffect: any = null;
+let diagnosticField: any = null;
+
 async function initEditor() {
   if (!editorContainer.value) return;
 
@@ -191,12 +200,48 @@ async function initEditor() {
   cmState = stateModule;
   cmCommands = commandsModule;
 
+  // Diagnostic gutter — StateField holds a Set<lineNumber>, custom
+  // GutterMarker draws a small "●" in the diagnostic line gutter.
+  diagnosticEffect = cmState.StateEffect.define<number[]>();
+  diagnosticField = cmState.StateField.define<Set<number>>({
+    create: () => new Set<number>(),
+    update(value: Set<number>, tr: any) {
+      for (const e of tr.effects) {
+        if (e.is(diagnosticEffect)) return new Set<number>(e.value as number[]);
+      }
+      return value;
+    },
+  });
+
+  class DiagnosticGutterMarker extends cmView.GutterMarker {
+    toDOM() {
+      const el = document.createElement('span');
+      el.textContent = '●';
+      el.title = 'Diagnostic on this line — click for details';
+      el.style.color = '#f56565';
+      el.style.cursor = 'pointer';
+      el.style.fontSize = '14px';
+      return el;
+    }
+  }
+  const diagnosticGutter = cmView.gutter({
+    class: 'cm-diagnostic-gutter',
+    lineMarker(view: any, line: any) {
+      const set: Set<number> = view.state.field(diagnosticField);
+      const lineNo = view.state.doc.lineAt(line.from).number;
+      return set.has(lineNo) ? new DiagnosticGutterMarker() : null;
+    },
+    initialSpacer: () => new DiagnosticGutterMarker(),
+  });
+
   const initialSource = currentTemplates.value[0]?.source || '';
 
   const extensions = [
     cmView.lineNumbers(),
     cmView.highlightActiveLine(),
     cmView.drawSelection(),
+    diagnosticField,
+    diagnosticGutter,
     cmView.keymap.of([
       ...cmCommands.defaultKeymap,
       ...cmCommands.historyKeymap,
@@ -226,6 +271,32 @@ async function initEditor() {
 
   // Initial analysis
   runAnalysis();
+}
+
+/** Update the gutter markers to reflect current diagnostics. */
+function syncDiagnosticGutter() {
+  if (!editorView.value || !diagnosticEffect) return;
+  const lines = new Set<number>();
+  for (const d of diagnostics.value) {
+    const lineNo = d?.span?.line ?? d?.line;
+    if (typeof lineNo === 'number' && lineNo > 0) lines.add(lineNo);
+  }
+  editorView.value.dispatch({
+    effects: diagnosticEffect.of([...lines]),
+  });
+}
+
+/** Click handler used by the diagnostic list — jump editor to the diagnostic's line. */
+function jumpToDiagnostic(d: any) {
+  if (!editorView.value) return;
+  const lineNo = d?.span?.line ?? d?.line;
+  if (typeof lineNo !== 'number' || lineNo < 1) return;
+  const line = editorView.value.state.doc.line(lineNo);
+  editorView.value.dispatch({
+    selection: { anchor: line.from },
+    scrollIntoView: true,
+  });
+  editorView.value.focus();
 }
 
 function onTemplateChange(event: Event) {
@@ -382,8 +453,19 @@ const footerClass = computed(() => {
         <div class="playground-tab-content">
           <!-- Diagnostics -->
           <div v-if="activeTab === 'diagnostics'">
-            <ul v-if="diagnostics.length > 0" class="diagnostic-list">
-              <li v-for="(d, i) in diagnostics" :key="i" class="diagnostic-item">
+            <ul v-if="diagnostics.length > 0" class="diagnostic-list" role="list">
+              <li
+                v-for="(d, i) in diagnostics"
+                :key="i"
+                class="diagnostic-item"
+                :class="{ clickable: !!(d.span?.start?.line ?? d.line) }"
+                role="button"
+                tabindex="0"
+                :title="(d.span?.start?.line ?? d.line) ? 'Click to jump to line' : ''"
+                @click="jumpToDiagnostic({ line: d.span?.start?.line ?? d.line })"
+                @keydown.enter="jumpToDiagnostic({ line: d.span?.start?.line ?? d.line })"
+                @keydown.space.prevent="jumpToDiagnostic({ line: d.span?.start?.line ?? d.line })"
+              >
                 <span class="diagnostic-severity error">ERROR</span>
                 <span v-if="d.span" class="diagnostic-location">
                   L{{ d.span.start.line }}:{{ d.span.start.col }}
