@@ -12,7 +12,7 @@
  */
 
 import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join, relative, resolve as resolvePath } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 
@@ -81,8 +81,60 @@ function resolveGlossary(): GlossaryExport {
   throw new Error('[check-glossary] @aster-cloud/glossary not found in node_modules or workspace sibling');
 }
 
-function loadConfig(): Config {
-  return parseYaml(readFileSync(join(repoRoot, 'glossary.config.yaml'), 'utf8')) as Config;
+/**
+ * Resolve the canonical scanner from the same locations as resolveGlossary.
+ * Matching semantics live there; this driver only handles I/O.
+ */
+type CanonicalScan = (input: any, config: { glossary: GlossaryExport; strict?: boolean }) => {
+  issues: Array<{
+    severity: 'error' | 'warning';
+    rule: string;
+    surfacePath: string;
+    locale?: string;
+    termId?: string;
+    anchor?: string;
+    detail: string;
+  }>;
+  errorCount: number;
+  warningCount: number;
+};
+
+async function resolveScanner(): Promise<{ scan: CanonicalScan }> {
+  const candidates = [
+    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'scanner.js'),
+    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'scanner.js'),
+  ];
+  for (const p of candidates) {
+    if (existsSync(p)) {
+      const mod = await import(pathToFileURL(p).href);
+      return { scan: mod.scan };
+    }
+  }
+  throw new Error('[check-glossary] canonical scanner not found; run `pnpm build` in aster-design-system/packages/glossary');
+}
+
+async function loadConfig(): Promise<Config> {
+  const raw = parseYaml(readFileSync(join(repoRoot, 'glossary.config.yaml'), 'utf8'));
+  const schemaCandidates = [
+    join(repoRoot, 'node_modules', '@aster-cloud', 'glossary', 'dist', 'schema.js'),
+    join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary', 'dist', 'schema.js'),
+  ];
+  for (const sp of schemaCandidates) {
+    if (existsSync(sp)) {
+      const mod = await import(pathToFileURL(sp).href);
+      const parsed = mod.GlossaryConfigSchema.safeParse(raw);
+      if (!parsed.success) {
+        throw new Error(
+          `[check-glossary] glossary.config.yaml failed schema validation:\n  ${parsed.error.issues
+            .map((i: any) => `${i.path.join('.')}: ${i.message}`)
+            .join('\n  ')}`,
+        );
+      }
+      return parsed.data as Config;
+    }
+  }
+  console.warn('[check-glossary] schema module not built; skipping config Zod validation');
+  return raw as Config;
 }
 
 // ─── glob ─→ regex (handles **/ for zero-depth match) ───
@@ -128,65 +180,9 @@ function listMatches(glob: string | string[]): string[] {
   return [...new Set(results)];
 }
 
-// ─── matcher (subset of @aster-cloud/glossary/scanner) ───
-function normalize(s: string, ops: Array<string>): string {
-  let out = s.normalize('NFC');
-  out = out.replace(/[​-‏‪-‮⁠﻿]/g, ''); // strip zero-width + bidi
-  if (ops.includes('width')) {
-    out = out.replace(/[！-～]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
-  }
-  if (ops.includes('whitespace')) out = out.replace(/\s+/g, ' ').trim();
-  if (ops.includes('punctuation')) {
-    out = out
-      .replace(/[‘’]/g, "'")
-      .replace(/[“”]/g, '"')
-      .replace(/[‐-―]/g, '-')
-      .replace(/　/g, ' ');
-  }
-  return out;
-}
-
-function hasMatch(haystack: string, needle: string, match: MatchSpec): boolean {
-  if (!haystack || !needle) return false;
-  if (match.mode === 'literal') {
-    const cs = match['case-sensitive'] ?? false;
-    return cs ? haystack.includes(needle) : haystack.toLowerCase().includes(needle.toLowerCase());
-  }
-  if (match.mode === 'reviewed-regex') {
-    const flags = (match['case-sensitive'] ?? false) ? 'u' : 'iu';
-    try { return new RegExp(needle, flags).test(haystack); } catch { return false; }
-  }
-  const ops = match.normalize ?? [];
-  const cs = match['case-sensitive'] ?? false;
-  const nh = normalize(haystack, ops);
-  const nn = normalize(needle, ops);
-  const ch = cs ? nh : nh.toLowerCase();
-  const cn = cs ? nn : nn.toLowerCase();
-  const idx = ch.indexOf(cn);
-  if (idx === -1) return false;
-  const wordChar = /[\p{L}\p{N}_]/u;
-  const before = idx > 0 ? ch[idx - 1]! : ' ';
-  const after = idx + cn.length < ch.length ? ch[idx + cn.length]! : ' ';
-  return !wordChar.test(before) && !wordChar.test(after) ||
-    (wordChar.test(before) !== wordChar.test(ch[idx]!) && wordChar.test(after) !== wordChar.test(ch[idx + cn.length - 1]!));
-}
-
-function extractGlossaryBlocks(md: string): Array<{ id: string; text: string }> {
-  const blocks: Array<{ id: string; text: string }> = [];
-  const re = /<!--\s*glossary:block\s+id=([a-z0-9][a-z0-9-]*)\s*-->([\s\S]*?)<!--\s*\/glossary:block\s*-->/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(md)) !== null) {
-    const body = m[2]!
-      .replace(/```[\s\S]*?```/g, ' ')
-      .replace(/`[^`]*`/g, ' ')
-      .replace(/\[([^\]]*)\]\(([^)]*)\)/g, '$1')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    blocks.push({ id: m[1]!, text: body });
-  }
-  return blocks;
-}
+// Contract semantics — matching, surface extraction, parity, pairing,
+// freshness — live in @aster-cloud/glossary/scanner.scan(). This driver
+// only handles I/O. Do NOT add local matchers or extractors.
 
 function extractFrontmatterLocale(md: string): string | null {
   const m = /^---\n([\s\S]*?)\n---/.exec(md);
@@ -204,14 +200,20 @@ function localeFromPath(p: string): string {
 }
 
 // ─── main ───
-function main(): void {
+async function main(): Promise<void> {
   const strict = process.argv.includes('--strict');
   const glossary = resolveGlossary();
-  const config = loadConfig();
+  const config = await loadConfig();
+  const { scan } = await resolveScanner();
   const issues: Issue[] = [];
 
   console.log(`[check-glossary] glossary v${glossary.localesVersion} loaded ${Object.keys(glossary.terms).length} terms × ${glossary.locales.length} locales`);
   console.log(`[check-glossary] config tier=${config.tier} strict=${strict}`);
+
+  // Build ScanInput from markdown surfaces. The canonical scan() handles
+  // forbidden-alias detection AND cross-locale parity (which the previous
+  // hand-written driver lacked entirely — Round-2 Codex finding).
+  const markdownSurfaces: Array<{ path: string; locale: string; content: string; pairKey?: string }> = [];
 
   for (const [surfaceName, surface] of Object.entries(config.surfaces)) {
     if (surface.type !== 'markdown') continue;
@@ -222,26 +224,28 @@ function main(): void {
     for (const f of annotated) {
       const content = readFileSync(join(repoRoot, f), 'utf8');
       const fileLocale = extractFrontmatterLocale(content) ?? localeFromPath(f);
-      const blocks = extractGlossaryBlocks(content);
-      for (const block of blocks) {
-        for (const term of Object.values(glossary.terms)) {
-          const aliases = term['forbidden-aliases']?.[fileLocale] ?? [];
-          for (const alias of aliases) {
-            if (hasMatch(block.text, alias.text, alias.match)) {
-              issues.push({
-                severity: 'error',
-                rule: 'forbidden-alias',
-                path: f,
-                locale: fileLocale,
-                termId: term.id,
-                anchor: block.id,
-                detail: `forbidden alias "${alias.text}" of term "${term.id}" in block "${block.id}" (registered: "${term.translations[fileLocale] ?? '???'}")`,
-              });
-            }
-          }
-        }
-      }
+      // pairKey scope: `<surfaceName>:<path with locale segment stripped>`.
+      // Cross-surface namespacing prevents two surfaces that happen to share
+      // a relative path from being falsely paired (Round-3 codex finding).
+      const relativeWithoutLocale = f
+        .replace(/^docs\/(zh|de|ja|ko|fr|es|pt|it|ru|ar|hi)(-[a-z]{2,4})?\//i, 'docs/')
+        .replace(/^docs\//, '');
+      const pairKey = `${surfaceName}:${relativeWithoutLocale}`;
+      markdownSurfaces.push({ path: f, locale: fileLocale, content, pairKey });
     }
+  }
+
+  const scanResult = scan({ markdownSurfaces }, { glossary, strict });
+  for (const i of scanResult.issues) {
+    issues.push({
+      severity: i.severity,
+      rule: i.rule,
+      path: i.surfacePath,
+      locale: i.locale,
+      termId: i.termId,
+      anchor: i.anchor,
+      detail: i.detail,
+    });
   }
 
   const errorCount = issues.filter((i) => i.severity === 'error').length;
@@ -274,4 +278,7 @@ function main(): void {
   process.exit(failable ? 1 : 0);
 }
 
-main();
+main().catch((err) => {
+  console.error('[check-glossary] fatal:', err instanceof Error ? err.message : err);
+  process.exit(1);
+});
