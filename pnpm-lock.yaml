@@ -5,15 +5,15 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@aster-cloud/aster-lang-ts': ^0.1.5
+  '@aster-cloud/aster-lang-ts': ^0.2.0
 
 importers:
 
   .:
     dependencies:
       '@aster-cloud/aster-lang-ts':
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: ^0.2.0
+        version: 0.2.0
       '@aster-cloud/tokens':
         specifier: ^0.1.0
         version: 0.1.0
@@ -145,8 +145,8 @@ packages:
       zod:
         optional: true
 
-  '@aster-cloud/aster-lang-ts@0.1.5':
-    resolution: {integrity: sha512-5yn7xOwkL8VCqLEuCmrEXLjvNfRz19HrGou87xm8RVL1mF7WN3IjLQJS2sqbs689QG2MebdL/swOFwQFGVZOpw==}
+  '@aster-cloud/aster-lang-ts@0.2.0':
+    resolution: {integrity: sha512-UvBeLEIjfVoXP/lNHqNTbpiooHznpSzaYPagz80n8Hue9nt7mmyhgZ3si7JCY/m5f6PDhXHnUJbpN67t1LkSlA==}
     engines: {node: '>=24.0.0'}
     hasBin: true
 
@@ -1351,7 +1351,7 @@ snapshots:
       json-schema-to-ts: 3.1.1
     optional: true
 
-  '@aster-cloud/aster-lang-ts@0.1.5':
+  '@aster-cloud/aster-lang-ts@0.2.0':
     dependencies:
       '@types/semver': 7.7.1
       cac: 6.7.14
