@@ -53,7 +53,47 @@ interface LocaleParityConfig extends Config {
  * they appear under `docs/`), not the resolved full locale ids.
  */
 async function discoverLocaleDirs(cfg: LocaleParityConfig): Promise<string[]> {
-  const { glossaryRoot, glossaryExport, matchLocaleSegment } = await loadGlossaryArtifacts();
+  const artifacts = await loadGlossaryArtifacts();
+
+  // Degraded mode (CI without published @aster-cloud/glossary): rely on
+  // config['locale-dirs'] OR raw filesystem discovery without locale-id
+  // validation. The check is still useful — it ensures every backbone
+  // page has a mirror in each declared locale subtree — but it cannot
+  // reject locale-dirs that aren't in the glossary registry.
+  if (artifacts === null) {
+    const required = process.env.ASTER_GLOSSARY_REQUIRED === '1';
+    if (required) {
+      throw new Error(
+        '[check-locale-parity] @aster-cloud/glossary dist not found. ' +
+        'Run `pnpm build` in aster-design-system/packages/glossary first, ' +
+        'or unset ASTER_GLOSSARY_REQUIRED to fall back to filesystem discovery.',
+      );
+    }
+    console.warn(
+      '[check-locale-parity] @aster-cloud/glossary not available; ' +
+      'falling back to filesystem-only locale discovery. Set ' +
+      'ASTER_GLOSSARY_REQUIRED=1 to make this fatal.',
+    );
+    if (Array.isArray(cfg['locale-dirs']) && cfg['locale-dirs'].length > 0) {
+      return [...cfg['locale-dirs']].sort();
+    }
+    // Heuristic locale-dir match: BCP-47-like xx or xx-YY.
+    const localePattern = /^[a-z]{2,3}(-[A-Z]{2,4})?$/;
+    const docsDir = join(repoRoot, 'docs');
+    const fsDiscovered: string[] = [];
+    if (existsSync(docsDir)) {
+      for (const name of readdirSync(docsDir)) {
+        if (name.startsWith('.')) continue;
+        if (!localePattern.test(name)) continue;
+        const abs = join(docsDir, name);
+        let s; try { s = statSync(abs); } catch { continue; }
+        if (s.isDirectory()) fsDiscovered.push(name);
+      }
+    }
+    return fsDiscovered.sort();
+  }
+
+  const { glossaryRoot, glossaryExport, matchLocaleSegment } = artifacts;
   const backboneId = glossaryExport.locales.find((l) => l.role === 'backbone')?.id;
 
   // Filesystem-discover candidate directory names; each is mapped through
@@ -103,8 +143,14 @@ interface GlossaryArtifacts {
  * Resolve the @aster-cloud/glossary package once and load both the export
  * JSON and the canonical locale-utils. Both come from the same package
  * root, avoiding cross-version mixing.
+ *
+ * <p>Returns <code>null</code> when neither node_modules nor a sibling
+ * checkout has the package. Callers may either degrade to a filesystem-
+ * only discovery mode (the {@link main} default) or hard-fail. The
+ * historical fatal-error behaviour is restored by setting the env var
+ * <code>ASTER_GLOSSARY_REQUIRED=1</code>, which strict CI gates can pin.
  */
-async function loadGlossaryArtifacts(): Promise<GlossaryArtifacts> {
+async function loadGlossaryArtifacts(): Promise<GlossaryArtifacts | null> {
   const roots = [
     join(repoRoot, 'node_modules', '@aster-cloud', 'glossary'),
     join(repoRoot, '..', 'aster-design-system', 'packages', 'glossary'),
@@ -130,10 +176,7 @@ async function loadGlossaryArtifacts(): Promise<GlossaryArtifacts> {
       matchLocaleSegment: mod.matchLocaleSegment,
     };
   }
-  throw new Error(
-    '[check-locale-parity] @aster-cloud/glossary dist not found. ' +
-    'Run `pnpm build` in aster-design-system/packages/glossary first.',
-  );
+  return null;
 }
 
 function globToRegex(glob: string): RegExp {

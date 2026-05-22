@@ -8,6 +8,16 @@ version: 1
 tier: community
 localesVersion: 1
 
+# Explicit allowlist of locale subdirectories under docs/. When
+# @aster-cloud/glossary is available, this is cross-checked against
+# glossary.locales (any entry not registered there is a hard error).
+# When the glossary package isn't available (e.g. CI without sibling
+# checkout), this list IS the locale set — the alternative is a
+# filesystem heuristic that misclassifies dirs like "api" as locales.
+locale-dirs:
+  - de
+  - zh
+
 glossary-pin:
   version: 0.1.0
   npm-integrity: pending-g8a-publish
