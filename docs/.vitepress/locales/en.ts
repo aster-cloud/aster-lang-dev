@@ -9,6 +9,9 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: 'Playground', link: '/learn/playground' },
       { text: 'REST API', link: '/api/policies/evaluate' },
       { text: 'GraphQL', link: '/graphql/overview' },
+      { text: 'Pricing', link: '/pricing/' },
+      { text: 'Enterprise', link: '/enterprise/' },
+      { text: 'Blog', link: '/blog/' },
       { text: 'Community', link: '/community/' },
       { text: 'Language Docs', link: 'https://aster-lang.org' },
       { text: 'GitHub', link: 'https://github.com/aster-cloud/aster-lang-dev' },
@@ -91,6 +94,17 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           text: 'WebSocket',
           items: [
             { text: 'Preview Endpoint', link: '/websocket/preview' },
+          ],
+        },
+      ],
+      '/enterprise/': [
+        {
+          text: 'Enterprise & Legal',
+          items: [
+            { text: 'Overview', link: '/enterprise/' },
+            { text: 'DPA Template', link: '/enterprise/dpa-template' },
+            { text: 'Self-service DSAR', link: '/enterprise/dsar' },
+            { text: 'Telemetry Fields', link: '/enterprise/telemetry-fields' },
           ],
         },
       ],

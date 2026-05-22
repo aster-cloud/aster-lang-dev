@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
+    "docs:build": "vitepress build docs && node scripts/build-blog-rss.mjs",
     "docs:preview": "vitepress preview docs",
     "check:glossary": "tsx scripts/check-glossary.ts",
     "check:glossary:strict": "tsx scripts/check-glossary.ts --strict",
-    "check:locale-parity": "tsx scripts/check-locale-parity.ts"
+    "check:locale-parity": "tsx scripts/check-locale-parity.ts",
+    "sync:enterprise": "node scripts/sync-enterprise-docs.mjs",
+    "check:enterprise": "node scripts/sync-enterprise-docs.mjs --check",
+    "test:scripts": "node scripts/__tests__/sync-enterprise-docs.test.mjs && node scripts/__tests__/build-blog-rss.test.mjs"
   },
   "dependencies": {
     "@aster-cloud/aster-lang-ts": "^0.1.5",

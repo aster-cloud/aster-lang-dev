@@ -31,6 +31,32 @@ const editableInputs = ref<string>('');
 const lastCalledFunc = ref<string>('');
 const lastCalledArgs = ref<string>('');
 
+// Backend-vs-browser execution toggle. The browser path uses the bundled
+// TypeScript engine for an instant, offline demo. The backend path POSTs
+// to aster-api's /api/v1/policies/evaluate-source so visitors can confirm
+// the cloud engine gives the same answer (the "trial" upgrade — see the
+// /pricing page rationale).
+//
+// API base resolution order:
+//   1. <meta name="aster-api-base" content="https://..."> (CI override).
+//   2. import.meta.env.VITE_ASTER_API_BASE at build time.
+//   3. Built-in default (aster-lang.cloud's public endpoint).
+const runOnBackend = ref(false);
+const backendBase = computed(() => {
+  if (typeof document !== 'undefined') {
+    const meta = document.querySelector('meta[name="aster-api-base"]');
+    const c = meta?.getAttribute('content');
+    if (c) return c.replace(/\/+$/, '');
+  }
+  // Vite injects import.meta.env at build time; fall back to the public
+  // SaaS endpoint so the demo works without configuration.
+  const env = (import.meta as unknown as { env?: { VITE_ASTER_API_BASE?: string } }).env;
+  const fromEnv = env?.VITE_ASTER_API_BASE;
+  return (fromEnv ?? 'https://api.aster-lang.cloud').replace(/\/+$/, '');
+});
+const backendInFlight = ref(false);
+const backendController = ref<AbortController | null>(null);
+
 // Lazy-loaded modules
 let asterLang: any = null;
 let cmView: any = null;
@@ -158,6 +184,12 @@ function onRun() {
   const funcName = schemaResult.value.functionName;
   lastCalledFunc.value = funcName;
   lastCalledArgs.value = formatJson(context);
+  activeTab.value = 'console';
+
+  if (runOnBackend.value) {
+    runOnBackendImpl(funcName, context);
+    return;
+  }
 
   // 调用解释器
   const result = asterLang.evaluate(compileResult.value.core, funcName, context);
@@ -171,8 +203,127 @@ function onRun() {
     evalError.value = result.error || 'Unknown error';
     evalTime.value = result.executionTimeMs ?? null;
   }
+}
 
-  activeTab.value = 'console';
+function localeForLexicon(id: string): string {
+  switch (id) {
+    case 'ZH_CN': return 'zh-CN';
+    case 'DE_DE': return 'de-DE';
+    default: return 'en-US';
+  }
+}
+
+/**
+ * Round-trip the source + inputs to aster-api's evaluate-source endpoint.
+ * Returns the cloud engine's verdict so visitors can confirm parity with
+ * the in-browser TS engine. AbortController allows the user to cancel
+ * (or a subsequent Run to supersede an in-flight request).
+ */
+async function runOnBackendImpl(funcName: string, context: Record<string, unknown>) {
+  // Supersede any in-flight call. The previous request gets abort() → its
+  // catch sees AbortError → returns without touching state. Any state
+  // mutation below is also gated by isCurrent() so a slow-arriving older
+  // response can't overwrite the newer one's result.
+  backendController.value?.abort();
+  const controller = new AbortController();
+  backendController.value = controller;
+  backendInFlight.value = true;
+  evalResult.value = null;
+  evalError.value = null;
+  evalTime.value = null;
+
+  const isCurrent = () => backendController.value === controller;
+
+  const t0 = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+  try {
+    const res = await fetch(`${backendBase.value}/api/v1/policies/evaluate-source`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({
+        source: getSource(),
+        functionName: funcName,
+        locale: localeForLexicon(lexiconId.value),
+        context,
+      }),
+      signal: controller.signal,
+    });
+    if (!isCurrent()) return;
+
+    const elapsed = Math.round(((typeof performance !== 'undefined' ? performance.now() : Date.now())) - t0);
+
+    if (!res.ok) {
+      // 404 commonly means the public marketing-tier endpoint isn't enabled
+      // on this deployment — surface a hint instead of just "404".
+      let detail = '';
+      try { detail = await res.text(); } catch { /* ignore */ }
+      if (!isCurrent()) return;
+      const hint = res.status === 404 || res.status === 401 || res.status === 403
+        ? ' — backend trial may be disabled on this deployment; falling back to browser run is fine.'
+        : '';
+      evalError.value = `HTTP ${res.status}${detail ? ': ' + truncate(detail, 200) : ''}${hint}`;
+      evalTime.value = elapsed;
+      return;
+    }
+
+    const payload = await res.json();
+    if (!isCurrent()) return;
+    if (payload?.success === false) {
+      evalError.value = payload.error ?? 'Backend evaluation failed';
+      evalTime.value = typeof payload.executionTimeMs === 'number' ? payload.executionTimeMs : elapsed;
+      return;
+    }
+
+    // Cap displayed payload to avoid pathological large response wrecking
+    // the page. 256 KiB stringified is plenty for any plausible policy
+    // evaluation; if a server bug returns megabytes, we still show a
+    // friendly error rather than crashing the page.
+    evalResult.value = clipForDisplay(payload?.result ?? payload?.value ?? payload);
+    evalError.value = null;
+    evalTime.value = typeof payload.executionTimeMs === 'number' ? payload.executionTimeMs : elapsed;
+  } catch (err: unknown) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      // Superseded or user-cancelled — leave state alone.
+      return;
+    }
+    if (!isCurrent()) return;
+    const msg = err instanceof Error ? err.message : String(err);
+    // Network-level CORS/DNS failures usually surface here; give the
+    // browser-run fallback hint so the demo never feels dead.
+    evalError.value = `Network error: ${msg}. Toggle off "Run on backend" to use the in-browser engine.`;
+  } finally {
+    // Only the *current* controller is allowed to clear flags. A
+    // superseded controller hitting finally must not flip backendInFlight
+    // back to false (the newer request is still running and the Run
+    // button must stay disabled).
+    if (isCurrent()) {
+      backendInFlight.value = false;
+      backendController.value = null;
+    }
+  }
+}
+
+const MAX_DISPLAY_BYTES = 256 * 1024;
+function clipForDisplay(value: unknown): unknown {
+  try {
+    const s = JSON.stringify(value);
+    if (s != null && s.length > MAX_DISPLAY_BYTES) {
+      return {
+        __clipped: true,
+        message: `Response truncated to ${MAX_DISPLAY_BYTES} bytes for display`,
+        head: s.slice(0, MAX_DISPLAY_BYTES) + '…',
+      };
+    }
+    return value;
+  } catch {
+    return String(value).slice(0, MAX_DISPLAY_BYTES);
+  }
+}
+
+function truncate(s: string, n: number): string {
+  return s.length <= n ? s : s.slice(0, n - 1) + '…';
 }
 
 // Module-level handles to gutter effect + state — set during initEditor and
@@ -356,6 +507,7 @@ onUnmounted(() => {
     editorView.value.destroy();
   }
   if (debounceTimer) clearTimeout(debounceTimer);
+  backendController.value?.abort();
 });
 
 function formatJson(obj: any): string {
@@ -418,8 +570,12 @@ const footerClass = computed(() => {
           </option>
         </select>
       </label>
-      <button class="run-btn" :disabled="!canRun" @click="onRun">{{ t.toolbar.run }}</button>
+      <button class="run-btn" :disabled="!canRun || backendInFlight" @click="onRun">{{ t.toolbar.run }}</button>
       <button class="secondary" @click="onReset">{{ t.toolbar.reset }}</button>
+      <label class="backend-toggle" :title="t.toolbar.backendHint">
+        <input type="checkbox" v-model="runOnBackend" />
+        <span>{{ t.toolbar.backendToggle }}</span>
+      </label>
     </div>
     <div class="playground-grid" :style="{ height: height }">
       <div class="playground-editor" ref="editorContainer"></div>
@@ -532,10 +688,16 @@ const footerClass = computed(() => {
           </div>
           <!-- Console -->
           <div v-if="activeTab === 'console'" class="console-output">
-            <div v-if="evalResult !== null || evalError !== null">
+            <div v-if="backendInFlight" class="console-placeholder">
+              {{ t.messages.awaitingBackend }}
+            </div>
+            <div v-else-if="evalResult !== null || evalError !== null">
               <div class="console-prompt">
                 <span class="console-chevron">&gt;</span>
                 <span>{{ lastCalledFunc }}({{ lastCalledArgs }})</span>
+                <span class="run-badge" :class="runOnBackend ? 'cloud' : 'browser'">
+                  {{ runOnBackend ? t.toolbar.backendBadge : t.toolbar.browserBadge }}
+                </span>
               </div>
               <div v-if="evalError" class="console-error">
                 Error: {{ evalError }}

@@ -60,6 +60,18 @@ const websocketSidebar: DefaultTheme.SidebarItem[] = [
   },
 ]
 
+const enterpriseSidebar: DefaultTheme.SidebarItem[] = [
+  {
+    text: 'Enterprise & Recht',
+    items: [
+      { text: 'Überblick', link: '/enterprise/' },
+      { text: 'AVV/DPA-Vorlage', link: '/enterprise/dpa-template' },
+      { text: 'Self-service DSAR', link: '/enterprise/dsar' },
+      { text: 'Telemetrie-Felder', link: '/enterprise/telemetry-fields' },
+    ],
+  },
+]
+
 export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   title: 'Aster Lang',
   description: 'API-Referenz & Entwicklerdokumentation für die Aster Policy Engine',
@@ -69,6 +81,9 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: 'Spielplatz', link: '/de/learn/playground' },
       { text: 'REST API', link: '/api/policies/evaluate' },
       { text: 'GraphQL', link: '/graphql/overview' },
+      { text: 'Editionen', link: '/de/pricing/' },
+      { text: 'Enterprise', link: '/enterprise/' },
+      { text: 'Blog', link: '/blog/' },
       { text: 'Community', link: '/de/community/' },
       { text: 'Sprachdokumentation', link: 'https://aster-lang.org' },
       { text: 'GitHub', link: 'https://github.com/aster-cloud/aster-lang-dev' },
@@ -100,6 +115,7 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       '/api/': apiSidebar,
       '/graphql/': graphqlSidebar,
       '/websocket/': websocketSidebar,
+      '/enterprise/': enterpriseSidebar,
     },
     footer: {
       message: 'Veröffentlicht unter der MIT-Lizenz.',

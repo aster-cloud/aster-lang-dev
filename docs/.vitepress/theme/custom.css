@@ -144,6 +144,50 @@
   color: var(--vp-c-text-1);
 }
 
+.playground-toolbar button:disabled {
+  /* 0.4 在 dark-mode zinc 背景上对比度过低 (WCAG fail)；
+   * 0.65 + 显式 grayscale 保持可读，同时清楚地传达 disabled 状态。 */
+  opacity: 0.65;
+  cursor: not-allowed;
+  filter: grayscale(20%);
+}
+
+/* Backend-vs-browser toggle. Kept visually subordinate to the Run
+ * button (no fill, smaller text) since the default is in-browser. */
+.backend-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.backend-toggle input[type="checkbox"] {
+  accent-color: var(--vp-c-brand-1);
+}
+
+/* Badge in the console showing whether the last run was cloud or browser. */
+.run-badge {
+  margin-left: 8px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+.run-badge.cloud {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+}
+.run-badge.browser {
+  background: var(--vp-c-default-soft);
+  color: var(--vp-c-text-2);
+}
+
 /* ── Editor + Results grid ── */
 .playground-grid {
   display: grid;

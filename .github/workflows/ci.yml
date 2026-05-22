@@ -10,15 +10,58 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with: { path: aster-lang-dev }
+
+      # Sibling aster-cloud checkout — required only for the enterprise
+      # sync-drift check below. CROSS_REPO_TOKEN is the same secret aster-
+      # api uses for cross-repo CI; when the secret is missing (forks,
+      # community PRs) we skip the drift check rather than failing.
+      - name: Checkout aster-cloud (for enterprise sync check)
+        id: checkout-cloud
+        uses: actions/checkout@v6
+        continue-on-error: true
+        with:
+          repository: aster-cloud/aster-cloud
+          path: aster-cloud
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
+
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          cache-dependency-path: aster-lang-dev/pnpm-lock.yaml
+
+      - name: pnpm install
+        working-directory: aster-lang-dev
+        run: pnpm install --frozen-lockfile
 
       - name: Locale parity (en backbone → zh + de mirrors must exist)
+        working-directory: aster-lang-dev
         run: pnpm run check:locale-parity
+
+      # Build-side script tests — frontmatter parser, XML helpers (CDATA
+      # splitting), and the enterprise link-rewriter. Cheap to run, catches
+      # regression in the small standalone scripts we maintain in-tree.
+      - name: Script unit tests
+        working-directory: aster-lang-dev
+        run: pnpm run test:scripts
+
+      # Enterprise public-mirror drift detection. The DPA / DSAR /
+      # telemetry-fields pages under docs/enterprise/ are derived from
+      # aster-cloud's docs/on-prem/ via scripts/sync-enterprise-docs.mjs.
+      # --check fails if the generated files diverge from the source —
+      # caller must rerun `pnpm sync:enterprise` and commit the result.
+      #
+      # Skipped when aster-cloud isn't available (fork PR without
+      # CROSS_REPO_TOKEN), in which case the drift check happens on the
+      # next push to a branch that does have the secret.
+      - name: Enterprise public-mirror drift check
+        if: steps.checkout-cloud.outcome == 'success'
+        working-directory: aster-lang-dev
+        env:
+          ASTER_CLOUD_REPO: ${{ github.workspace }}/aster-cloud
+        run: pnpm run check:enterprise
 
       # Glossary Contract (v7) — Stage 1 of 4-stage remediation: report-only.
       # See aster-cloud/.claude/plan/glossary-contract.md §5 + glossary.config.yaml.
@@ -26,6 +69,7 @@ jobs:
       # the Stage 4 PR after G8a publishes @aster-cloud/glossary to npm AND
       # the structural-mismatch sync work in zh/de docs is complete.
       - name: Glossary contract (Stage 1 — report-only)
+        working-directory: aster-lang-dev
         run: pnpm run check:glossary || true
         continue-on-error: true
 
@@ -35,9 +79,10 @@ jobs:
         with:
           name: glossary-findings
           path: |
-            glossary-findings.json
-            locale-parity-findings.json
+            aster-lang-dev/glossary-findings.json
+            aster-lang-dev/locale-parity-findings.json
           if-no-files-found: ignore
 
       - name: VitePress build (sanity)
+        working-directory: aster-lang-dev
         run: pnpm docs:build

@@ -13,12 +13,14 @@
  * --vp-c-brand-1 references inside custom.css already point at Aster.
  *
  * Migration safety:
- *   - VitePress exposes ~70 --vp-* variables; we only remap the brand /
- *     font ones. Backgrounds, layout, and default neutral text stay on
- *     VitePress's own scale to avoid breaking dense doc layouts.
- *   - When the W1.5 baseline is approved and we ready W2, we'll widen
- *     this remap to cover bg/text/border so aster-lang-dev's neutral
- *     surfaces also match aster-cloud exactly.
+ *   - VitePress exposes ~70 --vp-* variables; we remap brand/font and the
+ *     neutral surface/text/border slots onto Aster zinc so the marketing
+ *     site visually reads as the same product as aster-lang.cloud.
+ *   - Layout-driving variables (sidebar widths, container widths, z-index
+ *     stacking, shadows) stay on VitePress defaults — overriding those
+ *     breaks dense doc layouts.
+ *   - Default-text and divider remaps below mirror aster-cloud's
+ *     tailwind zinc scale; the dark block inverts the ramp.
  */
 
 @import '@aster-cloud/tokens/tokens.css';
@@ -65,6 +67,33 @@
   /* ===== Code block tint ===== */
   --vp-code-color:          var(--aster-color-violet-600);
 
+  /* ===== Neutral surfaces → Aster zinc (light) =====
+   * VitePress layers backgrounds as: bg (page) → bg-alt (nav/sidebar) →
+   * bg-elv (cards/popovers) → bg-soft (code-block tint).
+   * Map onto zinc 50/100/0/50 so the page reads white-on-zinc just like
+   * aster-cloud's marketing surfaces.
+   */
+  --vp-c-bg:                #ffffff;
+  --vp-c-bg-alt:            var(--aster-color-zinc-50);
+  --vp-c-bg-elv:            #ffffff;
+  --vp-c-bg-soft:           var(--aster-color-zinc-50);
+
+  /* ===== Default text → zinc ramp ===== */
+  --vp-c-text-1:            var(--aster-color-zinc-900);
+  --vp-c-text-2:            var(--aster-color-zinc-700);
+  --vp-c-text-3:            var(--aster-color-zinc-500);
+
+  /* ===== Dividers / borders / gutters ===== */
+  --vp-c-divider:           var(--aster-color-zinc-200);
+  --vp-c-border:            var(--aster-color-zinc-200);
+  --vp-c-gutter:            var(--aster-color-zinc-100);
+
+  /* ===== Default semantic neutrals (cards, hover bg) ===== */
+  --vp-c-default-1:         var(--aster-color-zinc-100);
+  --vp-c-default-2:         var(--aster-color-zinc-200);
+  --vp-c-default-3:         var(--aster-color-zinc-300);
+  --vp-c-default-soft:      var(--aster-color-zinc-100);
+
   /* ===== Headings — Fraunces for display weight ===== */
 }
 
@@ -81,6 +110,25 @@
   --vp-button-brand-hover-border: var(--aster-color-violet-400);
   --vp-button-brand-hover-bg:     var(--aster-color-violet-400);
   --vp-button-brand-active-bg:    var(--aster-color-violet-600);
+
+  /* Neutral surfaces — invert the zinc ramp for dark mode. */
+  --vp-c-bg:                var(--aster-color-zinc-950);
+  --vp-c-bg-alt:            var(--aster-color-zinc-900);
+  --vp-c-bg-elv:            var(--aster-color-zinc-900);
+  --vp-c-bg-soft:            var(--aster-color-zinc-800);
+
+  --vp-c-text-1:            var(--aster-color-zinc-50);
+  --vp-c-text-2:            var(--aster-color-zinc-300);
+  --vp-c-text-3:            var(--aster-color-zinc-500);
+
+  --vp-c-divider:           var(--aster-color-zinc-800);
+  --vp-c-border:            var(--aster-color-zinc-800);
+  --vp-c-gutter:            var(--aster-color-zinc-900);
+
+  --vp-c-default-1:         var(--aster-color-zinc-800);
+  --vp-c-default-2:         var(--aster-color-zinc-700);
+  --vp-c-default-3:         var(--aster-color-zinc-600);
+  --vp-c-default-soft:      var(--aster-color-zinc-800);
 }
 
 /*
