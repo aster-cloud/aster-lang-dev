@@ -23,6 +23,7 @@
     "@aster-cloud/tokens": "^0.1.0"
   },
   "devDependencies": {
+    "@aster-cloud/glossary": "^0.1.1",
     "vitepress": "^1.6.3",
     "vue": "^3.5.13",
     "tsx": "^4.19.0",
@@ -30,6 +31,5 @@
     "@types/node": "^22.0.0",
     "typescript": "^5.9.2"
   },
-  "//": "@aster-cloud/glossary is not yet published to npm. The check-glossary + check-locale-parity scripts resolve it dynamically from ../aster-design-system/packages/glossary/dist via pathToFileURL. Add it here as a devDependency (with workspace:* if a root workspace exists, or ^0.1.0 once published) when G8a lands.",
   "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48"
 }
