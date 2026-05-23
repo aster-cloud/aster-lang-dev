@@ -23,7 +23,7 @@
     "@codemirror/theme-one-dark": "^6.1.0",
     "@codemirror/view": "^6.36.0",
     "@lezer/highlight": "^1.2.0",
-    "@aster-cloud/tokens": "^0.1.0"
+    "@aster-cloud/tokens": "^0.2.0"
   },
   "devDependencies": {
     "@aster-cloud/glossary": "^0.1.1",

@@ -15,8 +15,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0(zod@3.25.76)
       '@aster-cloud/tokens':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.2.0
+        version: 0.2.0
       '@codemirror/commands':
         specifier: ^6.8.0
         version: 6.10.3
@@ -157,8 +157,8 @@ packages:
     resolution: {integrity: sha512-6ZbktjiQrfNmmqofauD5FdXi/wwaRdVZBLtLmYz62W8ye1PBknqj0C9u88UnVyc0pSRbBcNVRPYocrXQlOye2w==}
     engines: {node: '>=20'}
 
-  '@aster-cloud/tokens@0.1.0':
-    resolution: {integrity: sha512-AQexV643kYCw2BJKX8fXIUf8/u0xujCjOA4NTK1369AHPGCn/xqM8sGH/Ti59dp55mfhnqgexoiohEQzySkroQ==}
+  '@aster-cloud/tokens@0.2.0':
+    resolution: {integrity: sha512-+KwfnRtHckpxWQkInlA/V7EcJ93mXBlH9ZrBlheg3n9Vu5ZzjxheVQO+0ydZ3Th16uH+op3UEq1ofTnoHOz3EQ==}
 
   '@babel/helper-string-parser@7.27.1':
     resolution: {integrity: sha512-qMlSxKbpRlAridDExk92nSobyDdpPijUq2DW6oDnUqd0iOGxmQjyqhMIihI9+zv4LPyZdRje2cavWPbCbWm3eA==}
@@ -1504,7 +1504,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@aster-cloud/tokens@0.1.0': {}
+  '@aster-cloud/tokens@0.2.0': {}
 
   '@babel/helper-string-parser@7.27.1': {}
 
