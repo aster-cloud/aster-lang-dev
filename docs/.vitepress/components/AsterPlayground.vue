@@ -33,14 +33,22 @@ const lastCalledArgs = ref<string>('');
 
 // Backend-vs-browser execution toggle. The browser path uses the bundled
 // TypeScript engine for an instant, offline demo. The backend path POSTs
-// to aster-api's /api/v1/policies/evaluate-source so visitors can confirm
-// the cloud engine gives the same answer (the "trial" upgrade — see the
-// /pricing page rationale).
+// to aster-cloud's /api/playground/evaluate-source so visitors can
+// confirm the cloud engine gives the same answer.
+//
+// Why aster-cloud, not aster-api directly:
+//   /api/v1/policies/evaluate-source on aster-api is internal-only —
+//   the k3s traefik middleware `block-evaluate-source` rewrites the
+//   path to a 404 for any caller that comes in through the public
+//   ingress. The marketing playground proxies through aster-cloud's
+//   BFF instead, which signs the call with HMAC and forwards via the
+//   internal service DNS. See aster-cloud's
+//   src/app/api/playground/evaluate-source/route.ts.
 //
 // API base resolution order:
 //   1. <meta name="aster-api-base" content="https://..."> (CI override).
 //   2. import.meta.env.VITE_ASTER_API_BASE at build time.
-//   3. Built-in default (aster-lang.cloud's public endpoint).
+//   3. Built-in default — the public aster-cloud BFF host.
 const runOnBackend = ref(false);
 const backendBase = computed(() => {
   if (typeof document !== 'undefined') {
@@ -48,11 +56,11 @@ const backendBase = computed(() => {
     const c = meta?.getAttribute('content');
     if (c) return c.replace(/\/+$/, '');
   }
-  // Vite injects import.meta.env at build time; fall back to the public
-  // SaaS endpoint so the demo works without configuration.
+  // Vite injects import.meta.env at build time; fall back to the
+  // public aster-cloud BFF so the demo works without configuration.
   const env = (import.meta as unknown as { env?: { VITE_ASTER_API_BASE?: string } }).env;
   const fromEnv = env?.VITE_ASTER_API_BASE;
-  return (fromEnv ?? 'https://api.aster-lang.cloud').replace(/\/+$/, '');
+  return (fromEnv ?? 'https://aster-lang.cloud').replace(/\/+$/, '');
 });
 const backendInFlight = ref(false);
 const backendController = ref<AbortController | null>(null);
@@ -236,7 +244,7 @@ async function runOnBackendImpl(funcName: string, context: Record<string, unknow
 
   const t0 = (typeof performance !== 'undefined' ? performance.now() : Date.now());
   try {
-    const res = await fetch(`${backendBase.value}/api/v1/policies/evaluate-source`, {
+    const res = await fetch(`${backendBase.value}/api/playground/evaluate-source`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
