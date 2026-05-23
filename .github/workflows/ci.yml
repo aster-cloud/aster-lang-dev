@@ -25,7 +25,13 @@ jobs:
           path: aster-cloud
           token: ${{ secrets.CROSS_REPO_TOKEN }}
 
+      # Repo is checked out into ./aster-lang-dev/ so the workspace-root
+      # package.json doesn't exist — pnpm/action-setup@v6 fails its
+      # version-discovery step ("No pnpm version is specified") without
+      # an explicit pointer at the real package.json.
       - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: aster-lang-dev/package.json
       - uses: actions/setup-node@v6
         with:
           node-version: '22'
