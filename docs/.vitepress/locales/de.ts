@@ -119,9 +119,5 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       message: 'Veröffentlicht unter der MIT-Lizenz.',
       copyright: 'Copyright © 2025 Aster Language Team',
     },
-    editLink: {
-      pattern: 'https://github.com/aster-cloud/aster-lang-dev/edit/main/docs/:path',
-      text: 'Diese Seite auf GitHub bearbeiten',
-    },
   },
 }

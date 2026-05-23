@@ -15,9 +15,6 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.svg',
     search: { provider: 'local' },
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/aster-cloud/aster-lang-dev' },
-    ],
     // Right-rail table of contents. The VitePress default shows H2 only,
     // which is too coarse for API reference pages with H2 endpoint + H3
     // parameters/responses. [2, 3] gives a 2-level hierarchy; deeper

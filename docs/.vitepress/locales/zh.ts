@@ -119,9 +119,5 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       message: '基于 MIT 许可证发布。',
       copyright: '版权所有 © 2025 Aster Language 团队',
     },
-    editLink: {
-      pattern: 'https://github.com/aster-cloud/aster-lang-dev/edit/main/docs/:path',
-      text: '在 GitHub 上编辑此页',
-    },
   },
 }
