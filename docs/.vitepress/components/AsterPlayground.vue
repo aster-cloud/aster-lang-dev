@@ -65,6 +65,25 @@ const backendBase = computed(() => {
 const backendInFlight = ref(false);
 const backendController = ref<AbortController | null>(null);
 
+// Run-button hardening. Three layers, defense in depth:
+//   1. trailing debounce — collapses rapid clicks (300ms window) into a
+//      single fired request. Matches the human perception of "I clicked
+//      Run, why is it doing 5 things".
+//   2. single-flight — backendInFlight gates the disabled state and also
+//      gates onRun re-entry (in case keyboard Enter beats the disabled
+//      re-render).
+//   3. min-interval — at most one backend run per RUN_MIN_INTERVAL_MS.
+//      Even with the timer + flag, you should never be able to drive
+//      more than ~1 RPS of backend trial traffic from one tab.
+// These three together cap a single misbehaving tab at ~1 req/sec to
+// /api/playground/evaluate-source. Combined with the backend semaphore
+// added in the same change, OOM is no longer reachable via dashboard
+// click spam.
+const RUN_DEBOUNCE_MS = 300;
+const RUN_MIN_INTERVAL_MS = 1000;
+let runDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+let lastRunDispatchedAt = 0;
+
 // Lazy-loaded modules
 let asterLang: any = null;
 let cmView: any = null;
@@ -176,6 +195,10 @@ async function runAnalysis() {
 function onRun() {
   if (!asterLang || !compileResult.value?.success || !compileResult.value?.core) return;
   if (!schemaResult.value?.success) return;
+  // single-flight re-entry guard. The button is :disabled while in
+  // flight, but keyboard Enter on a focused-then-disabled control can
+  // still fire onRun() in some browsers; bail out explicitly.
+  if (runOnBackend.value && backendInFlight.value) return;
 
   // 解析用户输入的 JSON
   let context: Record<string, unknown>;
@@ -195,7 +218,26 @@ function onRun() {
   activeTab.value = 'console';
 
   if (runOnBackend.value) {
-    runOnBackendImpl(funcName, context);
+    // Coalesce burst-clicks via trailing debounce. Each click resets
+    // the timer; only the last click in a quiet window actually fires.
+    if (runDebounceTimer !== null) clearTimeout(runDebounceTimer);
+    runDebounceTimer = setTimeout(() => {
+      runDebounceTimer = null;
+      // Min-interval enforcement: even after the debounce window, we
+      // refuse to dispatch faster than RUN_MIN_INTERVAL_MS apart.
+      const now = Date.now();
+      const waitMs = lastRunDispatchedAt + RUN_MIN_INTERVAL_MS - now;
+      if (waitMs > 0) {
+        runDebounceTimer = setTimeout(() => {
+          runDebounceTimer = null;
+          lastRunDispatchedAt = Date.now();
+          runOnBackendImpl(funcName, context);
+        }, waitMs);
+        return;
+      }
+      lastRunDispatchedAt = now;
+      runOnBackendImpl(funcName, context);
+    }, RUN_DEBOUNCE_MS);
     return;
   }
 
@@ -515,6 +557,7 @@ onUnmounted(() => {
     editorView.value.destroy();
   }
   if (debounceTimer) clearTimeout(debounceTimer);
+  if (runDebounceTimer) clearTimeout(runDebounceTimer);
   backendController.value?.abort();
 });
 
