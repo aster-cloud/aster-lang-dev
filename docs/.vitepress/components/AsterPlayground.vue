@@ -15,7 +15,36 @@ const props = withDefaults(defineProps<{
 const editorContainer = ref<HTMLElement | null>(null);
 const editorView = shallowRef<any>(null);
 const lexiconId = ref(props.initialLexicon);
-const activeTab = ref<'diagnostics' | 'schema' | 'ast' | 'inputs' | 'console'>('diagnostics');
+type TabName = 'diagnostics' | 'schema' | 'ast' | 'inputs' | 'console';
+const activeTab = ref<TabName>('diagnostics');
+const TAB_ORDER: readonly TabName[] = ['diagnostics', 'schema', 'ast', 'inputs', 'console'] as const;
+
+// P1-R22 (audit): keyboard navigation for the tablist.
+// WAI-ARIA Authoring Practices for tabs:
+//   ArrowLeft / ArrowRight = previous/next tab (wrap)
+//   Home / End = first/last tab
+// Combined with roving tabindex (already in template), Tab key exits the
+// tablist while arrows traverse within it.
+function onTabKeydown(e: KeyboardEvent) {
+  const idx = TAB_ORDER.indexOf(activeTab.value);
+  let next: TabName | null = null;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    next = TAB_ORDER[(idx + 1) % TAB_ORDER.length] as TabName;
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    next = TAB_ORDER[(idx - 1 + TAB_ORDER.length) % TAB_ORDER.length] as TabName;
+  } else if (e.key === 'Home') {
+    next = TAB_ORDER[0] as TabName;
+  } else if (e.key === 'End') {
+    next = TAB_ORDER[TAB_ORDER.length - 1] as TabName;
+  } else {
+    return;
+  }
+  e.preventDefault();
+  activeTab.value = next;
+  // Move focus to the newly-active tab so the roving tabindex contract holds.
+  const id = `playground-tab-${next}`;
+  (document.getElementById(id) as HTMLButtonElement | null)?.focus();
+}
 const isRunning = ref(false);
 const diagnostics = ref<any[]>([]);
 const schemaResult = ref<any>(null);
@@ -631,10 +660,16 @@ const footerClass = computed(() => {
     <div class="playground-grid" :style="{ height: height }">
       <div class="playground-editor" ref="editorContainer"></div>
       <div class="playground-results">
-        <!-- P1-R21 (audit): ARIA tab semantics. Screen readers now identify
-             the 5-tab structure; arrow keys / Home / End provide keyboard
-             navigation in addition to mouse click. -->
-        <div class="playground-tabs" role="tablist" :aria-label="t.tabs.diagnostics">
+        <!-- P1-R21/R22 (audit): ARIA tab semantics + keyboard navigation.
+             Screen readers identify the 5-tab structure; arrow keys / Home /
+             End navigate via onTabKeydown; roving tabindex keeps Tab key
+             outside the tablist. -->
+        <div
+          class="playground-tabs"
+          role="tablist"
+          :aria-label="t.tabs.diagnostics"
+          @keydown="onTabKeydown"
+        >
           <button
             id="playground-tab-diagnostics"
             class="playground-tab"
