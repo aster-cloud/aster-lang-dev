@@ -631,9 +631,17 @@ const footerClass = computed(() => {
     <div class="playground-grid" :style="{ height: height }">
       <div class="playground-editor" ref="editorContainer"></div>
       <div class="playground-results">
-        <div class="playground-tabs">
+        <!-- P1-R21 (audit): ARIA tab semantics. Screen readers now identify
+             the 5-tab structure; arrow keys / Home / End provide keyboard
+             navigation in addition to mouse click. -->
+        <div class="playground-tabs" role="tablist" :aria-label="t.tabs.diagnostics">
           <button
+            id="playground-tab-diagnostics"
             class="playground-tab"
+            role="tab"
+            :aria-selected="activeTab === 'diagnostics'"
+            :tabindex="activeTab === 'diagnostics' ? 0 : -1"
+            aria-controls="playground-panel-diagnostics"
             :class="{ active: activeTab === 'diagnostics' }"
             @click="activeTab = 'diagnostics'"
           >
@@ -641,28 +649,48 @@ const footerClass = computed(() => {
             <span v-if="diagnostics.length > 0">({{ diagnostics.length }})</span>
           </button>
           <button
+            id="playground-tab-schema"
             class="playground-tab"
+            role="tab"
+            :aria-selected="activeTab === 'schema'"
+            :tabindex="activeTab === 'schema' ? 0 : -1"
+            aria-controls="playground-panel-schema"
             :class="{ active: activeTab === 'schema' }"
             @click="activeTab = 'schema'"
           >
             {{ t.tabs.schema }}
           </button>
           <button
+            id="playground-tab-ast"
             class="playground-tab"
+            role="tab"
+            :aria-selected="activeTab === 'ast'"
+            :tabindex="activeTab === 'ast' ? 0 : -1"
+            aria-controls="playground-panel-ast"
             :class="{ active: activeTab === 'ast' }"
             @click="activeTab = 'ast'"
           >
             {{ t.tabs.coreIr }}
           </button>
           <button
+            id="playground-tab-inputs"
             class="playground-tab"
+            role="tab"
+            :aria-selected="activeTab === 'inputs'"
+            :tabindex="activeTab === 'inputs' ? 0 : -1"
+            aria-controls="playground-panel-inputs"
             :class="{ active: activeTab === 'inputs' }"
             @click="activeTab = 'inputs'"
           >
             {{ t.tabs.inputs }}
           </button>
           <button
+            id="playground-tab-console"
             class="playground-tab"
+            role="tab"
+            :aria-selected="activeTab === 'console'"
+            :tabindex="activeTab === 'console' ? 0 : -1"
+            aria-controls="playground-panel-console"
             :class="{ active: activeTab === 'console' }"
             @click="activeTab = 'console'"
           >
@@ -671,7 +699,12 @@ const footerClass = computed(() => {
         </div>
         <div class="playground-tab-content">
           <!-- Diagnostics -->
-          <div v-if="activeTab === 'diagnostics'">
+          <div
+            v-if="activeTab === 'diagnostics'"
+            id="playground-panel-diagnostics"
+            role="tabpanel"
+            aria-labelledby="playground-tab-diagnostics"
+          >
             <ul v-if="diagnostics.length > 0" class="diagnostic-list" role="list">
               <li
                 v-for="(d, i) in diagnostics"
@@ -695,7 +728,12 @@ const footerClass = computed(() => {
             <p v-else style="color: var(--playground-success);">{{ t.messages.noErrors }}</p>
           </div>
           <!-- Schema -->
-          <div v-if="activeTab === 'schema'">
+          <div
+            v-if="activeTab === 'schema'"
+            id="playground-panel-schema"
+            role="tabpanel"
+            aria-labelledby="playground-tab-schema"
+          >
             <div v-if="schemaResult?.success">
               <p><strong>Module:</strong> {{ schemaResult.moduleName }}</p>
               <p><strong>Function:</strong> {{ schemaResult.functionName }}</p>
@@ -721,13 +759,23 @@ const footerClass = computed(() => {
             <p v-else style="color: var(--vp-c-text-3);">{{ t.messages.runToSeeSchema }}</p>
           </div>
           <!-- AST / Core IR -->
-          <div v-if="activeTab === 'ast'">
+          <div
+            v-if="activeTab === 'ast'"
+            id="playground-panel-ast"
+            role="tabpanel"
+            aria-labelledby="playground-tab-ast"
+          >
             <pre v-if="compileResult?.core">{{ formatJson(compileResult.core) }}</pre>
             <pre v-else-if="compileResult?.parseErrors">{{ formatJson(compileResult.parseErrors) }}</pre>
             <p v-else style="color: var(--vp-c-text-3);">{{ t.messages.runToSeeCore }}</p>
           </div>
           <!-- Inputs (editable) -->
-          <div v-if="activeTab === 'inputs'">
+          <div
+            v-if="activeTab === 'inputs'"
+            id="playground-panel-inputs"
+            role="tabpanel"
+            aria-labelledby="playground-tab-inputs"
+          >
             <div v-if="compileResult?.success" class="inputs-editor">
               <textarea
                 class="inputs-textarea"
@@ -738,7 +786,13 @@ const footerClass = computed(() => {
             <p v-else style="color: var(--vp-c-text-3);">{{ t.messages.compileToEdit }}</p>
           </div>
           <!-- Console -->
-          <div v-if="activeTab === 'console'" class="console-output">
+          <div
+            v-if="activeTab === 'console'"
+            id="playground-panel-console"
+            role="tabpanel"
+            aria-labelledby="playground-tab-console"
+            class="console-output"
+          >
             <div v-if="backendInFlight" class="console-placeholder">
               {{ t.messages.awaitingBackend }}
             </div>
