@@ -514,3 +514,12 @@
   white-space: nowrap;
   min-width: 0;
 }
+
+/* R31-4 Turnstile widget host. The widget itself is rendered by
+   cf's script and has its own iframe; we just give it room. With the
+   flexible size variant, the widget can be ~36px tall (invisible /
+   passing) or ~70px tall when a visible challenge is shown. */
+.playground-turnstile {
+  margin: 8px 0 0 0;
+  min-height: 36px;
+}

@@ -94,6 +94,117 @@ const backendBase = computed(() => {
 const backendInFlight = ref(false);
 const backendController = ref<AbortController | null>(null);
 
+// R31-4 Cloudflare Turnstile (per ADR-0012).
+//
+// The widget is loaded only when:
+//   1. VITE_TURNSTILE_SITE_KEY is set at build time, AND
+//   2. the user has clicked "Run on backend" once (lazy mount — the cf
+//      script is ~30 KiB + ~150ms of cold work, no point loading it for
+//      users who never hit the backend path).
+//
+// The token attaches to the next /api/playground/evaluate-source POST
+// as X-Trial-Turnstile-Token. aster-cloud BFF forwards it to aster-api's
+// TurnstileVerifier. When the backend has ENABLED=false the token is
+// ignored — keeps every existing environment working as today.
+const turnstileSiteKey = (() => {
+  const env = (import.meta as unknown as { env?: { VITE_TURNSTILE_SITE_KEY?: string } }).env;
+  return env?.VITE_TURNSTILE_SITE_KEY ?? '';
+})();
+const turnstileEnabled = computed(() => turnstileSiteKey.length > 0);
+const turnstileToken = ref<string>('');
+const turnstileWidgetId = ref<string | null>(null);
+const turnstileMounted = ref(false);
+
+// Type-shim for the cf-injected window.turnstile global. Keeps the
+// widget script optional: if the script never loads (no key, ad-block,
+// network failure), turnstileToken stays empty and the request goes
+// through unverified — aster-api decides whether to accept it.
+interface TurnstileGlobal {
+  render: (
+    selector: string | HTMLElement,
+    opts: {
+      sitekey: string;
+      callback: (token: string) => void;
+      'error-callback'?: () => void;
+      'expired-callback'?: () => void;
+      'timeout-callback'?: () => void;
+      theme?: 'light' | 'dark' | 'auto';
+      size?: 'normal' | 'flexible' | 'compact' | 'invisible';
+    },
+  ) => string;
+  reset: (widgetId: string) => void;
+  remove: (widgetId: string) => void;
+}
+function getTurnstile(): TurnstileGlobal | null {
+  if (typeof window === 'undefined') return null;
+  const w = window as unknown as { turnstile?: TurnstileGlobal };
+  return w.turnstile ?? null;
+}
+
+async function ensureTurnstileScript(): Promise<void> {
+  if (!turnstileEnabled.value || typeof document === 'undefined') return;
+  if (getTurnstile() != null) return;
+
+  const existing = document.querySelector<HTMLScriptElement>(
+    'script[data-aster-turnstile="1"]',
+  );
+  if (existing != null) {
+    // already in-flight from a previous click; wait for it
+    await new Promise<void>((resolve) => {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => resolve(), { once: true });
+    });
+    return;
+  }
+
+  await new Promise<void>((resolve) => {
+    const s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    s.async = true;
+    s.defer = true;
+    s.dataset.asterTurnstile = '1';
+    s.addEventListener('load', () => resolve(), { once: true });
+    // Ad-block or network failure → resolve anyway, callers handle empty token.
+    s.addEventListener('error', () => resolve(), { once: true });
+    document.head.appendChild(s);
+  });
+}
+
+async function mountTurnstileIfNeeded(): Promise<void> {
+  if (!turnstileEnabled.value || turnstileMounted.value) return;
+  await ensureTurnstileScript();
+  const ts = getTurnstile();
+  if (ts == null) return; // script didn't load; degrade gracefully
+  const host = document.getElementById('aster-turnstile-widget');
+  if (host == null) return;
+  turnstileWidgetId.value = ts.render(host, {
+    sitekey: turnstileSiteKey,
+    size: 'flexible',
+    theme: 'auto',
+    callback: (token: string) => {
+      turnstileToken.value = token;
+    },
+    'error-callback': () => {
+      turnstileToken.value = '';
+    },
+    'expired-callback': () => {
+      turnstileToken.value = '';
+    },
+    'timeout-callback': () => {
+      turnstileToken.value = '';
+    },
+  });
+  turnstileMounted.value = true;
+}
+
+function resetTurnstile(): void {
+  const ts = getTurnstile();
+  if (ts != null && turnstileWidgetId.value != null) {
+    try { ts.reset(turnstileWidgetId.value); } catch { /* ignore */ }
+  }
+  turnstileToken.value = '';
+}
+
 // Run-button hardening. Three layers, defense in depth:
 //   1. trailing debounce — collapses rapid clicks (300ms window) into a
 //      single fired request. Matches the human perception of "I clicked
@@ -320,6 +431,15 @@ async function runOnBackendImpl(funcName: string, context: Record<string, unknow
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        // R31-4: include Turnstile token when widget produced one. Empty
+        // string is a valid state (widget not enabled, not yet solved,
+        // ad-blocked) — aster-cloud BFF forwards the header only when
+        // non-empty, and aster-api's TurnstileVerifier ignores it when
+        // its own ENABLED flag is false. Net: zero behaviour change in
+        // every current environment.
+        ...(turnstileToken.value
+          ? { 'X-Trial-Turnstile-Token': turnstileToken.value }
+          : {}),
       },
       body: JSON.stringify({
         source: getSource(),
@@ -380,6 +500,11 @@ async function runOnBackendImpl(funcName: string, context: Record<string, unknow
     if (isCurrent()) {
       backendInFlight.value = false;
       backendController.value = null;
+      // R31-4: Turnstile tokens are single-use; reset to force a fresh
+      // challenge on the next backend run. With invisible/flexible
+      // widget the reset is silent for legit users; suspicious clients
+      // see the visible challenge re-appear.
+      resetTurnstile();
     }
   }
 }
@@ -600,6 +725,20 @@ onUnmounted(() => {
   if (debounceTimer) clearTimeout(debounceTimer);
   if (runDebounceTimer) clearTimeout(runDebounceTimer);
   backendController.value?.abort();
+  // R31-4: Turnstile widget cleanup on unmount.
+  const ts = getTurnstile();
+  if (ts != null && turnstileWidgetId.value != null) {
+    try { ts.remove(turnstileWidgetId.value); } catch { /* ignore */ }
+  }
+});
+
+// R31-4: lazy-mount Turnstile when the user opts into backend execution.
+// We don't mount on page load because most visitors never click "Run on
+// backend" — saves ~30 KiB of cf script + ~150ms of cold work.
+watch(runOnBackend, async (next) => {
+  if (next) {
+    await mountTurnstileIfNeeded();
+  }
 });
 
 function formatJson(obj: any): string {
@@ -669,6 +808,16 @@ const footerClass = computed(() => {
         <span>{{ t.toolbar.backendToggle }}</span>
       </label>
     </div>
+    <!-- R31-4 Turnstile widget host. Hidden until the user toggles "Run
+         on backend" AND VITE_TURNSTILE_SITE_KEY is set. Flexible-size
+         widget is invisible-by-default and only escalates to a visible
+         challenge under suspicion. -->
+    <div
+      v-show="turnstileEnabled && runOnBackend"
+      id="aster-turnstile-widget"
+      class="playground-turnstile"
+      aria-label="Verify you are human"
+    ></div>
     <div class="playground-grid" :style="{ height: height }">
       <div class="playground-editor" ref="editorContainer"></div>
       <div class="playground-results">
