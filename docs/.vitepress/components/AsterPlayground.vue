@@ -396,8 +396,20 @@ function clipForDisplay(value: unknown): unknown {
       };
     }
     return value;
-  } catch {
-    return String(value).slice(0, MAX_DISPLAY_BYTES);
+  } catch (e) {
+    // R30+ audit P2：原版 bare catch {} 静默吞 stringify 错误，用户在
+    // 看到截断结果时完全不知道发生了什么 —— "我请求的是 200，为什么显示
+    // 像是 truncated string？"。改成把异常打到 console 并加显式 sentinel，
+    // 用户/开发者可以从 panel 区分 "stringify fail" vs "naturally clipped"。
+    if (typeof console !== 'undefined') {
+      console.warn('AsterPlayground.clipForDisplay: failed to stringify value, falling back to String()', e);
+    }
+    return {
+      __clipped: true,
+      __reason: 'stringify_error',
+      message: `Could not serialise response for display: ${e instanceof Error ? e.message : String(e)}`,
+      head: String(value).slice(0, MAX_DISPLAY_BYTES),
+    };
   }
 }
 
