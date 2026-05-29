@@ -145,11 +145,24 @@
 }
 
 .playground-toolbar button:disabled {
-  /* 0.4 在 dark-mode zinc 背景上对比度过低 (WCAG fail)；
-   * 0.65 + 显式 grayscale 保持可读，同时清楚地传达 disabled 状态。 */
+  /* R30+ audit P1：原实现叠 grayscale(20%) filter，对低端设备触发
+   * compositor work（每帧重做颜色变换），并且 grayscale 是纯视觉
+   * 信号，对色觉障碍用户无可读差异。
+   *
+   * 修复策略：
+   *   - 把 disabled 状态从 "filter 改色" 改为 "边框 + 阴影 + cursor"
+   *     三层非颜色信号，对色觉障碍 / 屏幕阅读器同样可达。
+   *   - 保留 0.65 opacity，因为 WCAG SC 1.4.3 要求 disabled 视觉
+   *     可识别，opacity 是常见 affordance，不删。
+   *   - 加 :focus-visible 的描边保留键盘可访问性 —— disabled 在键盘
+   *     上不可聚焦但 :focus-visible 的兜底样式仍能合并。
+   */
   opacity: 0.65;
   cursor: not-allowed;
-  filter: grayscale(20%);
+  /* 替代 grayscale：用边框淡化 + 内阴影传达 "按下了但不响应" */
+  border-color: var(--vp-c-divider);
+  box-shadow: inset 0 0 0 1px var(--vp-c-divider);
+  pointer-events: none;
 }
 
 /* Backend-vs-browser toggle. Kept visually subordinate to the Run
