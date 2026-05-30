@@ -85,7 +85,7 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: '企业版', link: '/enterprise/' },
       { text: '博客', link: '/blog/' },
       { text: '社区', link: '/zh/community/' },
-      { text: '打开 Cloud ↗', link: 'https://aster-lang.cloud' },
+      { text: 'Cloud', link: 'https://aster-lang.cloud' },
     ],
     sidebar: {
       '/zh/learn/': [

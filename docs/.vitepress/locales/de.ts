@@ -85,7 +85,7 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       { text: 'Enterprise', link: '/enterprise/' },
       { text: 'Blog', link: '/blog/' },
       { text: 'Community', link: '/de/community/' },
-      { text: 'Cloud öffnen ↗', link: 'https://aster-lang.cloud' },
+      { text: 'Cloud', link: 'https://aster-lang.cloud' },
     ],
     sidebar: {
       '/de/learn/': [
