@@ -41,4 +41,4 @@ $EDITOR src/main/resources/lexicons/template-XX-XX.json
 ## 需要帮助？
 
 - [GitHub Discussions](https://github.com/aster-cloud/aster-lang-core/discussions) — 公开 Q&A
-- discord.aster-lang.cloud — 实时聊天（规划中）
+- [Discord（规划中）](https://aster-lang.cloud/community) — 实时聊天即将上线

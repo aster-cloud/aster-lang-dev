@@ -41,4 +41,4 @@ Maßgebliche Version: [aster-lang-en/CONTRIBUTING.md](https://github.com/aster-c
 ## Hilfe benötigt?
 
 - [GitHub Discussions](https://github.com/aster-cloud/aster-lang-core/discussions) — öffentliche Q&A
-- discord.aster-lang.cloud — Echtzeit-Chat (geplant)
+- [Discord (geplant)](https://aster-lang.cloud/community) — Echtzeit-Chat folgt
