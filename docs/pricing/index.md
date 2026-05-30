@@ -8,7 +8,7 @@ description: Choose between Aster Lang Open Source, Aster Lang Cloud (managed Sa
 Aster Lang ships in three editions. All three run the **same engine and the same language** — what differs is who operates the infrastructure and where the data lives.
 
 ::: tip Pricing
-For self-serve teams, Cloud offers Free and Pro plans with public pricing at **[aster-lang.cloud/pricing](https://aster-lang.cloud/pricing)**. Enterprise (self-hosted) pricing depends on tenancy size, evaluation volume, and data residency — **[talk to sales](mailto:hello@aster-lang.dev)** for a quote.
+For self-serve teams, Cloud offers Free and Pro plans with public pricing at **[aster-lang.cloud/pricing](https://aster-lang.cloud/pricing)**. Enterprise (self-hosted) pricing depends on tenancy size, evaluation volume, and data residency — **[talk to sales](mailto:sales@aster-lang.cloud)** for a quote.
 :::
 
 ## At a glance
@@ -18,7 +18,7 @@ For self-serve teams, Cloud offers Free and Pro plans with public pricing at **[
 | **Who runs it** | You — on your machine | We — at `aster-lang.cloud` | You — in your VPC/cluster |
 | **License** | Apache-2.0 | Subscription | Subscription + perpetual fallback |
 | **Best for** | Building, learning, embedding the parser | Teams who want managed multi-tenant | Regulated industries, data residency, air-gapped |
-| **Get started** | `npm i @aster-cloud/aster-lang-ts` | [aster-lang.cloud](https://aster-lang.cloud) | [Contact sales](mailto:hello@aster-lang.dev) |
+| **Get started** | `npm i @aster-cloud/aster-lang-ts` | [aster-lang.cloud](https://aster-lang.cloud) | [Contact sales](mailto:sales@aster-lang.cloud) |
 
 ## Feature comparison
 
@@ -139,7 +139,7 @@ You're in a regulated industry — finance, healthcare, government, or anywhere 
 - Bespoke DPA + 24×7 incident channel
 
 → [Read the Enterprise overview](/enterprise/)
-→ [Talk to sales](mailto:hello@aster-lang.dev)
+→ [Talk to sales](mailto:sales@aster-lang.cloud)
 
 </div>
 
@@ -156,11 +156,11 @@ Yes. The Java/Truffle reference engine and the TypeScript engine are both open s
 Yes. Policies are portable plain-text source; audit chains export as JSONL.
 
 **Do you offer an evaluation / proof-of-concept license?**
-For Enterprise, yes — typically 30 days with engineering support. [Email us](mailto:hello@aster-lang.dev) with your use case.
+For Enterprise, yes — typically 30 days with engineering support. [Email us](mailto:sales@aster-lang.cloud) with your use case.
 
 **What about pricing?**
-[Talk to us](mailto:hello@aster-lang.dev) — we'll size based on evaluation volume, tenants, and residency requirements. Open Source remains free under Apache-2.0.
+[Talk to us](mailto:sales@aster-lang.cloud) — we'll size based on evaluation volume, tenants, and residency requirements. Open Source remains free under Apache-2.0.
 
 ---
 
-[**Open aster-lang.cloud →**](https://aster-lang.cloud) &nbsp; · &nbsp; [Contact sales](mailto:hello@aster-lang.dev)
+[**Open aster-lang.cloud →**](https://aster-lang.cloud) &nbsp; · &nbsp; [Contact sales](mailto:sales@aster-lang.cloud)
