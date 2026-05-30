@@ -122,8 +122,9 @@ Sie wollen den Managed-Komfort — mehrmandantenfähig, KI-Unterstützung, gehos
 - Registrieren, Regel einfügen, Evaluate drücken
 - KI-Entwurf & -Erklärung integriert
 - Hash-verketteter Audit-Log ab Werk
+- [Eigene Domänenvokabulare](https://aster-lang.cloud/domain-vocabularies) — Free: keine · Pro: 5.000 Begriffe · Enterprise: unbegrenzt
 
-→ [**Zu aster-lang.cloud →**](https://aster-lang.cloud)
+→ [**Kostenlos auf aster-lang.cloud starten →**](https://aster-lang.cloud)
 
 </div>
 
@@ -138,7 +139,7 @@ Sie sind in einer regulierten Branche — Finanzen, Gesundheit, öffentlicher Se
 - Individueller AVV + 24×7-Incident-Kanal
 
 → [Enterprise-Übersicht](/enterprise/)
-→ [Kontakt](mailto:hello@aster-lang.dev)
+→ [Vertrieb sprechen](mailto:hello@aster-lang.dev)
 
 </div>
 

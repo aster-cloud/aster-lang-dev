@@ -122,8 +122,9 @@ You want the managed experience — multi-tenant, AI assistance, hosted audit tr
 - Sign up, paste a rule, hit Evaluate
 - Built-in AI drafting & explanation
 - Hash-chained audit log out of the box
+- [Custom domain vocabularies](https://aster-lang.cloud/domain-vocabularies) — Free: none · Pro: 5,000 terms · Enterprise: unlimited
 
-→ [**Open aster-lang.cloud →**](https://aster-lang.cloud)
+→ [**Start free on aster-lang.cloud →**](https://aster-lang.cloud)
 
 </div>
 
@@ -138,7 +139,7 @@ You're in a regulated industry — finance, healthcare, government, or anywhere 
 - Bespoke DPA + 24×7 incident channel
 
 → [Read the Enterprise overview](/enterprise/)
-→ [Talk to us](mailto:hello@aster-lang.dev)
+→ [Talk to sales](mailto:hello@aster-lang.dev)
 
 </div>
 
