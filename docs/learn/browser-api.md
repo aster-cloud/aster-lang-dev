@@ -421,7 +421,7 @@ if (compiled.success) {
 | **Validation** | `validateSyntaxWithSpan` | `/evaluate-source` (dry run) | `validatePolicy` mutation |
 | **Schema extraction** | `extractSchema` | `POST /policies/schema` | `policySchema` query |
 | **Batch evaluation** | Not supported | `POST /policies/evaluate/batch` | Not supported |
-| **Audit trail** | Not generated | Automatic SHA-256 chain | Automatic SHA-256 chain |
+| **Audit trail** | Not generated | Automatic [SHA-256 chain](/api/audit/verify-chain) | Automatic [SHA-256 chain](/api/audit/verify-chain) |
 | **Best for** | Editors, CI checks, local tooling | Production evaluation, deployment | Flexible queries, dashboards |
 <!-- /glossary:block -->
 

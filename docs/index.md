@@ -30,7 +30,7 @@ features:
     details: Java + GraalVM Truffle interpreter for high-throughput evaluation. Native Image builds boot in milliseconds. P99 latency under 200ms.
 
   - title: 🔒 Tamper-evident audit
-    details: Every evaluation produces a SHA-256 hash-chained audit record. Replay any historical decision deterministically — clocks and UUIDs are controlled at runtime.
+    details: Every policy evaluation is recorded in the engine's tamper-evident AuditLog, hash-chained with SHA-256. Verify any chain via GET /api/v1/audit/verify-chain?start=…&end=…. Replay any historical decision deterministically — clocks and UUIDs are controlled at runtime.
 
   - title: 🏢 SaaS or self-hosted
     details: Use aster-lang.cloud for managed multi-tenant, or deploy to your own K3S cluster via ArgoCD GitOps. Your data, your jurisdiction.

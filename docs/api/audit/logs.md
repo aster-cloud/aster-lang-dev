@@ -1,5 +1,9 @@
 # Audit Logs
 
+::: tip Scope
+These endpoints are served by **aster-api** (the policy engine) and cover policy execution events that are SHA-256 hash-chained. The **aster-cloud** SaaS dashboard maintains a separate, non-chained activity log for UI events (user logins, plan changes, member invitations); that activity log is not exposed through this API.
+:::
+
 Retrieve audit log records for events recorded by the policy engine. All endpoints in this section require the `ADMIN` role.
 
 ## Required Role

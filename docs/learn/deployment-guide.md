@@ -209,16 +209,19 @@ curl -s -X GET \
 ### Verify Hash Chain Integrity
 
 <!-- glossary:block id=deployment-guide-verify-hash-chain-integrity-paragraph-16 -->
-Audit records are linked by SHA-256 hash chaining. Verify that the chain has not been tampered with:
+Audit records are linked by SHA-256 hash chaining, enforced by `AuditEventListener` at the policy engine layer. SaaS dashboard activity events are stored separately and reference these chained audit ids. Verify a chain over a time range:
 <!-- /glossary:block -->
 
 ```bash
-curl -s -X POST https://policy.aster-lang.dev/api/v1/audit/verify-chain \
+START="2026-01-01T00:00:00Z"
+END="2026-12-31T23:59:59Z"
+
+curl -s "https://policy.aster-lang.dev/api/v1/audit/verify-chain?start=${START}&end=${END}" \
   -H "Authorization: Bearer $ASTER_TOKEN" \
-  -H "Content-Type: application/json" \
-  -H "X-Tenant-ID: $ASTER_TENANT_ID" \
-  -d '{"policyModule": "Loan.Approval"}'
+  -H "X-Tenant-Id: $ASTER_TENANT_ID"
 ```
+
+The endpoint returns `{ valid, brokenAt, reason, recordsVerified }`. Any `valid: false` response indicates tampered or missing records within the range.
 
 ## Version Management
 
