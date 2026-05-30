@@ -390,19 +390,24 @@
 
 /* ── Run button ── */
 .playground-toolbar .run-btn {
-  background: #22c55e;
-  color: white;
+  background: var(--aster-success);
+  color: var(--aster-success-fg);
   font-weight: 600;
-  border: 1px solid #16a34a;
+  border: 1px solid var(--aster-success);
   padding: 4px 14px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 13px;
-  transition: opacity 0.2s, background 0.2s;
+  transition: filter 0.2s, background 0.2s;
 }
 
 .playground-toolbar .run-btn:hover:not(:disabled) {
-  background: #16a34a;
+  filter: brightness(0.92);
+}
+
+.playground-toolbar .run-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--aster-shadow-ring);
 }
 
 .playground-toolbar .run-btn:disabled {
@@ -444,6 +449,7 @@
 .inputs-textarea:focus {
   outline: none;
   border-color: var(--vp-c-brand-1);
+  box-shadow: var(--aster-shadow-ring);
 }
 
 /* ── Console output ── */
