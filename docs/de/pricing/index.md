@@ -8,7 +8,7 @@ description: Wählen Sie zwischen Aster Lang Open Source, Aster Lang Cloud (mana
 Aster Lang ist in drei Editionen verfügbar. Alle drei nutzen **dieselbe Engine und dieselbe Sprache** — der Unterschied liegt darin, wer den Betrieb übernimmt und wo die Daten liegen.
 
 ::: tip Preise
-Diese Seite enthält bewusst **keine Preisliste**. Preise hängen von Mandantengröße, Auswertungsvolumen und Datenresidenz ab. **[Sprechen Sie mit uns](mailto:hello@aster-lang.dev)** für ein Angebot oder **[starten Sie kostenlos in Aster Lang Cloud](https://aster-lang.cloud)**.
+Für Self-Service-Teams bietet Cloud Free- und Pro-Pläne mit öffentlicher Preisliste unter **[aster-lang.cloud/pricing](https://aster-lang.cloud/pricing)**. Enterprise (selbst gehostet) richtet sich nach Mandantengröße, Auswertungsvolumen und Datenresidenz — **[Vertrieb sprechen](mailto:hello@aster-lang.dev)** für ein Angebot.
 :::
 
 ## Auf einen Blick

@@ -51,7 +51,7 @@ features:
 
 Compliance officer, risk analyst, or policy author. You want rules in **your** language, with AI helping you write the first draft.
 
-→ [**Open the SaaS**](https://aster-lang.cloud)
+→ [**Start free on Cloud**](https://aster-lang.cloud)
 → [Read: CNL Quick Reference](/learn/cnl-quick-reference)
 
 </div>
@@ -76,7 +76,7 @@ You need data sovereignty, GDPR/PII controls, and a clear deployment path. Self-
 
 → [Deployment Guide](/learn/deployment-guide)
 → [Authentication & RBAC](/getting-started/authentication)
-→ [Talk to us](mailto:hello@aster-lang.dev)
+→ [Talk to sales](mailto:hello@aster-lang.dev)
 
 </div>
 

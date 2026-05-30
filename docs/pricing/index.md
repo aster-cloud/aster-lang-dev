@@ -8,7 +8,7 @@ description: Choose between Aster Lang Open Source, Aster Lang Cloud (managed Sa
 Aster Lang ships in three editions. All three run the **same engine and the same language** — what differs is who operates the infrastructure and where the data lives.
 
 ::: tip Pricing
-This page intentionally does not list prices. Pricing depends on tenancy size, evaluation volume, and data residency. **[Talk to us](mailto:hello@aster-lang.dev)** for a quote, or **[start free in Aster Lang Cloud](https://aster-lang.cloud)**.
+For self-serve teams, Cloud offers Free and Pro plans with public pricing at **[aster-lang.cloud/pricing](https://aster-lang.cloud/pricing)**. Enterprise (self-hosted) pricing depends on tenancy size, evaluation volume, and data residency — **[talk to sales](mailto:hello@aster-lang.dev)** for a quote.
 :::
 
 ## At a glance
