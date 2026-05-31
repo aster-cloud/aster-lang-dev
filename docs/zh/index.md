@@ -7,9 +7,7 @@ hero:
   name: "Aster Lang"
   text: "策略即代码,用母语书写（English · 中文 · Deutsch）"
   tagline: "让业务专家用自己的语言编写可执行的规则。AI 起草。引擎运行。审计可信。"
-  image:
-    src: /logo.svg
-    alt: Aster Lang
+  # 不设 image:让 hero 文本占满列宽,HeroAnimation 在 CTA 下方居中渲染（对齐 cloud）
   actions:
     - theme: brand
       text: 在演练场开始

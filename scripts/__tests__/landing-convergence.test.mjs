@@ -336,8 +336,12 @@ test('CustomLayout imports all 6 components', () => {
 
 test('CustomLayout uses correct VitePress slot names', () => {
   const layout = read('docs/.vitepress/theme/CustomLayout.vue')
-  // Real slots verified against vitepress 1.6.4 Layout.vue
-  assert.match(layout, /#home-hero-image/)
+  // Real slots verified against vitepress 1.6.4 Layout.vue.
+  // home-hero-after (full-width, below VPHero) is used instead of
+  // home-hero-image (right column of 2-col grid) because the dark
+  // zinc HeroAnimation card drifts in the image slot and the cloud
+  // landing uses a below-CTA placement (max-w-2xl, centered).
+  assert.match(layout, /#home-hero-after/)
   assert.match(layout, /#home-hero-info-after/)
   assert.match(layout, /#home-features-before/)
   assert.match(layout, /#home-features-after/)

@@ -7,9 +7,8 @@ hero:
   name: "Aster Lang"
   text: "Policy-as-Code in Plain English (and 中文 · Deutsch)"
   tagline: "Let business experts write executable rules in their own language. AI drafts. Engines run. Auditors trust."
-  image:
-    src: /logo.svg
-    alt: Aster Lang
+  # No `image:` — hero text spans full column width and HeroAnimation
+  # renders centered below the CTAs (cloud-aligned layout).
   actions:
     - theme: brand
       text: Try in Playground

@@ -7,9 +7,7 @@ hero:
   name: "Aster Lang"
   text: "Policy-as-Code in der eigenen Sprache (English · 中文 · Deutsch)"
   tagline: "Lassen Sie Fachexperten ausführbare Regeln in ihrer eigenen Sprache schreiben. KI entwirft. Engines führen aus. Auditoren vertrauen."
-  image:
-    src: /logo.svg
-    alt: Aster Lang
+  # Kein image: — Hero-Text nimmt die volle Spaltenbreite ein, HeroAnimation rendert mittig unter den CTAs (cloud-aligned)
   actions:
     - theme: brand
       text: Im Playground starten

@@ -190,24 +190,26 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+/* Placed via CustomLayout #home-hero-after slot — sits below VPHero,
+ * full-width container, centered and capped at 720px (matches cloud's
+ * CnlDemo max-w-2xl). No aspect-ratio constraint; height drives off
+ * content. Top margin separates it from the hero CTAs above. */
 .hero-animation {
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
+  max-width: 720px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
   user-select: none;
 }
 
 .card-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
 }
 
-/* 主卡 — cloud-aligned dark zinc-950 窗 + 12px 圆角 + 紫色阴影
- * 取消原 tilt-bg 渐变层(cloud 没有,显得装饰) + 取消 -1deg 倾斜 */
+/* 主卡 — cloud-aligned dark zinc-950 窗 + 12px 圆角 + 紫色阴影 */
 .main-card {
-  position: absolute;
-  inset: 0;
+  position: relative;
   background: #0a0a0a;
   border-radius: 12px;
   box-shadow: 0 25px 50px -12px rgb(139 92 246 / 0.25);
@@ -217,7 +219,6 @@ onBeforeUnmount(() => {
 
 .card-inner {
   padding: 24px 24px 18px;
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -269,18 +270,21 @@ onBeforeUnmount(() => {
   font-weight: 500;
 }
 
-/* Code 区域 */
+/* Code 区域 — content-driven height (no aspect-ratio constraint).
+ * Cards share the same vertical slot using grid layered children
+ * (all in row/col 1), only the active card has opacity:1 so transitions
+ * cross-fade in place. min-height keeps the slot stable when swapping
+ * cards with different line counts. */
 .code-container {
   position: relative;
-  flex: 1;
-  min-height: 0;
+  display: grid;
+  min-height: 14rem;
   overflow: hidden;
 }
 
 .code-card {
-  position: absolute;
-  inset: 0;
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  grid-area: 1 / 1;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .code-card.visible {
@@ -291,7 +295,7 @@ onBeforeUnmount(() => {
 
 .code-card.hidden {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
   pointer-events: none;
 }
 
@@ -384,25 +388,22 @@ onBeforeUnmount(() => {
 }
 
 /* Mobile 简化版:不再 display:none(与 cloud 一致,保留视觉钩子)
- * 隐藏 tabs / badge-row / progress-row,只显示当前 active code card */
+ * 隐藏 tabs / badge-row / progress-row,只显示当前 active code card.
+ * JS guards (mql + reducedMotion) already disable the JS cycle at
+ * <=960px so `active` is always the first card here. */
 @media (max-width: 960px) {
   .hero-animation {
     max-width: 100%;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
+    padding: 0 1rem;
   }
-  .card-wrapper {
-    aspect-ratio: auto;
-    min-height: 14rem;
+  .code-container {
+    min-height: 12rem;
   }
   .tabs,
   .badge-row,
   .progress-row {
     display: none;
-  }
-  .code-card.active {
-    position: static;
-    opacity: 1;
-    transform: none;
   }
   .code-card:not(.active) {
     display: none;
