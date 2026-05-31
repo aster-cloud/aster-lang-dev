@@ -13,10 +13,11 @@ export default defineConfig({
     de: { label: 'Deutsch', lang: 'de-DE', link: '/de/', ...deConfig },
   },
   themeConfig: {
-    // Nav uses logo-mark.svg (transparent bg, tight viewBox) so the A
-    // reads cleanly on the ~24px nav slot in both light and dark mode.
-    // /logo.svg keeps the 1024-square white-background variant for
-    // favicons and social share cards (see config.shared.ts head).
+    // Nav + favicon both use logo-mark.svg — transparent background,
+    // tight viewBox — so the A reads cleanly on whatever surface
+    // (light/dark nav, browser tab chrome) draws behind it.
+    // logo.svg (white-plate variant) stays in the repo as a fallback
+    // for surfaces that explicitly want the framed mark.
     logo: '/logo-mark.svg',
     search: { provider: 'local' },
     // Right-rail table of contents. The VitePress default shows H2 only,

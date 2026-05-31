@@ -28,7 +28,11 @@ export const sharedConfig: UserConfig = {
     languages: [asterGrammar as any],
   },
   head: [
-    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+    // Use the transparent nav mark so the favicon inherits whatever
+    // background the browser tab / share card draws behind it,
+    // matching the nav logo's appearance on both light and dark
+    // chromes.
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo-mark.svg' }],
   ],
   vite: {
     optimizeDeps: {
