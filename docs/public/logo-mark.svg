@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 110 904 820" role="img" aria-label="Aster Lang">
+  <!--
+    Aster Lang nav mark — transparent background variant of logo.svg
+    optimized for ~24-32px header slots. Differences from logo.svg:
+      - No white <rect> background → SVG inherits the nav container
+        color, so the A reads cleanly on both light + dark nav
+      - Tight viewBox (60 110 904 820) crops the dead padding around
+        the A's geometry, so the blades fill the small slot without
+        a visible margin
+      - No central white aperture: at favicon scale (≤24px) the
+        aperture becomes a single pixel of noise. The A still reads
+        as an A because the two blade paths meet at the apex but
+        diverge at the base (the gap between blade endpoints reads
+        as the A's open base even without the inner cutout)
+
+    Favicon + share previews keep using /logo.svg (the 1024×1024
+    white-background variant), which renders better at OG/twitter
+    card sizes and tab favicons that get drawn on a window chrome
+    backdrop.
+  -->
+  <defs>
+    <linearGradient id="blue" x1="250" y1="160" x2="470" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="760" y1="160" x2="560" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Aster A: left blade (blue) -->
+  <path d="M505 143 L93 896 L441 681 L371 640 L505 397 Z" fill="url(#blue)"/>
+
+  <!-- Aster A: right blade (orange) -->
+  <path d="M519 143 L931 896 L583 681 L653 640 L519 397 Z" fill="url(#orange)"/>
+</svg>
