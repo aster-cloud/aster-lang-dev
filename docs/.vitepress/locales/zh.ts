@@ -117,7 +117,7 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       '/enterprise/': enterpriseSidebar,
     },
     footer: {
-      message: '基于 MIT 许可证发布。',
+      message: '基于 Apache License 2.0 发布。',
       copyright: '版权所有 © 2025 Aster Language 团队',
     },
   },

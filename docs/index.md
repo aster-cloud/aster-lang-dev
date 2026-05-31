@@ -1,5 +1,7 @@
 ---
 layout: home
+# Suppress VPFooter on home; DevFooter takes over via CustomLayout layout-bottom slot.
+footer: false
 
 hero:
   name: "Aster Lang"
@@ -15,28 +17,6 @@ hero:
     - theme: alt
       text: 5-Minute Quick Start
       link: /getting-started/quickstart
-    - theme: alt
-      text: API Reference
-      link: /api/policies/evaluate
-
-features:
-  - title: 🌍 Write rules in your own language
-    details: English, Simplified Chinese, and German are first-class citizens — same semantics, same engine. Adding a new language is a configuration task, not an engineering one.
-
-  - title: 🤖 AI drafts. You review.
-    details: Built-in LLM assistance generates rule drafts from plain prompts, explains existing rules, and auto-repairs syntax errors. Streaming over SSE, validated before suggested.
-
-  - title: ⚡ Production-grade execution
-    details: Java + GraalVM Truffle interpreter for high-throughput evaluation. Native Image builds boot in milliseconds. P99 latency under 200ms.
-
-  - title: 🔒 Tamper-evident audit
-    details: Every policy evaluation is recorded in the engine's tamper-evident AuditLog, hash-chained with SHA-256. Verify any chain via GET /api/v1/audit/verify-chain?start=…&end=…. Replay any historical decision deterministically — clocks and UUIDs are controlled at runtime.
-
-  - title: 🏢 SaaS or self-hosted
-    details: Use aster-lang.cloud for managed multi-tenant, or deploy to your own K3S cluster via ArgoCD GitOps. Your data, your jurisdiction.
-
-  - title: 🧰 Drop-in via REST, GraphQL, or WebSocket
-    details: Submit policy source inline or reference a stored policy by ID. Batch evaluate. Stream traces. RBAC + HMAC signing on every endpoint.
 ---
 
 <div class="vp-doc" style="max-width: 960px; margin: 4rem auto; padding: 0 24px;">

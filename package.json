@@ -12,7 +12,7 @@
     "check:locale-parity": "tsx scripts/check-locale-parity.ts",
     "sync:enterprise": "node scripts/sync-enterprise-docs.mjs",
     "check:enterprise": "node scripts/sync-enterprise-docs.mjs --check",
-    "test:scripts": "node scripts/__tests__/sync-enterprise-docs.test.mjs && node scripts/__tests__/build-blog-rss.test.mjs"
+    "test:scripts": "node scripts/__tests__/sync-enterprise-docs.test.mjs && node scripts/__tests__/build-blog-rss.test.mjs && node scripts/__tests__/landing-convergence.test.mjs"
   },
   "dependencies": {
     "@aster-cloud/aster-lang-ts": "^0.1.5",

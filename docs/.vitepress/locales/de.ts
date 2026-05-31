@@ -117,7 +117,7 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
       '/enterprise/': enterpriseSidebar,
     },
     footer: {
-      message: 'Veröffentlicht unter der MIT-Lizenz.',
+      message: 'Veröffentlicht unter der Apache License 2.0.',
       copyright: 'Copyright © 2025 Aster Language Team',
     },
   },

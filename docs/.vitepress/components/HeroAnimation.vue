@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useUiStrings } from '../i18n/ui'
 
 interface CodeLine {
@@ -20,7 +20,7 @@ const cards: Card[] = [
     subtitle: 'POST /api/v1/policies/evaluate',
     lines: [
       { text: 'POST', cls: 'kw', indent: 0 },
-      { text: '/api/v1/policies/{id}/evaluate', cls: 'str', indent: 0 },
+      { text: '/api/v1/policies/evaluate', cls: 'str', indent: 0 },
       { text: '', cls: '', indent: 0 },
       { text: '{ "context": {', cls: 'punc', indent: 0 },
       { text: '"total": 500,', cls: 'val', indent: 2 },
@@ -32,7 +32,7 @@ const cards: Card[] = [
   },
   {
     label: 'Source',
-    subtitle: 'POST /api/v1/evaluate-source',
+    subtitle: 'POST /api/v1/policies/evaluate-source',
     lines: [
       { text: 'POST', cls: 'kw', indent: 0 },
       { text: '/api/v1/policies/evaluate-source', cls: 'str', indent: 0 },
@@ -47,10 +47,10 @@ const cards: Card[] = [
   },
   {
     label: 'Batch',
-    subtitle: 'POST /api/v1/policies/batch',
+    subtitle: 'POST /api/v1/policies/evaluate/batch',
     lines: [
       { text: 'POST', cls: 'kw', indent: 0 },
-      { text: '/api/v1/policies/batch', cls: 'str', indent: 0 },
+      { text: '/api/v1/policies/evaluate/batch', cls: 'str', indent: 0 },
       { text: '', cls: '', indent: 0 },
       { text: '{ "policyId": "pricing-v2",', cls: 'punc', indent: 0 },
       { text: '"requests": [', cls: 'key', indent: 1 },
@@ -66,66 +66,94 @@ const cards: Card[] = [
 const strings = useUiStrings()
 const badges = computed(() => strings.value.hero.badges)
 const requestLabel = computed(() => strings.value.hero.requestLabel)
+const animationLabel = computed(() => strings.value.hero.animationLabel)
 
 const active = ref(0)
-let interval: ReturnType<typeof setInterval> | null = null
+let timer: ReturnType<typeof setInterval> | undefined
+
+// 守卫:mobile 不轮播(屏幕太小,卡片切换视觉噪音);reduced-motion
+// 不轮播(WCAG 2.3.3 — 用户系统级关闭动画意图)。两个守卫 OR 组合,
+// 任一触发即停。
+const mql = typeof window !== 'undefined'
+  ? window.matchMedia('(max-width: 960px)')
+  : null
+const reducedMotion = typeof window !== 'undefined'
+  ? window.matchMedia('(prefers-reduced-motion: reduce)')
+  : null
+
+function startCycle() {
+  if (mql?.matches || reducedMotion?.matches) return
+  timer = setInterval(() => {
+    active.value = (active.value + 1) % cards.length
+  }, 3200)
+}
+
+function stopCycle() {
+  if (timer !== undefined) {
+    clearInterval(timer)
+    timer = undefined
+  }
+}
+
+function onMediaChange() {
+  stopCycle()
+  startCycle()
+}
 
 function setActive(index: number) {
   active.value = index
-  restartInterval()
-}
-
-function restartInterval() {
-  if (interval) clearInterval(interval)
-  interval = setInterval(() => {
-    active.value = (active.value + 1) % cards.length
-  }, 3000)
+  stopCycle()
+  startCycle()
 }
 
 onMounted(() => {
-  restartInterval()
+  startCycle()
+  mql?.addEventListener('change', onMediaChange)
+  reducedMotion?.addEventListener('change', onMediaChange)
 })
 
-onUnmounted(() => {
-  if (interval) clearInterval(interval)
+onBeforeUnmount(() => {
+  stopCycle()
+  mql?.removeEventListener('change', onMediaChange)
+  reducedMotion?.removeEventListener('change', onMediaChange)
 })
 </script>
 
 <template>
-  <div class="hero-animation">
+  <div
+    class="hero-animation"
+    role="img"
+    :aria-label="animationLabel"
+  >
     <div class="card-wrapper">
-      <!-- 倾斜背景层 -->
-      <div class="bg-tilt"></div>
-      <!-- 主卡片 -->
       <div class="main-card">
         <div class="card-inner">
-          <!-- 窗口控制按钮 -->
-          <div class="window-dots">
+          <div class="window-dots" aria-hidden="true">
             <span class="dot red"></span>
             <span class="dot yellow"></span>
             <span class="dot green"></span>
           </div>
 
-          <!-- API 标签切换 -->
-          <div class="tabs">
+          <div class="tabs" role="tablist">
             <button
               v-for="(card, i) in cards"
               :key="i"
               class="tab"
               :class="{ active: active === i }"
+              role="tab"
+              :aria-selected="active === i"
               @click="setActive(i)"
             >
               {{ card.label }}
             </button>
           </div>
 
-          <!-- 代码卡片容器 -->
           <div class="code-container">
             <div
               v-for="(card, ci) in cards"
               :key="ci"
               class="code-card"
-              :class="{ visible: active === ci, hidden: active !== ci }"
+              :class="{ visible: active === ci, hidden: active !== ci, active: active === ci }"
             >
               <div class="code-subtitle">
                 {{ requestLabel }} <span class="subtitle-accent">— {{ card.subtitle }}</span>
@@ -143,13 +171,11 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <!-- 功能徽章 -->
           <div class="badge-row">
             <span v-for="badge in badges" :key="badge" class="badge">{{ badge }}</span>
           </div>
 
-          <!-- 进度条 -->
-          <div class="progress-row">
+          <div class="progress-row" aria-hidden="true">
             <span
               v-for="(_, i) in cards"
               :key="i"
@@ -177,89 +203,73 @@ onUnmounted(() => {
   aspect-ratio: 1;
 }
 
-/* 倾斜背景层 */
-.bg-tilt {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #ede9fe, #e0e7ff);
-  border-radius: 24px;
-  transform: rotate(3deg);
-}
-
-.dark .bg-tilt {
-  background: linear-gradient(135deg, #2e1065, #1e1b4b);
-}
-
-/* 主卡片 */
+/* 主卡 — cloud-aligned dark zinc-950 窗 + 12px 圆角 + 紫色阴影
+ * 取消原 tilt-bg 渐变层(cloud 没有,显得装饰) + 取消 -1deg 倾斜 */
 .main-card {
   position: absolute;
   inset: 0;
-  background: var(--vp-c-bg);
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
-  border: 1px solid var(--vp-c-divider);
-  transform: rotate(-1deg);
+  background: #0a0a0a;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgb(139 92 246 / 0.25);
+  border: 1px solid var(--aster-color-zinc-800, #27272a);
   overflow: hidden;
 }
 
-.dark .main-card {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
 .card-inner {
-  padding: 28px 28px 20px;
+  padding: 24px 24px 18px;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-/* 窗口圆点 */
+/* macOS window dots — rose-500 / amber-500 / emerald-500 @ 70% opacity
+ * 用 -500 step(所有色阶都存在;不使用 -400 因为 tokens.css 不暴露) */
 .window-dots {
   display: flex;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  opacity: 0.7;
 }
-.dot.red { background: #f87171; }
-.dot.yellow { background: #fbbf24; }
-.dot.green { background: #4ade80; }
+.dot.red    { background: var(--aster-color-rose-500, #f43f5e); }
+.dot.yellow { background: var(--aster-color-amber-500, #f59e0b); }
+.dot.green  { background: var(--aster-color-emerald-500, #10b981); }
 
-/* 标签切换 */
+/* Tabs */
 .tabs {
   display: flex;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .tab {
   padding: 4px 12px;
   font-size: 12px;
-  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  font-family: var(--vp-font-family-mono);
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
-  background: var(--vp-c-default-soft);
-  color: var(--vp-c-text-3);
+  transition: background 0.2s, color 0.2s;
+  background: transparent;
+  color: var(--aster-color-zinc-400, #a1a1aa);
+}
+
+.tab:hover {
+  color: var(--aster-color-zinc-100, #f4f4f5);
 }
 
 .tab.active {
-  background: #ede9fe;
-  color: #6366f1;
+  background: var(--aster-color-violet-900, #4c1d95);
+  color: var(--aster-color-violet-200, #ddd6fe);
   font-weight: 500;
 }
 
-.dark .tab.active {
-  background: #2e1065;
-  color: #a5b4fc;
-}
-
-/* 代码区域 */
+/* Code 区域 */
 .code-container {
   position: relative;
   flex: 1;
@@ -287,26 +297,23 @@ onUnmounted(() => {
 
 .code-subtitle {
   font-size: 11px;
-  color: var(--vp-c-text-3);
-  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  color: var(--aster-color-zinc-500, #71717a);
+  font-family: var(--vp-font-family-mono);
   margin-bottom: 12px;
 }
 
 .subtitle-accent {
-  color: #6366f1;
-}
-
-.dark .subtitle-accent {
-  color: #a5b4fc;
+  color: var(--aster-color-violet-400, #a78bfa);
 }
 
 .code-lines {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-family: 'SF Mono', 'Fira Code', Menlo, Consolas, monospace;
+  font-family: var(--vp-font-family-mono);
   font-size: 13px;
   line-height: 1.7;
+  color: var(--aster-color-zinc-100, #f4f4f5);
 }
 
 .code-line {
@@ -314,24 +321,20 @@ onUnmounted(() => {
   min-height: 1.7em;
 }
 
-/* 语法高亮 token */
-.token.kw { color: #7c3aed; font-weight: 600; }
-.token.str { color: var(--vp-c-text-2); }
-.token.key { color: #6366f1; }
-.token.val { color: var(--vp-c-text-1); }
-.token.punc { color: var(--vp-c-text-2); }
-.token.comment { color: var(--vp-c-text-3); font-style: italic; }
-.token.res { color: #16a34a; }
+/* 语法高亮 token (token step 全部验证存在 tokens.css):
+ * kw / key / str / val / punc / comment + 默认 zinc-100 */
+.token.kw      { color: var(--aster-color-violet-400, #a78bfa); font-weight: 600; }
+.token.str     { color: var(--aster-color-emerald-500, #10b981); }
+.token.key     { color: var(--aster-color-sky-300, #7dd3fc); }
+.token.val     { color: var(--aster-color-amber-500, #f59e0b); }
+.token.punc    { color: var(--aster-color-zinc-300, #d4d4d8); }
+.token.comment { color: var(--aster-color-zinc-500, #71717a); font-style: italic; }
 
-.dark .token.kw { color: #a78bfa; }
-.dark .token.key { color: #a5b4fc; }
-.dark .token.res { color: #4ade80; }
-
-/* 徽章 */
+/* Badges */
 .badge-row {
   display: flex;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 14px;
   flex-wrap: wrap;
 }
 
@@ -340,36 +343,21 @@ onUnmounted(() => {
   font-size: 11px;
   font-weight: 500;
   border-radius: 999px;
-  background: #ede9fe;
-  color: #6d28d9;
-}
-
-.dark .badge {
-  background: #2e1065;
-  color: #c4b5fd;
+  background: var(--aster-color-violet-900, #4c1d95);
+  color: var(--aster-color-violet-200, #ddd6fe);
 }
 
 .badge:nth-child(2) {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-.dark .badge:nth-child(2) {
-  background: #14532d;
-  color: #86efac;
+  background: rgb(16 185 129 / 0.18);
+  color: var(--aster-color-emerald-500, #10b981);
 }
 
 .badge:nth-child(3) {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: rgb(125 211 252 / 0.18);
+  color: var(--aster-color-sky-300, #7dd3fc);
 }
 
-.dark .badge:nth-child(3) {
-  background: #1e3a5f;
-  color: #93c5fd;
-}
-
-/* 进度条 */
+/* Progress */
 .progress-row {
   display: flex;
   gap: 5px;
@@ -379,23 +367,44 @@ onUnmounted(() => {
 .progress-dot {
   height: 3px;
   border-radius: 999px;
-  background: var(--vp-c-default-soft);
+  background: var(--aster-color-zinc-800, #27272a);
   width: 16px;
   transition: all 0.3s;
 }
 
 .progress-dot.active {
   width: 32px;
-  background: #6366f1;
+  background: var(--aster-color-violet-400, #a78bfa);
 }
 
-.dark .progress-dot.active {
-  background: #a5b4fc;
+/* Focus-visible (PR-5 polish — 提前 inline) */
+.tab:focus-visible {
+  outline: none;
+  box-shadow: var(--aster-shadow-ring);
 }
 
-/* 响应式 */
+/* Mobile 简化版:不再 display:none(与 cloud 一致,保留视觉钩子)
+ * 隐藏 tabs / badge-row / progress-row,只显示当前 active code card */
 @media (max-width: 960px) {
   .hero-animation {
+    max-width: 100%;
+    margin-top: 2rem;
+  }
+  .card-wrapper {
+    aspect-ratio: auto;
+    min-height: 14rem;
+  }
+  .tabs,
+  .badge-row,
+  .progress-row {
+    display: none;
+  }
+  .code-card.active {
+    position: static;
+    opacity: 1;
+    transform: none;
+  }
+  .code-card:not(.active) {
     display: none;
   }
 }

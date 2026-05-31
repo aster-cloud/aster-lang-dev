@@ -111,4 +111,5 @@ Playground 使用同一个 npm 包 `@aster-cloud/aster-lang-ts`（aster-lang-ts 
 
 ## License
 
-MIT —— 文档与示例代码可自由使用。
+Apache-2.0 —— 文档与示例代码可自由使用。详见仓库根目录 [`LICENSE`](./LICENSE)。
+与 [aster-lang-core](https://github.com/aster-lang/aster-lang-core) / [aster-lang-ts](https://github.com/aster-lang/aster-lang-ts) 等同款仓库保持许可一致。

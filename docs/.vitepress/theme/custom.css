@@ -529,3 +529,83 @@
   margin: 8px 0 0 0;
   min-height: 36px;
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Home hero — subtle secondary links under the tagline.
+ * VitePress home hero.actions only renders buttons; this gives us
+ * an inline "API Reference · Open Cloud" row matching the cloud
+ * landing page's hierarchy (two CTAs + small text below).
+ * Injected via CustomLayout #home-hero-info-after slot.
+ * ────────────────────────────────────────────────────────────── */
+.hero-subtle-links {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+}
+
+.hero-link-secondary,
+.hero-link-sibling {
+  color: var(--vp-c-text-2);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.hero-link-secondary:hover,
+.hero-link-sibling:hover {
+  color: var(--aster-primary);
+  border-bottom-color: var(--aster-primary);
+}
+
+.hero-link-secondary:focus-visible,
+.hero-link-sibling:focus-visible {
+  outline: none;
+  box-shadow: var(--aster-shadow-ring);
+  border-radius: 2px;
+}
+
+.hero-link-divider {
+  color: var(--vp-c-text-3);
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Home hero / features vertical rhythm tune.
+ * Matches the cloud landing page's section padding so when the
+ * DevTrustBand sits between hero and features, the cadence reads
+ * as a single composed page rather than three glued sections.
+ * ────────────────────────────────────────────────────────────── */
+.VPHome .VPHero {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.VPHome .VPFeatures {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * DevFeatures replaces VPFeatures.
+ *
+ * frontmatter.features arrays were removed from docs/{,zh,de}/index.md
+ * so VPFeatures wouldn't normally render. This hide rule is a defense
+ * against a future PR re-introducing features: in frontmatter — without
+ * it, we'd silently get both VPFeatures and DevFeatures on the home
+ * page. Scoped to .VPHome so doc sub-pages are unaffected.
+ * ────────────────────────────────────────────────────────────── */
+.VPHome .VPFeatures {
+  display: none;
+}
+
+/* VPFooter is already suppressed on home via frontmatter `footer: false`
+ * (VitePress-native). This CSS rule is a defense against a future PR
+ * removing that frontmatter — without it, home would double-render
+ * VPFooter (light, MIT line) AND DevFooter (dark). Scoped to .VPHome
+ * so doc sub-pages keep VPFooter. */
+.VPHome .VPFooter {
+  display: none;
+}
