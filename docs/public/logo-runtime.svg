@@ -1,0 +1,64 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aster Runtime">
+  <defs>
+    <!-- Outer ring gradients: left half orange, right half blue.
+         Both flow top → bottom to match the Aster A's two blade
+         gradients (top brighter, bottom deeper). -->
+    <linearGradient id="ringOrange" x1="50" y1="262" x2="512" y2="962" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
+    </linearGradient>
+    <linearGradient id="ringBlue" x1="974" y1="262" x2="512" y2="962" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+
+    <!-- Inner Aster A gradients (same as logo.svg). The A inverts the
+         ring's left/right palette: A's left blade is blue, right is
+         orange. Two-axis color cross gives the mark its woven look. -->
+    <linearGradient id="blue" x1="250" y1="160" x2="470" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="760" y1="160" x2="560" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="white"/>
+
+  <!-- Outer circle, split vertically into left and right semicircles.
+       Center (512, 512), radius 462.
+
+       Each half is drawn as an arc from top to bottom plus a straight
+       line back along the vertical diameter. SVG arc command:
+         A rx ry x-axis-rotation large-arc-flag sweep-flag x y
+
+       Left half (orange): start at top (512, 50), sweep counter-clockwise
+       (sweep-flag=0) through the left side down to bottom (512, 974),
+       then a straight Z back to top. -->
+  <path d="M512 50 A462 462 0 0 0 512 974 Z" fill="url(#ringOrange)"/>
+
+  <!-- Right half (blue): start at top, sweep clockwise (sweep-flag=1)
+       through the right side down to bottom, then close. -->
+  <path d="M512 50 A462 462 0 0 1 512 974 Z" fill="url(#ringBlue)"/>
+
+  <!-- White inner disc — 80px frame thickness. Radius 382. -->
+  <circle cx="512" cy="512" r="382" fill="white"/>
+
+  <!-- Aster A — scaled 0.62× and nudged up 34px so the wide baseline
+       blades sit visually centered in the disc (A's narrow apex vs
+       wide skirt: geometric center is below visual center of mass). -->
+  <g transform="translate(512 478) scale(0.62) translate(-512 -512)">
+    <!-- Aster A: left blade (blue) -->
+    <path d="M505 143 L93 896 L441 681 L371 640 L505 397 Z" fill="url(#blue)"/>
+    <!-- Aster A: right blade (orange) -->
+    <path d="M519 143 L931 896 L583 681 L653 640 L519 397 Z" fill="url(#orange)"/>
+    <!-- Central white aperture -->
+    <path d="M512 405 L371 640 L512 706 L653 640 Z" fill="white"/>
+  </g>
+</svg>

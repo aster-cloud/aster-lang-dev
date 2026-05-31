@@ -1,0 +1,37 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blue" x1="250" y1="160" x2="470" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="760" y1="160" x2="560" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
+    </linearGradient>
+    <linearGradient id="starOrange" x1="428" y1="470" x2="512" y2="590" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="1" stop-color="#FF5800"/>
+    </linearGradient>
+    <linearGradient id="starBlue" x1="596" y1="470" x2="512" y2="590" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#19AEFF"/>
+      <stop offset="1" stop-color="#2848F2"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="white"/>
+
+  <!-- Aster A: left blade -->
+  <path d="M505 143 L93 896 L441 681 L371 640 L505 397 Z" fill="url(#blue)"/>
+
+  <!-- Aster A: right blade -->
+  <path d="M519 143 L931 896 L583 681 L653 640 L519 397 Z" fill="url(#orange)"/>
+
+  <!-- central white aperture, matching the generated mark's inner void -->
+  <path d="M512 405 L371 640 L512 706 L653 640 Z" fill="white"/>
+
+  <!-- inner two-tone agent spark -->
+  <path d="M512 468 C503 529 472 560 407 568 C472 576 503 607 512 668 Z" fill="url(#starOrange)"/>
+  <path d="M512 468 C521 529 552 560 617 568 C552 576 521 607 512 668 Z" fill="url(#starBlue)"/>
+</svg>
