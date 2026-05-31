@@ -1,0 +1,72 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aster Studio">
+  <defs>
+    <!-- Outer rounded square gradients: left half orange, right half blue.
+         Same gradient stops as logo-cloud / logo-runtime so all three
+         brand variants share the exact color story. -->
+    <linearGradient id="squareOrange" x1="50" y1="262" x2="512" y2="962" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
+    </linearGradient>
+    <linearGradient id="squareBlue" x1="974" y1="262" x2="512" y2="962" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+
+    <!-- Inner Aster A gradients (same as logo.svg). The A inverts the
+         frame's left/right palette: A's left blade is blue, right is
+         orange. Two-axis color cross gives the mark its woven look. -->
+    <linearGradient id="blue" x1="250" y1="160" x2="470" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="760" y1="160" x2="560" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
+    </linearGradient>
+
+    <!-- Clip the two halves to the rounded square so the vertical split
+         line stops cleanly at the corner radius instead of overshooting
+         into the white margin. -->
+    <clipPath id="studioSquareClip">
+      <rect x="50" y="50" width="924" height="924" rx="160" ry="160"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1024" height="1024" fill="white"/>
+
+  <!-- Outer rounded square frame.
+       Bounds: (50, 50) to (974, 974) — 924×924, leaves ~50px padding
+       around the artwork at canvas scale. Corner radius 160 matches
+       iOS-style "squircle" feel without going full pill.
+       Split vertically at x=512 into two halves; clipPath trims both
+       paths to the rounded silhouette. -->
+  <g clip-path="url(#studioSquareClip)">
+    <!-- Left half (orange) -->
+    <rect x="50" y="50" width="462" height="924" fill="url(#squareOrange)"/>
+    <!-- Right half (blue) -->
+    <rect x="512" y="50" width="462" height="924" fill="url(#squareBlue)"/>
+  </g>
+
+  <!-- White inner rounded square — 80px frame thickness matches the
+       cloud hex / runtime circle siblings. Inset 80px from outer
+       bounds; corner radius scaled proportionally (160 - 80 = 80). -->
+  <rect x="130" y="130" width="764" height="764" rx="80" ry="80" fill="white"/>
+
+  <!-- Aster A — scaled 0.72× and nudged up 24px to sit visually
+       centered in the white square. The square's inner area is
+       larger than the cloud/runtime variants' inner hex/disc, so
+       the A doesn't need to shrink as aggressively (0.72 vs 0.62)
+       and the vertical nudge is smaller. -->
+  <g transform="translate(512 488) scale(0.72) translate(-512 -512)">
+    <!-- Aster A: left blade (blue) -->
+    <path d="M505 143 L93 896 L441 681 L371 640 L505 397 Z" fill="url(#blue)"/>
+    <!-- Aster A: right blade (orange) -->
+    <path d="M519 143 L931 896 L583 681 L653 640 L519 397 Z" fill="url(#orange)"/>
+    <!-- Central white aperture -->
+    <path d="M512 405 L371 640 L512 706 L653 640 Z" fill="white"/>
+  </g>
+</svg>
