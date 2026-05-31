@@ -574,13 +574,50 @@
 
 /* ──────────────────────────────────────────────────────────────
  * Home hero / features vertical rhythm tune.
- * Matches the cloud landing page's section padding so when the
- * DevTrustBand sits between hero and features, the cadence reads
- * as a single composed page rather than three glued sections.
+ *
+ * VitePress home Hero is left-aligned by default; it only centers
+ * when frontmatter.hero.image is set (.VPHero.has-image .container).
+ * We dropped the image (HeroAnimation now renders below via
+ * #home-hero-after) but still want cloud-style centered hero, so we
+ * unconditionally center the .main column and widen the title slot
+ * past the default 392px cap.
  * ────────────────────────────────────────────────────────────── */
 .VPHome .VPHero {
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
+}
+
+.VPHome .VPHero .container {
+  text-align: center;
+}
+
+.VPHome .VPHero .main {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* Headline + tagline + actions all center under the wider title slot.
+ * The 392px cap on .name/.text is what makes default VitePress hero
+ * feel cramped; bumping to 920px lets the Fraunces display weight
+ * breathe like cloud's hero (`max-w-5xl`). */
+.VPHome .VPHero .heading {
+  align-items: center;
+}
+
+.VPHome .VPHero .name,
+.VPHome .VPHero .text {
+  max-width: none;
+  width: 100%;
+}
+
+.VPHome .VPHero .tagline {
+  margin: 1rem auto 0;
+  max-width: 640px;
+}
+
+.VPHome .VPHero .actions {
+  justify-content: center;
 }
 
 .VPHome .VPFeatures {

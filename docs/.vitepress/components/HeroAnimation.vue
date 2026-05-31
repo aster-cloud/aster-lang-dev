@@ -193,11 +193,16 @@ onBeforeUnmount(() => {
 /* Placed via CustomLayout #home-hero-after slot — sits below VPHero,
  * full-width container, centered and capped at 720px (matches cloud's
  * CnlDemo max-w-2xl). No aspect-ratio constraint; height drives off
- * content. Top margin separates it from the hero CTAs above. */
+ * content.
+ *
+ * margin: 2.5rem top separates from hero CTAs; 4rem bottom gives the
+ * dark zinc card breathing room before DevTrustBand starts (DevTrustBand
+ * has its own border-top + 3.5rem padding-top, so this combines to
+ * ~7.5rem of vertical rhythm — matches cloud's hero → trust band gap). */
 .hero-animation {
   width: 100%;
   max-width: 720px;
-  margin: 2.5rem auto 0;
+  margin: 2.5rem auto 4rem;
   padding: 0 1.5rem;
   user-select: none;
 }

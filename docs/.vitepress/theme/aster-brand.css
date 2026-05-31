@@ -149,3 +149,103 @@
   font-weight: 600;
   letter-spacing: -0.02em;
 }
+
+/*
+ * Aster semantic token mode-sync (CRITICAL).
+ *
+ * @aster-cloud/tokens uses `@media (prefers-color-scheme: dark)` +
+ * `:root:not([data-theme="light"])` to flip all --aster-* semantic
+ * tokens between light and dark values. VitePress, however, uses an
+ * `html.dark` class toggled by its own theme switcher — and ignores
+ * the data-theme attribute. The result is a desync:
+ *
+ *   - OS dark mode + VitePress light theme  →  tokens flip to dark
+ *     (because of prefers-color-scheme), so DevTrustBand / DevFeatures
+ *     render with bg-subtle = zinc-900 even though the page chrome is
+ *     light. This is what users see as "dark cards on light theme".
+ *
+ *   - VitePress dark toggle with OS light   →  tokens stay light, but
+ *     the page chrome is dark. Same desync in the other direction.
+ *
+ * Fix: re-bind every reversing --aster-* token to the actual VitePress
+ * theme state. `html:not(.dark)` is the light branch, `html.dark` is
+ * the dark branch. These rules override the tokens.css media query
+ * because they share specificity but come later in the cascade, and
+ * because they use `html.<class>` which beats `:root:not([data-theme])`
+ * at equal specificity due to source order.
+ *
+ * Only the *reversing* tokens are listed — raw `--aster-color-*`
+ * steps don't reverse, so we don't need to restate them.
+ */
+
+/* Specificity note: tokens.css uses `:root:not([data-theme="light"])`
+ * inside an `@media (prefers-color-scheme: dark)` query, which has
+ * specificity (0, 2, 0). To win the cascade we need at least the same
+ * specificity AND the same source-order weight (or higher). We use
+ * `html:not(.dark):root` and `html.dark:root` so both branches measure
+ * at (0, 2, 1) — beats the tokens.css media block on specificity alone.
+ * Source order is also later (brand.css is imported AFTER tokens.css). */
+
+html:not(.dark):root {
+  --aster-primary:        var(--aster-color-violet-600);
+  --aster-primary-hover:  var(--aster-color-violet-500);
+  --aster-primary-active: var(--aster-color-violet-700);
+  --aster-primary-fg:     #ffffff;
+  --aster-primary-subtle: var(--aster-color-violet-50);
+
+  --aster-accent:         var(--aster-color-sky-700);
+  --aster-accent-hover:   var(--aster-color-sky-800);
+  --aster-accent-fg:      #ffffff;
+  --aster-accent-subtle:  var(--aster-color-sky-50);
+
+  --aster-bg:             #ffffff;
+  --aster-bg-subtle:      var(--aster-color-zinc-50);
+  --aster-bg-muted:       var(--aster-color-zinc-100);
+  --aster-fg:             var(--aster-color-zinc-900);
+  --aster-fg-muted:       var(--aster-color-zinc-600);
+  --aster-fg-subtle:      var(--aster-color-zinc-500);
+  --aster-border:         var(--aster-color-zinc-200);
+  --aster-border-strong:  var(--aster-color-zinc-300);
+
+  --aster-success:        var(--aster-color-emerald-700);
+  --aster-success-fg:     #ffffff;
+  --aster-success-subtle: var(--aster-color-emerald-50);
+  --aster-warning:        var(--aster-color-amber-700);
+  --aster-warning-fg:     #ffffff;
+  --aster-warning-subtle: var(--aster-color-amber-50);
+  --aster-danger:         var(--aster-color-rose-700);
+  --aster-danger-fg:      #ffffff;
+  --aster-danger-subtle:  var(--aster-color-rose-50);
+}
+
+html.dark:root {
+  --aster-primary:        var(--aster-color-violet-400);
+  --aster-primary-hover:  var(--aster-color-violet-300);
+  --aster-primary-active: var(--aster-color-violet-200);
+  --aster-primary-fg:     var(--aster-color-zinc-950);
+  --aster-primary-subtle: rgb(139 92 246 / 0.18);
+
+  --aster-accent:         var(--aster-color-sky-400);
+  --aster-accent-hover:   var(--aster-color-sky-300);
+  --aster-accent-fg:      var(--aster-color-zinc-950);
+  --aster-accent-subtle:  rgb(14 165 233 / 0.12);
+
+  --aster-bg:             var(--aster-color-zinc-950);
+  --aster-bg-subtle:      var(--aster-color-zinc-900);
+  --aster-bg-muted:       var(--aster-color-zinc-800);
+  --aster-fg:             var(--aster-color-zinc-50);
+  --aster-fg-muted:       var(--aster-color-zinc-300);
+  --aster-fg-subtle:      var(--aster-color-zinc-400);
+  --aster-border:         var(--aster-color-zinc-800);
+  --aster-border-strong:  var(--aster-color-zinc-700);
+
+  --aster-success:        var(--aster-color-emerald-500);
+  --aster-success-fg:     var(--aster-color-zinc-950);
+  --aster-success-subtle: rgb(16 185 129 / 0.12);
+  --aster-warning:        var(--aster-color-amber-500);
+  --aster-warning-fg:     var(--aster-color-zinc-950);
+  --aster-warning-subtle: rgb(245 158 11 / 0.12);
+  --aster-danger:         var(--aster-color-rose-500);
+  --aster-danger-fg:      var(--aster-color-zinc-950);
+  --aster-danger-subtle:  rgb(244 63 94 / 0.15);
+}
