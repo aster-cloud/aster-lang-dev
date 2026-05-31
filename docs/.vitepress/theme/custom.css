@@ -542,6 +542,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  /* justify-content: center matches the centered hero layout. Without
+   * this, the flex children sit left-aligned even though .VPHero
+   * .container is text-align: center (text-align doesn't affect flex
+   * children's main-axis alignment). */
+  justify-content: center;
   gap: 0.5rem 0.75rem;
   font-size: 0.875rem;
   color: var(--vp-c-text-2);

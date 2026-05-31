@@ -4,9 +4,10 @@ layout: home
 footer: false
 
 hero:
-  name: "Aster Lang"
-  text: "Policy-as-Code in Plain English (and 中文 · Deutsch)"
-  tagline: "Let business experts write executable rules in their own language. AI drafts. Engines run. Auditors trust."
+  name: "Policy as Code"
+  text: "in native language"
+  tagline: "Write business rules in your native language. AI drafts, humans approve, GraalVM executes. Hash-chained audit included."
+  # Wording mirrors aster-lang.cloud hero (messages/en.json `hero.*`).
   # No `image:` — hero text spans full column width and HeroAnimation
   # renders centered below the CTAs (cloud-aligned layout).
   actions:
