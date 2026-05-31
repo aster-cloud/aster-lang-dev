@@ -1,10 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aster Lang">
   <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
+    <linearGradient id="blue" x1="250" y1="160" x2="470" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#11A8FF"/>
+      <stop offset="0.55" stop-color="#2868F0"/>
+      <stop offset="1" stop-color="#3727F5"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="760" y1="160" x2="560" y2="890" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFB000"/>
+      <stop offset="0.55" stop-color="#FF8200"/>
+      <stop offset="1" stop-color="#FF4F00"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="24" fill="url(#g)"/>
-  <text x="64" y="88" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-size="72" font-weight="700" fill="white">A</text>
+
+  <rect width="1024" height="1024" fill="white"/>
+
+  <!-- Aster A: left blade -->
+  <path d="M505 143 L93 896 L441 681 L371 640 L505 397 Z" fill="url(#blue)"/>
+
+  <!-- Aster A: right blade -->
+  <path d="M519 143 L931 896 L583 681 L653 640 L519 397 Z" fill="url(#orange)"/>
+
+  <!-- central white aperture -->
+  <path d="M512 405 L371 640 L512 706 L653 640 Z" fill="white"/>
 </svg>
