@@ -319,11 +319,15 @@ test('bottomCta is permanently-bright (no primary-fg token reference in CSS)', (
 
 console.log('\n[5/6] CustomLayout slot wiring')
 
-test('CustomLayout imports all 6 components', () => {
+test('CustomLayout imports all 6 hero/section components', () => {
   const layout = read('docs/.vitepress/theme/CustomLayout.vue')
+  // HeroAnimation moved out of the landing (it now lives in
+  // docs/api/policies/evaluate.md via global component registration
+  // in theme/index.ts). The tagline carousel (HeroTaglineList)
+  // carries the visual rotation on the landing instead.
   const REQUIRED_IMPORTS = [
-    'HeroAnimation',
     'HeroSubtleLinks',
+    'HeroTaglineList',
     'DevTrustBand',
     'DevFeatures',
     'DevBottomCta',
@@ -332,16 +336,19 @@ test('CustomLayout imports all 6 components', () => {
   for (const c of REQUIRED_IMPORTS) {
     assert.match(layout, new RegExp(`import ${c}`), `CustomLayout missing import: ${c}`)
   }
+  // HeroAnimation must NOT be imported by CustomLayout anymore —
+  // it's a global component registered in theme/index.ts.
+  assert.ok(
+    !/import HeroAnimation/.test(layout),
+    'CustomLayout still imports HeroAnimation (should be moved to theme/index.ts global registration)',
+  )
 })
 
 test('CustomLayout uses correct VitePress slot names', () => {
   const layout = read('docs/.vitepress/theme/CustomLayout.vue')
   // Real slots verified against vitepress 1.6.4 Layout.vue.
-  // home-hero-after (full-width, below VPHero) is used instead of
-  // home-hero-image (right column of 2-col grid) because the dark
-  // zinc HeroAnimation card drifts in the image slot and the cloud
-  // landing uses a below-CTA placement (max-w-2xl, centered).
-  assert.match(layout, /#home-hero-after/)
+  // home-hero-after slot removed when HeroAnimation moved out of
+  // the landing; HeroTaglineList lives in home-hero-info-after now.
   assert.match(layout, /#home-hero-info-after/)
   assert.match(layout, /#home-features-before/)
   assert.match(layout, /#home-features-after/)
@@ -350,6 +357,25 @@ test('CustomLayout uses correct VitePress slot names', () => {
   assert.ok(
     !/#home-features\b(?!-)/.test(layout),
     'CustomLayout references non-existent #home-features slot (use -before/-after)',
+  )
+})
+
+test('HeroAnimation is registered globally via theme/index.ts', () => {
+  const themeIndex = read('docs/.vitepress/theme/index.ts')
+  assert.match(themeIndex, /import HeroAnimation/, 'theme/index.ts must import HeroAnimation')
+  assert.match(
+    themeIndex,
+    /app\.component\(\s*['"]HeroAnimation['"]\s*,\s*HeroAnimation\s*\)/,
+    'theme/index.ts must register HeroAnimation globally so markdown pages can embed it',
+  )
+})
+
+test('HeroAnimation is embedded in /api/policies/evaluate.md', () => {
+  const evaluateMd = read('docs/api/policies/evaluate.md')
+  assert.match(
+    evaluateMd,
+    /<HeroAnimation\s*\/>/,
+    'evaluate.md must embed <HeroAnimation /> (the 3 cards match this page subject)',
   )
 })
 

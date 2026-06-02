@@ -1,5 +1,7 @@
 # Evaluate Policy
 
+<HeroAnimation />
+
 Evaluate a deployed policy by module and function name. The policy must already be deployed to the engine before it can be called through this endpoint.
 
 ## Endpoint

@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import { useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import HeroAnimation from '../components/HeroAnimation.vue'
 import HeroSubtleLinks from '../components/HeroSubtleLinks.vue'
 import HeroTaglineList from '../components/HeroTaglineList.vue'
 import DevTrustBand from '../components/DevTrustBand.vue'
@@ -21,12 +20,11 @@ const { frontmatter } = useData()
 //   home-features-after   → below VPFeatures, BEFORE markdown body
 //   layout-bottom         → below markdown body (last thing in <main>)
 //
-// HeroAnimation placement decision (vs aster-cloud):
-//   Cloud's landing renders the live CnlDemo block CENTERED under the
-//   hero CTAs (max-w-2xl, full-bleed-friendly). We mirror that by using
-//   home-hero-after instead of home-hero-image. The image slot puts
-//   the animation in VPHero's right column (2-col grid), which makes
-//   the dark zinc card drift / clip when the title is long.
+// HeroAnimation removed from landing — the tagline carousel
+// (HeroTaglineList) now carries the visual rotation. The animation
+// is embedded directly into the REST API reference page
+// (docs/api/policies/evaluate.md) where its three cards (Policy /
+// Workflow / Decision) match the page's native subject matter.
 //
 // VPFooter is rendered by Layout.vue directly (conditional on
 // theme.footer && frontmatter.footer !== false). On home we set
@@ -44,10 +42,6 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
            bullets → secondary links → CTAs. -->
       <HeroTaglineList />
       <HeroSubtleLinks />
-    </template>
-
-    <template #home-hero-after>
-      <HeroAnimation />
     </template>
 
     <template #home-features-before>
