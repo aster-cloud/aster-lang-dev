@@ -10,6 +10,10 @@ interface HeroStrings {
   apiRefLink: { text: string; href: string }
   /** Sibling link to the Cloud product for users that need hosting/teams/audit. */
   siblingLink: { text: string; href: string }
+  /** Bullet-list version of the tagline. Rendered by HeroTaglineList via
+   *  #home-hero-info-after slot since VitePress's frontmatter tagline is
+   *  a single string and the technical claims read better as bullets. */
+  taglineItems: string[]
 }
 
 interface PlaygroundStrings {
@@ -114,6 +118,14 @@ const en: UiStrings = {
       text: 'Need hosting, teams, and audit workflows? Open Aster Cloud',
       href: 'https://aster-lang.cloud',
     },
+    taglineItems: [
+      'Open-source Controlled Natural Language for executable business logic',
+      'Source compiles in three languages into the same audit-grade engine',
+      'Dual reference implementations (Java/ANTLR + TypeScript/PEG), cross-verified per commit',
+      'Lexicon packs ship today — add a fourth with a config file',
+      'Drop-in via REST, GraphQL, or WebSocket',
+      'Apache-2.0 licensed',
+    ],
   },
   playground: {
     toolbar: {
@@ -267,6 +279,14 @@ const zh: UiStrings = {
       text: '\u9700\u8981\u6258\u7ba1\u3001\u56e2\u961f\u534f\u4f5c\u3001\u5ba1\u8ba1\u5de5\u4f5c\u6d41\uff1f\u524d\u5f80 Aster Cloud',
       href: 'https://aster-lang.cloud',
     },
+    taglineItems: [
+      '\u9762\u5411\u53ef\u6267\u884c\u4e1a\u52a1\u903b\u8f91\u7684\u5f00\u6e90\u53d7\u63a7\u81ea\u7136\u8bed\u8a00\uff08CNL\uff09',
+      '\u4e09\u79cd\u8bed\u8a00\u540c\u6e90\uff0c\u7f16\u8bd1\u5230\u540c\u4e00\u53f0\u5ba1\u8ba1\u7ea7\u5f15\u64ce',
+      '\u53cc\u53c2\u8003\u5b9e\u73b0\uff08Java/ANTLR + TypeScript/PEG\uff09\uff0c\u6bcf\u6b21\u63d0\u4ea4\u4ea4\u53c9\u9a8c\u8bc1',
+      '\u8bcd\u5178\u5305\u968f\u53d1\u5e03\u5373\u7528 \u2014\u2014 \u65b0\u589e\u7b2c\u56db\u79cd\u8bed\u8a00\u53ea\u9700\u4e00\u4e2a\u914d\u7f6e\u6587\u4ef6',
+      '\u901a\u8fc7 REST\u3001GraphQL\u3001WebSocket \u5373\u63d2\u5373\u7528',
+      'Apache-2.0 \u534f\u8bae',
+    ],
   },
   playground: {
     toolbar: {
@@ -420,6 +440,14 @@ const de: UiStrings = {
       text: 'Hosting, Teams oder Audit-Workflows? Aster Cloud \u00f6ffnen',
       href: 'https://aster-lang.cloud',
     },
+    taglineItems: [
+      'Open-Source Controlled Natural Language f\u00fcr ausf\u00fchrbare Gesch\u00e4ftslogik',
+      'Quellcode kompiliert in drei Sprachen in dieselbe audit-feste Engine',
+      'Zwei Referenzimplementierungen (Java/ANTLR + TypeScript/PEG), bei jedem Commit gegeneinander verifiziert',
+      'Lexicon Packs sind sofort verf\u00fcgbar \u2014 eine vierte Sprache hinzuf\u00fcgen hei\u00dft eine Konfigurationsdatei schreiben',
+      'Integration via REST, GraphQL oder WebSocket',
+      'Apache-2.0 lizenziert',
+    ],
   },
   playground: {
     toolbar: {

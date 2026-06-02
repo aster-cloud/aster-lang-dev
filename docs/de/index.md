@@ -4,13 +4,11 @@ layout: home
 footer: false
 
 hero:
-  name: "Eine Open-Source Controlled Natural Language"
-  text: "für Policy as Code"
-  tagline: "Kompilieren Sie Regeln, geschrieben in English, 中文 oder Deutsch, in dieselbe audit-feste Engine. Zwei Referenzimplementierungen (Java/ANTLR + TypeScript/PEG), bei jedem Commit gegeneinander verifiziert. Lexicon Packs sind sofort verfügbar — eine vierte Sprache hinzufügen heißt eine Konfigurationsdatei schreiben. Integration via REST, GraphQL oder WebSocket. Apache-2.0 lizenziert."
-  # Lang-Positionierung (KEINE Spiegelung von aster-lang.cloud)
-  # Cloud verkauft Hosting + KI; Lang verkauft die Sprache selbst: die
-  # CNL-Spezifikation, die dualen Compiler-Implementierungen, das
-  # Lexicon-System und die Integrationsfläche.
+  name: "Policy · Workflow · Decision"
+  text: "In English, 中文, Deutsch — alle gleichberechtigt"
+  # Tagline als Bullet-Liste in HeroTaglineList (via
+  # #home-hero-info-after slot). Grund: VitePress's frontmatter
+  # tagline ist ein String; die technischen Claims brauchen Bullets.
   # Kein image: — Hero-Text nimmt die volle Spaltenbreite ein, HeroAnimation rendert mittig unter den CTAs (cloud-aligned)
   actions:
     - theme: brand

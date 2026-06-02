@@ -4,6 +4,7 @@ import { useData } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import HeroAnimation from '../components/HeroAnimation.vue'
 import HeroSubtleLinks from '../components/HeroSubtleLinks.vue'
+import HeroTaglineList from '../components/HeroTaglineList.vue'
 import DevTrustBand from '../components/DevTrustBand.vue'
 import DevFeatures from '../components/DevFeatures.vue'
 import DevBottomCta from '../components/DevBottomCta.vue'
@@ -37,6 +38,11 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
 <template>
   <Layout>
     <template #home-hero-info-after>
+      <!-- Tagline as a bullet list (replaces the frontmatter `tagline:`
+           string which only supports a single line). HeroSubtleLinks
+           sits below so the reading order is: name → text → tagline
+           bullets → secondary links → CTAs. -->
+      <HeroTaglineList />
       <HeroSubtleLinks />
     </template>
 

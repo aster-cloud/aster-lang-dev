@@ -4,17 +4,17 @@ layout: home
 footer: false
 
 hero:
-  name: "An open-source Controlled Natural Language"
-  text: "for Policy as Code"
-  tagline: "Compile rules written in English, 中文, or Deutsch into the same audit-grade engine. Dual reference implementations (Java/ANTLR + TypeScript/PEG) cross-verified per commit. Lexicon packs ship today — add a fourth language with a config file. Drop-in via REST, GraphQL, or WebSocket. Apache-2.0."
-  # Lang-specific positioning (NOT a mirror of aster-lang.cloud).
-  # Cloud sells hosting + AI; Lang sells the language itself: the CNL
-  # spec, the dual compiler implementations, the lexicon system, and
-  # the integration surface. Tagline names every concrete technical
-  # asset a developer evaluating "what is this thing?" needs to see
-  # (CNL, dual impl, lexicon packs, transport options, license).
-  # No `image:` — hero text spans full column width and HeroAnimation
-  # renders centered below the CTAs (cloud-aligned layout).
+  name: "Policy · Workflow · Decision"
+  text: "All in plain English, 中文, Deutsch"
+  # No `tagline` here — the bullet-list version lives in HeroTaglineList
+  # and renders via #home-hero-info-after slot (next to HeroSubtleLinks).
+  # Why: VitePress's frontmatter tagline is a single string, but the
+  # list format the project chose for the technical claims (open-source
+  # CNL, dual impl, lexicon system, transport surface, license) needs
+  # bullets to read scannable. SFC + i18n strings is the clean path.
+  #
+  # No `image:` either — hero text spans full column width and
+  # HeroAnimation renders centered below the CTAs (cloud-aligned).
   actions:
     - theme: brand
       text: Try in Playground

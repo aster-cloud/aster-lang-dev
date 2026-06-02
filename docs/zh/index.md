@@ -4,11 +4,11 @@ layout: home
 footer: false
 
 hero:
-  name: "开源受控自然语言"
-  text: "为策略即代码而生"
-  tagline: "用 English、中文 或 Deutsch 写规则，编译到同一台审计级引擎。两套参考实现（Java/ANTLR + TypeScript/PEG）每次提交交叉验证。词典包随发布即可使用 —— 新增第四种语言只需一个配置文件。通过 REST、GraphQL、WebSocket 即插即用。Apache-2.0 协议。"
-  # Lang 定位（非 aster-lang.cloud hero 的镜像）
-  # Cloud 卖托管 + AI；Lang 卖语言本身：CNL 规范、双编译器实现、词典系统、集成面。
+  name: "策略 · 流程 · 决策"
+  text: "用 English、中文、Deutsch 都行"
+  # tagline 用 HeroTaglineList SFC 渲染（六条技术契约列表），通过
+  # #home-hero-info-after slot 注入。原因：VitePress frontmatter
+  # tagline 只支持单行字符串，但本项目对技术声明的呈现需要 bullets。
   # 不设 image:让 hero 文本占满列宽,HeroAnimation 在 CTA 下方居中渲染（对齐 cloud）
   actions:
     - theme: brand
