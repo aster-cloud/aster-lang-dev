@@ -44,7 +44,7 @@ hero:
 
 → [**5 分钟快速开始**](/zh/getting-started/quickstart)
 → [REST API 参考](/api/policies/evaluate)
-→ [GraphQL Schema](/graphql/overview)
+→ [GraphQL Schema](/api/graphql/overview)
 
 </div>
 
@@ -66,7 +66,9 @@ hero:
 
 ## 什么是 Aster Lang?
 
-Aster Lang 是用于编写可执行业务策略的 **多语言受控自然语言(CNL)** —— 贷款资格、保险核保、GDPR 数据访问、欺诈规则,以及任何需要规则 **既能被人阅读又能被机器运行** 的场景。
+Aster Lang 是用于编写可执行业务逻辑的 **多语言受控自然语言(CNL)** —— 贷款资质策略、审批门禁流程、路由决策、定价规则,以及任何需要规则 **既能被人阅读又能被机器运行** 的场景。
+
+语言把 **策略**、**流程**、**决策** 当作一等公民:同一套语法既能表达资质检查,也能表达审批流转或路由规则。引擎将三者编译到同一条审计级执行路径。
 
 ```aster
 Module aster.finance.loan.
@@ -116,9 +118,9 @@ Aster Lang 是第四个选项:**像备忘录一样可读、像编译代码一样
 
 ## 开源与社区
 
-- [**aster-lang-ts**](https://github.com/aster-lang/aster-lang-ts) —— TypeScript 编译器与 LSP(npm:`@aster-cloud/aster-lang-ts`)
-- [**aster-lang-core**](https://github.com/aster-lang/aster-lang-core) —— Java/ANTLR 参考编译器
-- [**Language packs**](https://github.com/aster-lang) —— `aster-lang-en` / `-zh` / `-de`
+- [**aster-lang-ts**](https://github.com/aster-cloud/aster-lang-ts) —— TypeScript 编译器与 LSP(npm:`@aster-cloud/aster-lang-ts`)
+- [**aster-lang-core**](https://github.com/aster-cloud/aster-lang-core) —— Java/ANTLR 参考编译器
+- [**Language packs**](https://github.com/aster-cloud) —— `aster-lang-en` / `-zh` / `-de`
 
 发现 bug?提个 issue。想新增语言?见词典包指南。
 

@@ -44,7 +44,7 @@ Sie möchten Policy-Evaluierung in Ihren Service integrieren. REST in 5 Minuten,
 
 → [**5-Minuten-Schnellstart**](/de/getting-started/quickstart)
 → [REST-API-Referenz](/api/policies/evaluate)
-→ [GraphQL Schema](/graphql/overview)
+→ [GraphQL Schema](/api/graphql/overview)
 
 </div>
 
@@ -66,7 +66,9 @@ Sie brauchen Datenhoheit, GDPR/PII-Kontrollen und einen klaren Deployment-Pfad. 
 
 ## Was ist Aster Lang?
 
-Aster Lang ist eine **mehrsprachige Controlled Natural Language (CNL)** zum Schreiben ausführbarer Geschäftsregeln — Kreditwürdigkeitsprüfung, Versicherungsbewertung, GDPR-Datenzugriff, Betrugsregeln und alles andere, wo Regeln **für Menschen lesbar und für Maschinen ausführbar** sein sollen.
+Aster Lang ist eine **mehrsprachige Controlled Natural Language (CNL)** zum Schreiben ausführbarer Geschäftslogik — Kreditwürdigkeitspolicies, Approval-Gate-Workflows, Routing-Decisions, Preisregeln und alles andere, wo Regeln **für Menschen lesbar und für Maschinen ausführbar** sein sollen.
+
+Die Sprache behandelt **Policies**, **Workflows** und **Decisions** als Konzepte erster Klasse: Dieselbe Syntax drückt eine Eignungsprüfung, einen Genehmigungsfluss oder eine Routing-Regel aus. Die Engine kompiliert alle drei in denselben audit-festen Ausführungspfad.
 
 ```aster
 Module aster.finance.loan.
@@ -116,9 +118,9 @@ Aster Lang ist die vierte Option: **Regeln, die sich wie ein Memo lesen und wie 
 
 ## Open Source & Community
 
-- [**aster-lang-ts**](https://github.com/aster-lang/aster-lang-ts) — TypeScript-Compiler & LSP (npm: `@aster-cloud/aster-lang-ts`)
-- [**aster-lang-core**](https://github.com/aster-lang/aster-lang-core) — Java/ANTLR-Referenzcompiler
-- [**Language packs**](https://github.com/aster-lang) — `aster-lang-en` / `-zh` / `-de`
+- [**aster-lang-ts**](https://github.com/aster-cloud/aster-lang-ts) — TypeScript-Compiler & LSP (npm: `@aster-cloud/aster-lang-ts`)
+- [**aster-lang-core**](https://github.com/aster-cloud/aster-lang-core) — Java/ANTLR-Referenzcompiler
+- [**Language packs**](https://github.com/aster-cloud) — `aster-lang-en` / `-zh` / `-de`
 
 Bug gefunden? Issue eröffnen. Neue Sprache hinzufügen? Siehe Lexicon-Pack-Leitfaden.
 

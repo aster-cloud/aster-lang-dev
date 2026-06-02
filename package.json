@@ -10,8 +10,8 @@
     "check:glossary": "tsx scripts/check-glossary.ts",
     "check:glossary:strict": "tsx scripts/check-glossary.ts --strict",
     "check:locale-parity": "tsx scripts/check-locale-parity.ts",
-    "sync:enterprise": "node scripts/sync-enterprise-docs.mjs",
-    "check:enterprise": "node scripts/sync-enterprise-docs.mjs --check",
+    "sync:compliance": "node scripts/sync-enterprise-docs.mjs",
+    "check:compliance": "node scripts/sync-enterprise-docs.mjs --check",
     "test:scripts": "node scripts/__tests__/sync-enterprise-docs.test.mjs && node scripts/__tests__/build-blog-rss.test.mjs && node scripts/__tests__/landing-convergence.test.mjs"
   },
   "dependencies": {

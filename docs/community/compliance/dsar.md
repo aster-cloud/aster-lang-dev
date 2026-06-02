@@ -135,12 +135,12 @@ Every request — including `dryRun` previews — writes a row to the
 - Metadata: `dsarRef`, row count, optional request id.
 
 Delete-audit rows are retained 7 years (legal hold); read and dry-run
-audits 90 days. See [telemetry overview](/enterprise/telemetry-fields) for the retention
+audits 90 days. See [telemetry overview](/community/compliance/telemetry-fields) for the retention
 contract.
 
 ## Related
 
 - Telemetry overview: the telemetry overview (internal)
-- Per-field GDPR justification: [telemetry fields](/enterprise/telemetry-fields)
-- DPA template (Art 28): [DPA template](/enterprise/dpa-template)
+- Per-field GDPR justification: [telemetry fields](/community/compliance/telemetry-fields)
+- DPA template (Art 28): [DPA template](/community/compliance/dpa-template)
 - Privacy notice (live, customer-facing): `<saas-host>/<locale>/privacy`

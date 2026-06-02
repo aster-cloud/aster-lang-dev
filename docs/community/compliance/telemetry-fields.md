@@ -70,7 +70,7 @@ not pass a DPIA without that proportionality test.
 
 - Threat model + opt-in / opt-out flow: the telemetry overview (internal)
 - DPA template (Art 28 controller / processor agreement):
-  [DPA template](/enterprise/dpa-template)
+  [DPA template](/community/compliance/dpa-template)
 - Retention + DSAR delete: the access-audit module
   (cron: `/api/cron/telemetry-retention-gc`)
 - At-rest encryption of HMAC verification secrets:

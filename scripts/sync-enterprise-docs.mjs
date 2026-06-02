@@ -3,12 +3,12 @@
  * Sync + redact enterprise public docs from aster-cloud's on-prem docs.
  *
  * Source of truth lives in aster-cloud/docs/on-prem/. This script copies a
- * curated subset into aster-lang-dev/docs/enterprise/ with:
+ * curated subset into aster-lang-dev/docs/community/compliance/ with:
  *   1. glossary:block HTML comments stripped (those are aster-cloud's
  *      internal glossary tracking and are noise for the public site).
  *   2. Internal-only references redacted (e.g. docs/saas/* paths,
  *      internal runbooks).
- *   3. Relative `./<file>.md` links rewritten to absolute /enterprise/<file>
+ *   3. Relative `./<file>.md` links rewritten to absolute /community/compliance/<file>
  *      so VitePress's locale base resolves correctly.
  *
  * Run from aster-lang-dev repo root:
@@ -31,7 +31,7 @@ const SOURCE_REPO = process.env.ASTER_CLOUD_REPO
   ? resolve(process.env.ASTER_CLOUD_REPO)
   : resolve(REPO_ROOT, '..', 'aster-cloud')
 const SOURCE_DIR = resolve(SOURCE_REPO, 'docs', 'on-prem')
-const TARGET_DIR = resolve(REPO_ROOT, 'docs', 'enterprise')
+const TARGET_DIR = resolve(REPO_ROOT, 'docs', 'community', 'compliance')
 
 // Curated list of files to mirror. Anything not in this list stays internal.
 const FILES = [
@@ -89,22 +89,22 @@ function redact(markdown, basename) {
   )
   out = out.replace(
     /`docs\/on-prem\/telemetry-fields\.md`/g,
-    '[telemetry fields](/enterprise/telemetry-fields)',
+    '[telemetry fields](/community/compliance/telemetry-fields)',
   )
   out = out.replace(
     /`docs\/on-prem\/dpa-template\.md`/g,
-    '[DPA template](/enterprise/dpa-template)',
+    '[DPA template](/community/compliance/dpa-template)',
   )
   out = out.replace(
     /`docs\/on-prem\/dsar\.md`/g,
-    '[DSAR](/enterprise/dsar)',
+    '[DSAR](/community/compliance/dsar)',
   )
 
-  // 5. Rewrite relative links to absolute /enterprise/ paths so the
+  // 5. Rewrite relative links to absolute /community/compliance/ paths so the
   //    locale-aware VitePress router resolves them correctly.
   //
   //    Mirrored docs (in MIRRORED_DOCS):
-  //       ./<file>.md[#anchor]            → /enterprise/<file>[#anchor]
+  //       ./<file>.md[#anchor]            → /community/compliance/<file>[#anchor]
   //       ./<file>.md                     in any link shape (label may
   //                                       have backticks, "filename.md",
   //                                       descriptive text, etc.)
@@ -113,17 +113,17 @@ function redact(markdown, basename) {
   //    the descriptive label preserved.
   //
   //    Generic relative .md fallback: any leftover `./<unknown>.md`
-  //    becomes a /enterprise/ index link, so internal paths never leak
+  //    becomes a /community/compliance/ index link, so internal paths never leak
   //    to the public site as broken links.
   const MIRRORED_DOCS = new Set(['dpa-template', 'dsar', 'telemetry-fields']);
   // `telemetry.md` isn't mirrored standalone, but the closest public
   // equivalent is the fields doc.
-  const TELEMETRY_OVERVIEW_RETARGET = '/enterprise/telemetry-fields';
+  const TELEMETRY_OVERVIEW_RETARGET = '/community/compliance/telemetry-fields';
 
   // Pass A: handle `[label](./<file>.md[#anchor])` for any label form.
   //
   // [^\]]+ inside [] keeps the label as-is (preserves backticked or
-  //   plain text). For mirrored docs, target is /enterprise/<file><anchor>.
+  //   plain text). For mirrored docs, target is /community/compliance/<file><anchor>.
   // For labels that are *bare filenames* like `` `telemetry.md` `` or
   // `telemetry.md`, we normalize to a human-readable phrase so customers
   // don't see the internal file path leaking into the prose.
@@ -176,14 +176,14 @@ function redact(markdown, basename) {
       const anchor = hash || '';
       const display = normalizeLabel(label, slug);
       if (MIRRORED_DOCS.has(slug)) {
-        return `[${display}](/enterprise/${slug}${anchor})`;
+        return `[${display}](/community/compliance/${slug}${anchor})`;
       }
       if (slug === 'telemetry') {
         return `[${display}](${TELEMETRY_OVERVIEW_RETARGET}${anchor})`;
       }
       // Unmirrored internal doc — point at the enterprise index, label
       // preserved (already normalized when it was a bare filename).
-      return `[${display}](/enterprise/)`;
+      return `[${display}](/community/compliance/)`;
     },
   );
 
@@ -192,10 +192,10 @@ function redact(markdown, basename) {
   // names we know to avoid collateral damage on unrelated `.md` text.
   out = out.replace(
     /\.\/(dpa-template|dsar|telemetry-fields)\.md\b/g,
-    '/enterprise/$1',
+    '/community/compliance/$1',
   );
   out = out.replace(/\.\/telemetry\.md\b/g, TELEMETRY_OVERVIEW_RETARGET);
-  out = out.replace(/\.\/license-management\.md\b/g, '/enterprise/');
+  out = out.replace(/\.\/license-management\.md\b/g, '/community/compliance/');
 
   // Pass C: bare-prose filename references like "(see telemetry.md)" or
   // "Read dpa-template.md for…" with no link, no backticks, no leading

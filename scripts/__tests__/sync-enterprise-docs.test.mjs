@@ -34,32 +34,32 @@ console.log('sync-enterprise-docs link rewriter')
 test('backticked-filename label normalizes to display string', () => {
   const md = '[`telemetry-fields.md`](./telemetry-fields.md) describes…'
   const out = redact(md, 'dpa-template.md')
-  assert.match(out, /\[telemetry fields\]\(\/enterprise\/telemetry-fields\)/)
+  assert.match(out, /\[telemetry fields\]\(\/community\/compliance\/telemetry-fields\)/)
   assert.doesNotMatch(out, /telemetry-fields\.md/)
 })
 
 test('plain-text label preserved verbatim', () => {
   const md = 'See [the privacy doc](./telemetry-fields.md).'
   const out = redact(md, 'dpa-template.md')
-  assert.match(out, /\[the privacy doc\]\(\/enterprise\/telemetry-fields\)/)
+  assert.match(out, /\[the privacy doc\]\(\/community\/compliance\/telemetry-fields\)/)
 })
 
 test('anchor preserved through rewrite', () => {
   const md = 'See [retention rules](./telemetry-fields.md#section-7).'
   const out = redact(md, 'dpa-template.md')
-  assert.match(out, /\[retention rules\]\(\/enterprise\/telemetry-fields#section-7\)/)
+  assert.match(out, /\[retention rules\]\(\/community\/compliance\/telemetry-fields#section-7\)/)
 })
 
 test('telemetry.md retargets to telemetry-fields', () => {
   const md = 'See [details](./telemetry.md).'
   const out = redact(md, 'dpa-template.md')
-  assert.match(out, /\[details\]\(\/enterprise\/telemetry-fields\)/)
+  assert.match(out, /\[details\]\(\/community\/compliance\/telemetry-fields\)/)
 })
 
-test('unmirrored internal doc routes to /enterprise/', () => {
+test('unmirrored internal doc routes to /community/compliance/', () => {
   const md = 'See [the license guide](./license-management.md) for…'
   const out = redact(md, 'dpa-template.md')
-  assert.match(out, /\[the license guide\]\(\/enterprise\/\)/)
+  assert.match(out, /\[the license guide\]\(\/community\/compliance\/\)/)
 })
 
 test('bare-prose filename "(see telemetry.md)" rewrites to display string', () => {
@@ -71,7 +71,7 @@ test('bare-prose filename "(see telemetry.md)" rewrites to display string', () =
 test('docs/on-prem/ prefix path in code span becomes display link', () => {
   const md = 'Schema in `docs/on-prem/telemetry-fields.md` defines…'
   const out = redact(md, 'dpa-template.md')
-  assert.match(out, /\[telemetry fields\]\(\/enterprise\/telemetry-fields\)/)
+  assert.match(out, /\[telemetry fields\]\(\/community\/compliance\/telemetry-fields\)/)
 })
 
 test('glossary block markers stripped', () => {
@@ -94,7 +94,7 @@ test('no double-wrap when source has `docs/on-prem/X.md` inside link', () => {
   // Must not contain nested `[[…](…)](…)` constructs.
   assert.doesNotMatch(out, /\[\[/)
   // Must end with one well-formed link.
-  assert.match(out, /\[telemetry fields\]\(\/enterprise\/telemetry-fields\)/)
+  assert.match(out, /\[telemetry fields\]\(\/community\/compliance\/telemetry-fields\)/)
 })
 
 test('frontmatter title set from filename', () => {

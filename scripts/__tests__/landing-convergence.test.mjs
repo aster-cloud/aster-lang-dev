@@ -148,16 +148,21 @@ for (const { name, file } of LOCALES) {
 
 console.log('\n[3/6] HeroAnimation API path truthiness (PR-1)')
 
+// After PR-6 reframing: Evaluate → Policy, Source → Workflow,
+// Batch → Decision. The 3 cards now demo Policy/Workflow/Decision —
+// the IA refactor's three first-class concepts in the hero.
 const REAL_API_PATHS = [
-  '/api/v1/policies/evaluate',
-  '/api/v1/policies/evaluate-source',
-  '/api/v1/policies/evaluate/batch',
+  '/api/v1/policies/evaluate',         // Policy card
+  '/api/v1/workflows/',                // Workflow card (full path has {id})
+  '/api/v1/policies/evaluate/batch',   // Decision card
 ]
 
 const FAKE_API_PATHS = [
-  '/api/v1/evaluate-source',           // missing /policies
-  '/api/v1/policies/batch',            // missing /evaluate
+  '/api/v1/evaluate-source',           // missing /policies (legacy)
+  '/api/v1/policies/batch',            // missing /evaluate (legacy)
   '/api/v1/policies/{id}/evaluate',    // {id} doesn't exist on real endpoint
+  '/api/v1/workflows/events',          // PR-6 audit: real path needs {workflowId} prefix
+  '/api/v1/policies/evaluate-source',  // PR-6: source card replaced with workflow
 ]
 
 test('HeroAnimation.vue contains all 3 real API paths', () => {

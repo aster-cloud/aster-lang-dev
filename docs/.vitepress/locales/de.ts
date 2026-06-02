@@ -13,11 +13,11 @@ const apiSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Policy Management',
+    text: 'Workflows',
     items: [
-      { text: 'Version History', link: '/api/policies/versions' },
-      { text: 'Rollback', link: '/api/policies/rollback' },
-      { text: 'Cache Management', link: '/api/policies/cache' },
+      { text: 'Workflow Events', link: '/api/workflows/events' },
+      { text: 'Workflow State', link: '/api/workflows/state' },
+      { text: 'Metrics', link: '/api/workflows/metrics' },
     ],
   },
   {
@@ -31,43 +31,47 @@ const apiSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Workflows',
+    text: 'Policy Management',
     items: [
-      { text: 'Workflow Events', link: '/api/workflows/events' },
-      { text: 'Workflow State', link: '/api/workflows/state' },
-      { text: 'Metrics', link: '/api/workflows/metrics' },
+      { text: 'Version History', link: '/api/policies/versions' },
+      { text: 'Rollback', link: '/api/policies/rollback' },
+      { text: 'Cache Management', link: '/api/policies/cache' },
     ],
   },
-]
-
-const graphqlSidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: 'GraphQL API',
+    text: 'GraphQL',
     items: [
-      { text: 'Overview', link: '/graphql/overview' },
-      { text: 'Queries', link: '/graphql/queries' },
-      { text: 'Mutations', link: '/graphql/mutations' },
+      { text: 'Overview', link: '/api/graphql/overview' },
+      { text: 'Queries', link: '/api/graphql/queries' },
+      { text: 'Mutations', link: '/api/graphql/mutations' },
     ],
   },
-]
-
-const websocketSidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'WebSocket',
     items: [
-      { text: 'Preview Endpoint', link: '/websocket/preview' },
+      { text: 'Preview Endpoint', link: '/api/websocket/preview' },
     ],
   },
 ]
 
-const enterpriseSidebar: DefaultTheme.SidebarItem[] = [
+const communitySidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: 'Enterprise & Recht',
+    text: 'Community',
     items: [
-      { text: 'Überblick', link: '/enterprise/' },
-      { text: 'AVV/DPA-Vorlage', link: '/enterprise/dpa-template' },
-      { text: 'Self-service DSAR', link: '/enterprise/dsar' },
-      { text: 'Telemetrie-Felder', link: '/enterprise/telemetry-fields' },
+      { text: 'Überblick', link: '/community/' },
+      { text: 'Mitwirken', link: '/community/contribute' },
+      { text: 'Lexicon Packs', link: '/community/lexicons' },
+      { text: 'Gewünschte Sprachen', link: '/community/wanted-languages' },
+      { text: 'Blog', link: '/blog/' },
+    ],
+  },
+  {
+    text: 'Compliance',
+    items: [
+      { text: 'Überblick', link: '/community/compliance/' },
+      { text: 'AVV/DPA-Vorlage', link: '/community/compliance/dpa-template' },
+      { text: 'Self-service DSAR', link: '/community/compliance/dsar' },
+      { text: 'Telemetrie-Felder', link: '/community/compliance/telemetry-fields' },
     ],
   },
 ]
@@ -79,11 +83,8 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     nav: [
       { text: 'Lernen', link: '/de/learn/overview' },
       { text: 'Spielplatz', link: '/de/learn/playground' },
-      { text: 'REST API', link: '/api/policies/evaluate' },
-      { text: 'GraphQL', link: '/graphql/overview' },
-      { text: 'Editionen', link: '/de/pricing/' },
-      { text: 'Enterprise', link: '/enterprise/' },
-      { text: 'Blog', link: '/blog/' },
+      { text: 'API', link: '/api/policies/evaluate' },
+      { text: 'Editionen', link: '/de/editions/' },
       { text: 'Community', link: '/de/community/' },
       { text: 'Cloud', link: 'https://aster-lang.cloud' },
     ],
@@ -112,9 +113,7 @@ export const deConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         },
       ],
       '/api/': apiSidebar,
-      '/graphql/': graphqlSidebar,
-      '/websocket/': websocketSidebar,
-      '/enterprise/': enterpriseSidebar,
+      '/community/': communitySidebar,
     },
     footer: {
       message: 'Veröffentlicht unter der Apache License 2.0.',

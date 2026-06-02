@@ -64,7 +64,7 @@ We considered making tracing a paid feature or a debug-mode toggle. We didn't, f
 ## What we deliberately *don't* include
 
 - **Input data verbatim.** The trace captures the **resolved value** at each condition, not the original input object. So if a rule reads `applicant.ssn` only to discard it, the trace shows the discard, not the SSN. This was a deliberate concession to data-minimization: the trace is shaped by the rule, not by the input, so a sloppy input shape doesn't leak into long-term storage.
-- **Engine internals.** No bytecode addresses, no GC pauses, no internal IR. The trace is what an auditor needs to reconstruct the decision, not what an engineer needs to debug the engine. The engine has its own observability path (OpenTelemetry; see [enterprise/telemetry-fields](/enterprise/telemetry-fields)).
+- **Engine internals.** No bytecode addresses, no GC pauses, no internal IR. The trace is what an auditor needs to reconstruct the decision, not what an engineer needs to debug the engine. The engine has its own observability path (OpenTelemetry; see [enterprise/telemetry-fields](/community/compliance/telemetry-fields)).
 - **Cross-rule fan-out.** A rule that delegates to another rule produces a single step in the parent's trace, not a flattened combined trace. We'll surface cross-rule chains explicitly when the use case justifies the schema complexity — so far, customers prefer the per-rule scope.
 
 ## In the playground

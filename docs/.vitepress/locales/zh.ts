@@ -13,11 +13,11 @@ const apiSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Policy Management',
+    text: 'Workflows',
     items: [
-      { text: 'Version History', link: '/api/policies/versions' },
-      { text: 'Rollback', link: '/api/policies/rollback' },
-      { text: 'Cache Management', link: '/api/policies/cache' },
+      { text: 'Workflow Events', link: '/api/workflows/events' },
+      { text: 'Workflow State', link: '/api/workflows/state' },
+      { text: 'Metrics', link: '/api/workflows/metrics' },
     ],
   },
   {
@@ -31,43 +31,47 @@ const apiSidebar: DefaultTheme.SidebarItem[] = [
     ],
   },
   {
-    text: 'Workflows',
+    text: 'Policy Management',
     items: [
-      { text: 'Workflow Events', link: '/api/workflows/events' },
-      { text: 'Workflow State', link: '/api/workflows/state' },
-      { text: 'Metrics', link: '/api/workflows/metrics' },
+      { text: 'Version History', link: '/api/policies/versions' },
+      { text: 'Rollback', link: '/api/policies/rollback' },
+      { text: 'Cache Management', link: '/api/policies/cache' },
     ],
   },
-]
-
-const graphqlSidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: 'GraphQL API',
+    text: 'GraphQL',
     items: [
-      { text: 'Overview', link: '/graphql/overview' },
-      { text: 'Queries', link: '/graphql/queries' },
-      { text: 'Mutations', link: '/graphql/mutations' },
+      { text: 'Overview', link: '/api/graphql/overview' },
+      { text: 'Queries', link: '/api/graphql/queries' },
+      { text: 'Mutations', link: '/api/graphql/mutations' },
     ],
   },
-]
-
-const websocketSidebar: DefaultTheme.SidebarItem[] = [
   {
     text: 'WebSocket',
     items: [
-      { text: 'Preview Endpoint', link: '/websocket/preview' },
+      { text: 'Preview Endpoint', link: '/api/websocket/preview' },
     ],
   },
 ]
 
-const enterpriseSidebar: DefaultTheme.SidebarItem[] = [
+const communitySidebar: DefaultTheme.SidebarItem[] = [
   {
-    text: '企业 & 法务',
+    text: '社区',
     items: [
-      { text: '概览', link: '/enterprise/' },
-      { text: 'DPA 模板', link: '/enterprise/dpa-template' },
-      { text: '自助 DSAR', link: '/enterprise/dsar' },
-      { text: '遥测字段', link: '/enterprise/telemetry-fields' },
+      { text: '概览', link: '/community/' },
+      { text: '贡献', link: '/community/contribute' },
+      { text: '词典包', link: '/community/lexicons' },
+      { text: '征集中的语言', link: '/community/wanted-languages' },
+      { text: '博客', link: '/blog/' },
+    ],
+  },
+  {
+    text: '合规',
+    items: [
+      { text: '概览', link: '/community/compliance/' },
+      { text: 'DPA 模板', link: '/community/compliance/dpa-template' },
+      { text: '自助 DSAR', link: '/community/compliance/dsar' },
+      { text: '遥测字段', link: '/community/compliance/telemetry-fields' },
     ],
   },
 ]
@@ -79,11 +83,8 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     nav: [
       { text: '学习', link: '/zh/learn/overview' },
       { text: '演练场', link: '/zh/learn/playground' },
-      { text: 'REST API', link: '/api/policies/evaluate' },
-      { text: 'GraphQL', link: '/graphql/overview' },
-      { text: '版本对比', link: '/zh/pricing/' },
-      { text: '企业版', link: '/enterprise/' },
-      { text: '博客', link: '/blog/' },
+      { text: 'API', link: '/api/policies/evaluate' },
+      { text: '版本对比', link: '/zh/editions/' },
       { text: '社区', link: '/zh/community/' },
       { text: 'Cloud', link: 'https://aster-lang.cloud' },
     ],
@@ -112,9 +113,7 @@ export const zhConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
         },
       ],
       '/api/': apiSidebar,
-      '/graphql/': graphqlSidebar,
-      '/websocket/': websocketSidebar,
-      '/enterprise/': enterpriseSidebar,
+      '/community/': communitySidebar,
     },
     footer: {
       message: '基于 Apache License 2.0 发布。',

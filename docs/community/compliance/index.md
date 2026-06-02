@@ -17,7 +17,7 @@ If you're an engineer looking for deployment guides, see the [Learn](/learn/over
 
 <div style="border: 1px solid var(--vp-c-divider); border-radius: 12px; padding: 24px;">
 
-### 📄 [DPA Template](/enterprise/dpa-template)
+### 📄 [DPA Template](/community/compliance/dpa-template)
 
 GDPR Art 28 controller-processor template covering opt-in telemetry uploaded by self-hosted deployments. Public mirror — redline freely, then negotiate executed copy with sales.
 
@@ -25,7 +25,7 @@ GDPR Art 28 controller-processor template covering opt-in telemetry uploaded by 
 
 <div style="border: 1px solid var(--vp-c-divider); border-radius: 12px; padding: 24px;">
 
-### 🔓 [Self-service DSAR](/enterprise/dsar)
+### 🔓 [Self-service DSAR](/community/compliance/dsar)
 
 Exercise GDPR Art 15 (access) and Art 17 (erasure) against telemetry rows held by Aster Lang Cloud — signed HMAC request, no support ticket required. Includes `dryRun` preview.
 
@@ -33,7 +33,7 @@ Exercise GDPR Art 15 (access) and Art 17 (erasure) against telemetry rows held b
 
 <div style="border: 1px solid var(--vp-c-divider); border-radius: 12px; padding: 24px;">
 
-### 📋 [Telemetry Fields](/enterprise/telemetry-fields)
+### 📋 [Telemetry Fields](/community/compliance/telemetry-fields)
 
 Per-field justification for every metric the opt-in telemetry uploader sends. GDPR Art 5(1)(c) data-minimization evidence; what we **do not** collect.
 
@@ -47,7 +47,7 @@ Per-field justification for every metric the opt-in telemetry uploader sends. GD
 
 | Document | Where |
 |---|---|
-| Edition comparison (Open Source / Cloud / Enterprise) | [/pricing](/pricing/) |
+| Edition comparison (Open Source / Cloud / Enterprise) | [/editions](/editions/) |
 | Apache-2.0 source license (compiler, engine, SDKs) | [github.com/aster-cloud](https://github.com/aster-cloud) |
 | Security & disclosure policy | [hello@aster-lang.dev](mailto:hello@aster-lang.dev) |
 | SOC 2 / ISO 27001 status | [Talk to sales](mailto:hello@aster-lang.dev) |

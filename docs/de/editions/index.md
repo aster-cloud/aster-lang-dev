@@ -76,9 +76,9 @@ Für Self-Service-Teams bietet Cloud Free- und Pro-Pläne mit öffentlicher Prei
 | | Open Source | Cloud | Enterprise |
 |---|:---:|:---:|:---:|
 | Ihr Code bleibt unter Ihrer Lizenz | ✅ Apache-2.0 | ✅ | ✅ |
-| Auftragsverarbeitungsvertrag (AVV/DPA) | n/a | [öffentliche Vorlage](/enterprise/dpa-template) | individuell |
+| Auftragsverarbeitungsvertrag (AVV/DPA) | n/a | [öffentliche Vorlage](/community/compliance/dpa-template) | individuell |
 | DSAR / Recht auf Vergessenwerden | n/a | ✅ | ✅ |
-| Telemetrie-Transparenz | [Doku](/enterprise/telemetry-fields) | [Doku](/enterprise/telemetry-fields) | [Doku](/enterprise/telemetry-fields) + Kundenschalter |
+| Telemetrie-Transparenz | [Doku](/community/compliance/telemetry-fields) | [Doku](/community/compliance/telemetry-fields) | [Doku](/community/compliance/telemetry-fields) + Kundenschalter |
 | Datenresidenz | je nach Deployment | EU / US / APAC | Ihre Jurisdiktion |
 | SOC 2 / ISO 27001 | n/a | in Planung | vom Kunden vererbbar |
 
@@ -138,7 +138,7 @@ Sie sind in einer regulierten Branche — Finanzen, Gesundheit, öffentlicher Se
 - Erbt Ihre vorhandenen SOC 2 / ISO 27001 Kontrollen
 - Individueller AVV + 24×7-Incident-Kanal
 
-→ [Enterprise-Übersicht](/enterprise/)
+→ [Enterprise-Übersicht](/community/compliance/)
 → [Vertrieb sprechen](mailto:sales@aster-lang.cloud)
 
 </div>

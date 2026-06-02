@@ -76,9 +76,9 @@ For self-serve teams, Cloud offers Free and Pro plans with public pricing at **[
 | | Open Source | Cloud | Enterprise |
 |---|:---:|:---:|:---:|
 | Your code stays under your license | ✅ Apache-2.0 | ✅ | ✅ |
-| Data Processing Agreement (DPA) | n/a | [public template](/enterprise/dpa-template) | bespoke |
+| Data Processing Agreement (DPA) | n/a | [public template](/community/compliance/dpa-template) | bespoke |
 | DSAR / right-to-be-forgotten | n/a | ✅ | ✅ |
-| Telemetry transparency | [docs](/enterprise/telemetry-fields) | [docs](/enterprise/telemetry-fields) | [docs](/enterprise/telemetry-fields) + customer toggles |
+| Telemetry transparency | [docs](/community/compliance/telemetry-fields) | [docs](/community/compliance/telemetry-fields) | [docs](/community/compliance/telemetry-fields) + customer toggles |
 | Data residency choice | wherever you deploy | EU / US / APAC pools | your jurisdiction |
 | SOC 2 / ISO 27001 | n/a | on the roadmap | inheritable from customer |
 
@@ -138,7 +138,7 @@ You're in a regulated industry — finance, healthcare, government, or anywhere 
 - Inherit your existing SOC 2 / ISO 27001 controls
 - Bespoke DPA + 24×7 incident channel
 
-→ [Read the Enterprise overview](/enterprise/)
+→ [Read the Enterprise overview](/community/compliance/)
 → [Talk to sales](mailto:sales@aster-lang.cloud)
 
 </div>

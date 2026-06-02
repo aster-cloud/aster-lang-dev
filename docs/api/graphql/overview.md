@@ -7,7 +7,7 @@ The Aster Policy Engine exposes a GraphQL API for querying and managing policies
 | Purpose | URL |
 |---------|-----|
 | Query / Mutation execution | `POST /graphql` |
-| Schema (SDL) | `GET /graphql/schema.graphql` |
+| Schema (SDL) | `GET /api/graphql/schema.graphql` |
 
 ## Headers
 
@@ -58,7 +58,7 @@ Download the full schema in SDL format:
 ::: code-group
 
 ```bash [curl]
-curl -X GET https://policy.aster-lang.dev/graphql/schema.graphql \
+curl -X GET https://policy.aster-lang.dev/api/graphql/schema.graphql \
   -H "Authorization: Bearer <token>"
 ```
 

@@ -32,7 +32,7 @@ ID, which are contractual fields).
 
 Aster processes opt-in aggregate usage telemetry uploaded by the
 customer's on-prem deployment. The payload schema is enumerated in
-[telemetry overview](/enterprise/telemetry-fields). All fields are integer counters or
+[telemetry overview](/community/compliance/telemetry-fields). All fields are integer counters or
 booleans; no event content, no user identifiers, no PII.
 
 ## 3. Duration
@@ -58,7 +58,7 @@ in their deployment, plus the retention period for stored data (see
 
 The complete per-field justification (GDPR Art 5(1)(c) data
 minimization evidence) is documented in
-[telemetry fields](/enterprise/telemetry-fields). The
+[telemetry fields](/community/compliance/telemetry-fields). The
 machine-readable schema contract is served at
 `/api/v1/telemetry/schema`. Summary below.
 
@@ -151,7 +151,7 @@ Controller may, by giving Aster `<N>` days written notice:
   window. Two equivalent paths:
   - **Self-service**: controller signs a POST to `/api/v1/dsar` with the
     per-license HMAC secret; supports `dryRun=true` preview. See
-    [DSAR](/enterprise/dsar).
+    [DSAR](/community/compliance/dsar).
   - **Operator-assisted**: email `dpo@aster-lang.cloud` and Aster ops
     runs the admin DSAR endpoint on controller's behalf.
 
@@ -188,6 +188,6 @@ via the DSAR delete endpoint, retaining only the
 
 ## Related documents
 
-- [telemetry overview](/enterprise/telemetry-fields) — what data is sent + privacy notice
-- [license management](/enterprise/) — license lifecycle
+- [telemetry overview](/community/compliance/telemetry-fields) — what data is sent + privacy notice
+- [license management](/community/compliance/) — license lifecycle
 - Privacy notice page (live): `<saas-host>/<locale>/privacy`

@@ -184,8 +184,8 @@ const en: UiStrings = {
       {
         key: 'multilingual',
         tone: 'accent',
-        title: '\ud83c\udf0d Write rules in your own language',
-        desc: 'English, Simplified Chinese, and German are first-class citizens \u2014 same semantics, same engine. Adding a new language is a configuration task, not an engineering one.',
+        title: '\ud83c\udf0d Policies, workflows, decisions \u2014 in your own language',
+        desc: 'Express loan-eligibility checks, approval-gate workflows, routing decisions, and pricing rules in English, Simplified Chinese, or German. Same semantics, same engine. Adding a fourth language is a configuration task, not an engineering one.',
       },
       {
         key: 'ai-drafts',
@@ -244,8 +244,8 @@ const en: UiStrings = {
         heading: 'API',
         links: [
           { text: 'REST', href: '/api/policies/evaluate' },
-          { text: 'GraphQL', href: '/graphql/overview' },
-          { text: 'WebSocket', href: '/websocket/preview' },
+          { text: 'GraphQL', href: '/api/graphql/overview' },
+          { text: 'WebSocket', href: '/api/websocket/preview' },
           { text: 'Audit', href: '/api/audit/logs' },
         ],
       },
@@ -261,7 +261,7 @@ const en: UiStrings = {
         heading: 'Cloud',
         links: [
           { text: 'aster-lang.cloud', href: 'https://aster-lang.cloud' },
-          { text: 'Enterprise', href: '/enterprise/' },
+          { text: 'Enterprise', href: '/community/compliance/' },
           { text: 'Sales', href: 'mailto:sales@aster-lang.cloud' },
         ],
       },
@@ -345,8 +345,8 @@ const zh: UiStrings = {
       {
         key: 'multilingual',
         tone: 'accent',
-        title: '\ud83c\udf0d \u7528\u4f60\u7684\u6bcd\u8bed\u7f16\u5199\u89c4\u5219',
-        desc: 'English\u3001\u7b80\u4f53\u4e2d\u6587\u3001\u5fb7\u8bed\u90fd\u662f\u4e00\u7b49\u516c\u6c11 \u2014\u2014 \u76f8\u540c\u8bed\u4e49\u3001\u76f8\u540c\u5f15\u64ce\u3002\u65b0\u589e\u4e00\u79cd\u8bed\u8a00\u662f\u914d\u7f6e\u4efb\u52a1,\u4e0d\u662f\u5de5\u7a0b\u4efb\u52a1\u3002',
+        title: '\ud83c\udf0d \u7b56\u7565\u3001\u6d41\u7a0b\u3001\u51b3\u7b56 \u2014\u2014 \u7528\u4f60\u7684\u6bcd\u8bed',
+        desc: '\u7528 English\u3001\u7b80\u4f53\u4e2d\u6587 \u6216 \u5fb7\u8bed \u8868\u8fbe\u8d37\u6b3e\u8d44\u8d28\u68c0\u67e5\u3001\u5ba1\u6279\u95e8\u7981\u6d41\u7a0b\u3001\u8def\u7531\u51b3\u7b56\u3001\u5b9a\u4ef7\u89c4\u5219\u3002\u76f8\u540c\u8bed\u4e49\u3001\u76f8\u540c\u5f15\u64ce\u3002\u65b0\u589e\u7b2c\u56db\u79cd\u8bed\u8a00\u662f\u914d\u7f6e\u4efb\u52a1,\u4e0d\u662f\u5de5\u7a0b\u4efb\u52a1\u3002',
       },
       {
         key: 'ai-drafts',
@@ -405,8 +405,8 @@ const zh: UiStrings = {
         heading: 'API',
         links: [
           { text: 'REST', href: '/api/policies/evaluate' },
-          { text: 'GraphQL', href: '/graphql/overview' },
-          { text: 'WebSocket', href: '/websocket/preview' },
+          { text: 'GraphQL', href: '/api/graphql/overview' },
+          { text: 'WebSocket', href: '/api/websocket/preview' },
           { text: '\u5ba1\u8ba1', href: '/api/audit/logs' },
         ],
       },
@@ -422,7 +422,7 @@ const zh: UiStrings = {
         heading: 'Cloud',
         links: [
           { text: 'aster-lang.cloud', href: 'https://aster-lang.cloud' },
-          { text: '\u4f01\u4e1a\u7248', href: '/enterprise/' },
+          { text: '\u4f01\u4e1a\u7248', href: '/community/compliance/' },
           { text: '\u8054\u7cfb\u9500\u552e', href: 'mailto:sales@aster-lang.cloud' },
         ],
       },
@@ -506,8 +506,8 @@ const de: UiStrings = {
       {
         key: 'multilingual',
         tone: 'accent',
-        title: '\ud83c\udf0d Regeln in der eigenen Sprache schreiben',
-        desc: 'English, vereinfachtes Chinesisch und Deutsch sind gleichberechtigt \u2014 gleiche Semantik, gleiche Engine. Eine neue Sprache hinzuzuf\u00fcgen ist eine Konfigurationsaufgabe, keine Entwicklungsaufgabe.',
+        title: '\ud83c\udf0d Policies, Workflows, Decisions \u2014 in der eigenen Sprache',
+        desc: 'Kreditw\u00fcrdigkeitspr\u00fcfungen, Approval-Gate Workflows, Routing-Decisions und Pricing-Regeln auf English, vereinfachtem Chinesisch oder Deutsch ausdr\u00fccken. Gleiche Semantik, gleiche Engine. Eine vierte Sprache hinzuf\u00fcgen ist eine Konfigurationsaufgabe, keine Entwicklungsaufgabe.',
       },
       {
         key: 'ai-drafts',
@@ -566,8 +566,8 @@ const de: UiStrings = {
         heading: 'API',
         links: [
           { text: 'REST', href: '/api/policies/evaluate' },
-          { text: 'GraphQL', href: '/graphql/overview' },
-          { text: 'WebSocket', href: '/websocket/preview' },
+          { text: 'GraphQL', href: '/api/graphql/overview' },
+          { text: 'WebSocket', href: '/api/websocket/preview' },
           { text: 'Audit', href: '/api/audit/logs' },
         ],
       },
@@ -583,7 +583,7 @@ const de: UiStrings = {
         heading: 'Cloud',
         links: [
           { text: 'aster-lang.cloud', href: 'https://aster-lang.cloud' },
-          { text: 'Enterprise', href: '/enterprise/' },
+          { text: 'Enterprise', href: '/community/compliance/' },
           { text: 'Vertrieb', href: 'mailto:sales@aster-lang.cloud' },
         ],
       },

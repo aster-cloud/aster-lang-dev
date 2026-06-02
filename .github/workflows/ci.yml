@@ -47,27 +47,27 @@ jobs:
         run: pnpm run check:locale-parity
 
       # Build-side script tests — frontmatter parser, XML helpers (CDATA
-      # splitting), and the enterprise link-rewriter. Cheap to run, catches
+      # splitting), and the compliance link-rewriter. Cheap to run, catches
       # regression in the small standalone scripts we maintain in-tree.
       - name: Script unit tests
         working-directory: aster-lang-dev
         run: pnpm run test:scripts
 
-      # Enterprise public-mirror drift detection. The DPA / DSAR /
-      # telemetry-fields pages under docs/enterprise/ are derived from
+      # Compliance public-mirror drift detection. The DPA / DSAR /
+      # telemetry-fields pages under docs/community/compliance/ are derived from
       # aster-cloud's docs/on-prem/ via scripts/sync-enterprise-docs.mjs.
       # --check fails if the generated files diverge from the source —
-      # caller must rerun `pnpm sync:enterprise` and commit the result.
+      # caller must rerun `pnpm sync:compliance` and commit the result.
       #
       # Skipped when aster-cloud isn't available (fork PR without
       # CROSS_REPO_TOKEN), in which case the drift check happens on the
       # next push to a branch that does have the secret.
-      - name: Enterprise public-mirror drift check
+      - name: Compliance public-mirror drift check
         if: steps.checkout-cloud.outcome == 'success'
         working-directory: aster-lang-dev
         env:
           ASTER_CLOUD_REPO: ${{ github.workspace }}/aster-cloud
-        run: pnpm run check:enterprise
+        run: pnpm run check:compliance
 
       # Glossary Contract (v7) — Stage 1 of 4-stage remediation: report-only.
       # See aster-cloud/.claude/plan/glossary-contract.md §5 + glossary.config.yaml.

@@ -7,11 +7,8 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
     nav: [
       { text: 'Learn', link: '/learn/overview' },
       { text: 'Playground', link: '/learn/playground' },
-      { text: 'REST API', link: '/api/policies/evaluate' },
-      { text: 'GraphQL', link: '/graphql/overview' },
-      { text: 'Pricing', link: '/pricing/' },
-      { text: 'Enterprise', link: '/enterprise/' },
-      { text: 'Blog', link: '/blog/' },
+      { text: 'API', link: '/api/policies/evaluate' },
+      { text: 'Editions', link: '/editions/' },
       { text: 'Community', link: '/community/' },
       { text: 'Cloud', link: 'https://aster-lang.cloud' },
     ],
@@ -52,11 +49,11 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
-          text: 'Policy Management',
+          text: 'Workflows',
           items: [
-            { text: 'Version History', link: '/api/policies/versions' },
-            { text: 'Rollback', link: '/api/policies/rollback' },
-            { text: 'Cache Management', link: '/api/policies/cache' },
+            { text: 'Workflow Events', link: '/api/workflows/events' },
+            { text: 'Workflow State', link: '/api/workflows/state' },
+            { text: 'Metrics', link: '/api/workflows/metrics' },
           ],
         },
         {
@@ -70,40 +67,46 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
           ],
         },
         {
-          text: 'Workflows',
+          text: 'Policy Management',
           items: [
-            { text: 'Workflow Events', link: '/api/workflows/events' },
-            { text: 'Workflow State', link: '/api/workflows/state' },
-            { text: 'Metrics', link: '/api/workflows/metrics' },
+            { text: 'Version History', link: '/api/policies/versions' },
+            { text: 'Rollback', link: '/api/policies/rollback' },
+            { text: 'Cache Management', link: '/api/policies/cache' },
           ],
         },
-      ],
-      '/graphql/': [
         {
-          text: 'GraphQL API',
+          text: 'GraphQL',
           items: [
-            { text: 'Overview', link: '/graphql/overview' },
-            { text: 'Queries', link: '/graphql/queries' },
-            { text: 'Mutations', link: '/graphql/mutations' },
+            { text: 'Overview', link: '/api/graphql/overview' },
+            { text: 'Queries', link: '/api/graphql/queries' },
+            { text: 'Mutations', link: '/api/graphql/mutations' },
           ],
         },
-      ],
-      '/websocket/': [
         {
           text: 'WebSocket',
           items: [
-            { text: 'Preview Endpoint', link: '/websocket/preview' },
+            { text: 'Preview Endpoint', link: '/api/websocket/preview' },
           ],
         },
       ],
-      '/enterprise/': [
+      '/community/': [
         {
-          text: 'Enterprise & Legal',
+          text: 'Community',
           items: [
-            { text: 'Overview', link: '/enterprise/' },
-            { text: 'DPA Template', link: '/enterprise/dpa-template' },
-            { text: 'Self-service DSAR', link: '/enterprise/dsar' },
-            { text: 'Telemetry Fields', link: '/enterprise/telemetry-fields' },
+            { text: 'Overview', link: '/community/' },
+            { text: 'Contribute', link: '/community/contribute' },
+            { text: 'Lexicon Packs', link: '/community/lexicons' },
+            { text: 'Wanted Languages', link: '/community/wanted-languages' },
+            { text: 'Blog', link: '/blog/' },
+          ],
+        },
+        {
+          text: 'Compliance',
+          items: [
+            { text: 'Overview', link: '/community/compliance/' },
+            { text: 'DPA Template', link: '/community/compliance/dpa-template' },
+            { text: 'Self-service DSAR', link: '/community/compliance/dsar' },
+            { text: 'Telemetry Fields', link: '/community/compliance/telemetry-fields' },
           ],
         },
       ],

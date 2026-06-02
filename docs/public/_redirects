@@ -1,0 +1,55 @@
+# Cloudflare Pages redirect rules. Routes are matched in order; the
+# first match wins. 301 = permanent, preserves SEO.
+#
+# Locale-prefixed paths (/zh/, /de/) MUST come BEFORE the unprefixed
+# EN paths. Cloudflare matches by source-prefix; without this ordering,
+# /zh/pricing/foo would match the bare /pricing/* rule and rewrite to
+# /editions/foo instead of /zh/editions/foo.
+#
+# 2026-Q2 IA refactor:
+#   - /pricing/* moved under /editions/* (Compare Editions content;
+#     the URL caught up to the page title)
+#   - /enterprise/* moved under /community/compliance/* (DPA/DSAR/
+#     telemetry are community resources, not a separate product tier).
+#     /enterprise/* + /community/compliance/* are en-only by glossary
+#     policy; the zh/de redirects exist defensively in case a
+#     translation pack is added later.
+#   - /graphql/* and /websocket/* moved under /api/* (REST, GraphQL,
+#     and WebSocket are all transports onto the same engine). Same
+#     en-only note as enterprise.
+
+# === Pricing → Editions (3-locale mirror) ===
+/zh/pricing               /zh/editions/                       301
+/zh/pricing/              /zh/editions/                       301
+/zh/pricing/*             /zh/editions/:splat                 301
+/de/pricing               /de/editions/                       301
+/de/pricing/              /de/editions/                       301
+/de/pricing/*             /de/editions/:splat                 301
+/pricing                  /editions/                          301
+/pricing/                 /editions/                          301
+/pricing/*                /editions/:splat                    301
+
+# === Enterprise → Community/Compliance (en-only; zh/de defensive) ===
+/zh/enterprise            /zh/community/compliance/           301
+/zh/enterprise/           /zh/community/compliance/           301
+/zh/enterprise/*          /zh/community/compliance/:splat     301
+/de/enterprise            /de/community/compliance/           301
+/de/enterprise/           /de/community/compliance/           301
+/de/enterprise/*          /de/community/compliance/:splat     301
+/enterprise               /community/compliance/              301
+/enterprise/              /community/compliance/              301
+/enterprise/*             /community/compliance/:splat        301
+
+# === GraphQL → API/GraphQL (en-only; zh/de defensive) ===
+/zh/graphql/*             /zh/api/graphql/:splat              301
+/de/graphql/*             /de/api/graphql/:splat              301
+/graphql                  /api/graphql/overview               301
+/graphql/                 /api/graphql/overview               301
+/graphql/*                /api/graphql/:splat                 301
+
+# === WebSocket → API/WebSocket (en-only; zh/de defensive) ===
+/zh/websocket/*           /zh/api/websocket/:splat            301
+/de/websocket/*           /de/api/websocket/:splat            301
+/websocket                /api/websocket/preview              301
+/websocket/               /api/websocket/preview              301
+/websocket/*              /api/websocket/:splat               301

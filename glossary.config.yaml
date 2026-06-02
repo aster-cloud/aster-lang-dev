@@ -57,7 +57,7 @@ ignored-surfaces:
   - path: docs/pricing/**/*.md
     reason: pricing/comparison pages; translated by hand, no glossary blocks
     expires: never
-  - path: docs/enterprise/**/*.md
+  - path: docs/community/compliance/**/*.md
     reason: redacted public mirror of internal legal docs; sync via scripts/sync-enterprise-docs.mjs
     expires: never
 

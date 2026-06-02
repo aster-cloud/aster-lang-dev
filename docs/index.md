@@ -49,7 +49,7 @@ You want to integrate policy evaluation into your service. REST in 5 minutes, Gr
 
 → [**5-Minute Quick Start**](/getting-started/quickstart)
 → [REST API Reference](/api/policies/evaluate)
-→ [GraphQL Schema](/graphql/overview)
+→ [GraphQL Schema](/api/graphql/overview)
 
 </div>
 
@@ -71,7 +71,9 @@ You need data sovereignty, GDPR/PII controls, and a clear deployment path. Self-
 
 ## What is Aster Lang?
 
-Aster Lang is a **multi-lingual Controlled Natural Language (CNL)** for writing executable business policies — loan eligibility, insurance underwriting, GDPR data access, fraud rules, and anything else where the rule should be **readable by humans and runnable by machines**.
+Aster Lang is a **multi-lingual Controlled Natural Language (CNL)** for writing executable business logic — loan-eligibility policies, approval-gate workflows, routing decisions, pricing rules, and anything else where the rule should be **readable by humans and runnable by machines**.
+
+The language treats **policies**, **workflows**, and **decisions** as first-class concepts: the same syntax expresses an eligibility check, an approval flow, or a routing rule. The engine compiles all three to the same audit-grade execution path.
 
 ```aster
 Module aster.finance.loan.
@@ -121,9 +123,9 @@ Aster Lang is the fourth option: **rules that read like a memo and run like comp
 
 ## Open source & community
 
-- [**aster-lang-ts**](https://github.com/aster-lang/aster-lang-ts) — TypeScript compiler & LSP (npm: `@aster-cloud/aster-lang-ts`)
-- [**aster-lang-core**](https://github.com/aster-lang/aster-lang-core) — Java/ANTLR reference compiler
-- [**Language packs**](https://github.com/aster-lang) — `aster-lang-en` / `-zh` / `-de`
+- [**aster-lang-ts**](https://github.com/aster-cloud/aster-lang-ts) — TypeScript compiler & LSP (npm: `@aster-cloud/aster-lang-ts`)
+- [**aster-lang-core**](https://github.com/aster-cloud/aster-lang-core) — Java/ANTLR reference compiler
+- [**Language packs**](https://github.com/aster-cloud) — `aster-lang-en` / `-zh` / `-de`
 
 Found a bug? Open an issue. Want to add a language? See the lexicon pack guide.
 

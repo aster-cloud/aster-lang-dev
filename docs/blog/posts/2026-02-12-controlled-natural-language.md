@@ -59,7 +59,7 @@ We pay for this by being unusable for problems that need general computation. As
 
 This sounds prosaic — most languages have modules — but the consequence is that an Aster Lang rule is **portable**. You can move a module from one tenant to another, from one deployment to another, from cloud to enterprise, by copying its text. There's no hidden state, no module-scoped imports that resolve differently elsewhere.
 
-The portability is the thing that makes "edition migration" (Cloud → Enterprise, see [/pricing](/pricing/)) a non-event. The rule is text; the audit log is text; the migration is a `git diff`. We chose the strict module model specifically so that "lock-in" wouldn't be a real concern for customers evaluating us.
+The portability is the thing that makes "edition migration" (Cloud → Enterprise, see [/editions](/editions/)) a non-event. The rule is text; the audit log is text; the migration is a `git diff`. We chose the strict module model specifically so that "lock-in" wouldn't be a real concern for customers evaluating us.
 
 ## Choice 4: AI as draft, not as oracle
 
