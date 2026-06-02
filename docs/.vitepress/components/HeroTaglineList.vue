@@ -727,21 +727,28 @@ const TONES = ['primary', 'accent', 'success', 'warning', 'primary', 'neutral'] 
 .tagline-dots {
   display: flex;
   justify-content: center;
-  gap: 0.4rem;
-  margin-top: 1.25rem;
+  gap: 0;
+  margin-top: 1rem;
 }
 
+/* WCAG 2.5.5: pointer hit area ≥24×24px while the visual dot stays
+ * at 6.4px. Achieved by adding transparent padding around a
+ * content-box-clipped background. The width transition on .active
+ * applies to the *content box* so the visible pill grows from 6.4px
+ * to 20px without enlarging the surrounding hit area. */
 .tagline-dot {
   display: inline-block;
+  box-sizing: content-box;
   width: 0.4rem;
   height: 0.4rem;
+  padding: 0.6rem 0.3rem;
+  background: var(--vp-c-text-3);
+  background-clip: content-box;
   border: 0;
   border-radius: 9999px;
-  background: var(--vp-c-text-3);
   opacity: 0.4;
   cursor: pointer;
   transition: width 0.25s ease, opacity 0.25s ease, background 0.25s ease;
-  padding: 0;
 }
 
 .tagline-dot:hover {
@@ -751,6 +758,7 @@ const TONES = ['primary', 'accent', 'success', 'warning', 'primary', 'neutral'] 
 .tagline-dot.active {
   width: 1.25rem;
   background: var(--aster-primary);
+  background-clip: content-box;
   opacity: 1;
 }
 

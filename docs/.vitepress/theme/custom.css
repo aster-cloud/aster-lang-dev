@@ -651,3 +651,17 @@
 .VPHome .VPFooter {
   display: none;
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Shiki light-theme keyword contrast override
+ *
+ * VitePress's default light Shiki theme paints keywords/storage tokens
+ * with #d73a49 (GitHub Light), which lands at ~4.0:1 against the
+ * VitePress code-block background (`--vp-code-block-bg`, near #f6f8fa).
+ * WCAG 2.1 SC 1.4.3 requires 4.5:1 for code that conveys meaning, so we
+ * deepen to #b31d28 (~6.0:1 against the same bg). Dark mode keeps the
+ * Shiki defaults — those already meet contrast. */
+:root:not(.dark) .vp-code span[style*="color:#d73a49"],
+:root:not(.dark) .vp-doc div[class*="language-"] pre code span[style*="color:#d73a49"] {
+  color: #b31d28 !important;
+}

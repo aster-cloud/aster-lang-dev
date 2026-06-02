@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useData } from 'vitepress'
+import { computed, nextTick, onMounted, watch } from 'vue'
+import { useData, useRoute } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import HeroSubtleLinks from '../components/HeroSubtleLinks.vue'
 import HeroTaglineList from '../components/HeroTaglineList.vue'
@@ -11,6 +11,26 @@ import DevFooter from '../components/DevFooter.vue'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
+const route = useRoute()
+
+// VitePress's default Layout wraps page content in `.VPContent`, a
+// plain <div>. WCAG 1.3.1 / 4.1.2 expects a `main` landmark so AT can
+// jump straight to primary content. We patch `role="main"` onto
+// `.VPContent` after each route change (the original element is
+// re-created on SPA navigation, so a one-shot onMounted is not enough).
+function patchMainLandmark() {
+  if (typeof document === 'undefined') return
+  const el = document.querySelector('.VPContent')
+  if (el && !el.hasAttribute('role')) {
+    el.setAttribute('role', 'main')
+  }
+}
+
+onMounted(() => {
+  patchMainLandmark()
+  // Re-apply on route change — VitePress re-mounts .VPContent.
+  watch(() => route.path, () => nextTick(patchMainLandmark))
+})
 
 // Slots render in this order (verified against vitepress 1.6.4 VPHome.vue
 // and Layout.vue):

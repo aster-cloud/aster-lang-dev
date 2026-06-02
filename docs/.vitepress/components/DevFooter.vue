@@ -19,7 +19,7 @@ const footer = computed(() => strings.value.footer)
           :key="col.heading"
           class="column"
         >
-          <h4>{{ col.heading }}</h4>
+          <h3>{{ col.heading }}</h3>
           <ul>
             <li v-for="link in col.links" :key="link.href">
               <a :href="link.href">{{ link.text }}</a>
@@ -88,7 +88,7 @@ const footer = computed(() => strings.value.footer)
   }
 }
 
-h4 {
+.column h3 {
   color: #ffffff;
   font-size: 0.875rem;
   font-weight: 600;

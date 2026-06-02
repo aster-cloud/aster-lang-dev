@@ -393,8 +393,14 @@ test('CustomLayout gates DevBottomCta + DevFooter on isHome', () => {
   )
   assert.match(
     layout,
-    /import \{ computed \} from 'vue'/,
+    /import \{[^}]*\bcomputed\b[^}]*\} from 'vue'/,
     'CustomLayout must import computed from vue (audit P3 #8)',
+  )
+  // role="main" landmark patch (deep audit P2) — drives WCAG 1.3.1/4.1.2
+  assert.match(
+    layout,
+    /setAttribute\(['"]role['"],\s*['"]main['"]\)/,
+    'CustomLayout must patch role="main" onto .VPContent (WCAG landmark)',
   )
 })
 

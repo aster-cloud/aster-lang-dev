@@ -336,7 +336,9 @@ onBeforeUnmount(() => {
 .token.key     { color: var(--aster-color-sky-300, #7dd3fc); }
 .token.val     { color: var(--aster-color-amber-500, #f59e0b); }
 .token.punc    { color: var(--aster-color-zinc-300, #d4d4d8); }
-.token.comment { color: var(--aster-color-zinc-500, #71717a); font-style: italic; }
+/* zinc-400 (#a1a1aa) lands at ~5.5:1 on the zinc-950 code-card bg;
+ * zinc-500 was ~3.5:1 (WCAG 1.4.3 fail for ≥4.5:1 normal text). */
+.token.comment { color: var(--aster-color-zinc-400, #a1a1aa); font-style: italic; }
 
 /* Badges */
 .badge-row {
