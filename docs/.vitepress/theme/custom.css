@@ -665,3 +665,19 @@
 :root:not(.dark) .vp-doc div[class*="language-"] pre code span[style*="color:#d73a49"] {
   color: #b31d28 !important;
 }
+
+/* ──────────────────────────────────────────────────────────────
+ * Hide the nav-bar search on the landing page
+ *
+ * `.VPNavBarSearch` lives inside `.VPNav`, which is a sibling of
+ * `.VPContent.is-home` — not a descendant — so the usual
+ * `.VPHome X` scoping doesn't reach it. We use `:has()` on the
+ * `.Layout` root to detect the home variant of VPContent and hide
+ * the search wrapper only there. Doc/sub-pages keep search.
+ *
+ * Browser support: :has() is in all evergreen engines (Safari 15.4+,
+ * Chrome 105+, Firefox 121+). Older browsers degrade gracefully —
+ * search remains visible, which is the safe fallback. */
+.Layout:has(.VPContent.is-home) .VPNavBarSearch {
+  display: none;
+}
