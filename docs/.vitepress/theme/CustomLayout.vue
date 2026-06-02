@@ -4,6 +4,7 @@ import { useData, useRoute } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import HeroSubtleLinks from '../components/HeroSubtleLinks.vue'
 import HeroTaglineList from '../components/HeroTaglineList.vue'
+import HeroAnimationTeaser from '../components/HeroAnimationTeaser.vue'
 import DevTrustBand from '../components/DevTrustBand.vue'
 import DevFeatures from '../components/DevFeatures.vue'
 import DevBottomCta from '../components/DevBottomCta.vue'
@@ -40,11 +41,10 @@ onMounted(() => {
 //   home-features-after   → below VPFeatures, BEFORE markdown body
 //   layout-bottom         → below markdown body (last thing in <main>)
 //
-// HeroAnimation removed from landing — the tagline carousel
-// (HeroTaglineList) now carries the visual rotation. The animation
-// is embedded directly into the REST API reference page
-// (docs/api/policies/evaluate.md) where its three cards (Policy /
-// Workflow / Decision) match the page's native subject matter.
+// HeroAnimationTeaser (Policy / Workflow / Decision cards + "Aster
+// Cloud" framing) lands at #home-features-after. The application-layer
+// API docs themselves moved off this site to aster-lang.cloud/docs/* —
+// the teaser advertises that move + funnels readers to the right place.
 //
 // VPFooter is rendered by Layout.vue directly (conditional on
 // theme.footer && frontmatter.footer !== false). On home we set
@@ -70,6 +70,7 @@ const isHome = computed(() => frontmatter.value.layout === 'home')
 
     <template #home-features-after>
       <DevFeatures />
+      <HeroAnimationTeaser />
     </template>
 
     <template v-if="isHome" #layout-bottom>

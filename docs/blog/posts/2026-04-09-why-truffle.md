@@ -52,7 +52,7 @@ For everything in between — multi-tenant SaaS, rules that get evaluated thousa
 
 ## What to read next
 
-- [`evaluate-source` API reference](/api/policies/evaluate-source) — the endpoint Truffle backs.
+- [`evaluate-source` API reference ↗](https://aster-lang.cloud/docs/api/policies/evaluate-source) — the endpoint Truffle backs.
 - [Decision traces in production](/blog/posts/2026-05-07-decision-traces-in-production) — what the engine narrates about its own execution.
 - GraalVM Truffle [framework documentation](https://www.graalvm.org/latest/graalvm-as-a-platform/language-implementation-framework/) — the upstream we build on.
 

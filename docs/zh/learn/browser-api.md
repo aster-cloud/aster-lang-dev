@@ -430,5 +430,5 @@ console.log('Smoke test result:', result)
 - [演练场](./playground) — 在浏览器中交互式体验浏览器 API。
 - [CNL 快速参考](./cnl-quick-reference) — Aster CNL 的完整语法指南。
 - [部署指南](./deployment-guide) — 从源码到生产的端到端指南。
-- [API：提取 Schema](/api/policies/schema) — `extractSchema` 的 REST API 等价。
-- [API：验证策略](/api/policies/validate) — 检查已部署策略是否可调用。
+- [API：提取 Schema](https://aster-lang.cloud/zh/docs/api/policies/schema) — `extractSchema` 的 REST API 等价。
+- [API：验证策略](https://aster-lang.cloud/zh/docs/api/policies/validate) — 检查已部署策略是否可调用。

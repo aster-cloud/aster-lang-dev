@@ -188,7 +188,7 @@ Response:
 ```
 
 <!-- glossary:block id=deployment-guide-step-5-execute-the-policy-paragraph-14 -->
-For batch evaluation against multiple input sets in a single request, use the `/api/v1/policies/evaluate-source-batch` endpoint. See the [Batch Evaluate](/api/policies/batch) reference for details.
+For batch evaluation against multiple input sets in a single request, use the `/api/v1/policies/evaluate-source-batch` endpoint. See the [Batch Evaluate](https://aster-lang.cloud/docs/api/policies/batch) reference for details.
 <!-- /glossary:block -->
 
 ## Step 6 -- Monitor and Audit
@@ -298,19 +298,19 @@ Use this checklist before promoting a policy to production.
 ## Related Pages
 
 <!-- glossary:block id=deployment-guide-related-pages-list-item-23 -->
-- [API: Evaluate Policy](/api/policies/evaluate) -- full reference for the evaluate endpoint.
+- [API: Evaluate Policy](https://aster-lang.cloud/docs/api/policies/evaluate) -- full reference for the evaluate endpoint.
 <!-- /glossary:block -->
 <!-- glossary:block id=deployment-guide-related-pages-list-item-24 -->
-- [API: Evaluate Source](/api/policies/evaluate-source) -- compile and evaluate inline source.
+- [API: Evaluate Source](https://aster-lang.cloud/docs/api/policies/evaluate-source) -- compile and evaluate inline source.
 <!-- /glossary:block -->
 <!-- glossary:block id=deployment-guide-related-pages-list-item-25 -->
-- [API: Extract Schema](/api/policies/schema) -- discover parameter types programmatically.
+- [API: Extract Schema](https://aster-lang.cloud/docs/api/policies/schema) -- discover parameter types programmatically.
 <!-- /glossary:block -->
 <!-- glossary:block id=deployment-guide-related-pages-list-item-26 -->
-- [API: Version History](/api/policies/versions) -- list all versions of a deployed policy.
+- [API: Version History](https://aster-lang.cloud/docs/api/policies/versions) -- list all versions of a deployed policy.
 <!-- /glossary:block -->
 <!-- glossary:block id=deployment-guide-related-pages-list-item-27 -->
-- [API: Rollback](/api/policies/rollback) -- revert to a previous version.
+- [API: Rollback](https://aster-lang.cloud/docs/api/policies/rollback) -- revert to a previous version.
 <!-- /glossary:block -->
 <!-- glossary:block id=deployment-guide-related-pages-list-item-28 -->
 - [Browser API Reference](./browser-api) -- client-side validation and schema extraction.

@@ -45,11 +45,11 @@ Compliance officer, risk analyst, or policy author. You want rules in **your** l
 
 ### 👤 I'm an engineer
 
-You want to integrate policy evaluation into your service. REST in 5 minutes, GraphQL/WS for advanced flows.
+You want to write CNL rules and run them. Start in the browser playground; integrate via `@aster-cloud/aster-lang-ts`. Need a managed engine? Aster Cloud has hosted REST / GraphQL / WS.
 
-→ [**5-Minute Quick Start**](/getting-started/quickstart)
-→ [REST API Reference](/api/policies/evaluate)
-→ [GraphQL Schema](/api/graphql/overview)
+→ [**Try in Playground**](/learn/playground)
+→ [Browser SDK Guide](/learn/browser-api)
+→ [Cloud API Docs ↗](https://aster-lang.cloud/docs/api/policies/evaluate)
 
 </div>
 
@@ -60,7 +60,7 @@ You want to integrate policy evaluation into your service. REST in 5 minutes, Gr
 You need data sovereignty, GDPR/PII controls, and a clear deployment path. Self-hosted is a first-class option.
 
 → [Deployment Guide](/learn/deployment-guide)
-→ [Authentication & RBAC](/getting-started/authentication)
+→ [Compliance Resources](/community/compliance/)
 → [Talk to sales](mailto:hello@aster-lang.dev)
 
 </div>

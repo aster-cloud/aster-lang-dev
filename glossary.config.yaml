@@ -32,19 +32,11 @@ surfaces:
     alignment: block-id
     block-map: docs/.glossary/block-map.json
 
-# v7 §5.1 — API/GraphQL/WebSocket reference is auto-generated from
-# OpenAPI; carved out of glossary scanning. Hand-written content under
-# getting-started/learn/community is fully covered.
+# 2026-Q3 — application-layer docs (API + getting-started) moved to
+# aster-lang.cloud/docs/* and are no longer present in this repo. Their
+# carve-outs are dropped. Hand-written content under learn/community
+# is fully covered by glossary scanning.
 ignored-surfaces:
-  - path: docs/api/**/*.md
-    reason: OpenAPI-generated reference; en-only by policy
-    expires: never
-  - path: docs/graphql/**/*.md
-    reason: GraphQL schema docs; en-only by policy
-    expires: never
-  - path: docs/websocket/**/*.md
-    reason: WebSocket protocol reference; en-only by policy
-    expires: never
   - path: docs/.vitepress/**/*
     reason: site config, not user-facing prose
     expires: never
@@ -54,8 +46,8 @@ ignored-surfaces:
   - path: docs/blog/**/*.md
     reason: editorial blog posts; en-only by editorial policy (no translations yet)
     expires: never
-  - path: docs/pricing/**/*.md
-    reason: pricing/comparison pages; translated by hand, no glossary blocks
+  - path: docs/editions/**/*.md
+    reason: editions/comparison pages; translated by hand, no glossary blocks
     expires: never
   - path: docs/community/compliance/**/*.md
     reason: redacted public mirror of internal legal docs; sync via scripts/sync-enterprise-docs.mjs

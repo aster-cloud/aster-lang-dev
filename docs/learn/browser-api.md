@@ -421,7 +421,7 @@ if (compiled.success) {
 | **Validation** | `validateSyntaxWithSpan` | `/evaluate-source` (dry run) | `validatePolicy` mutation |
 | **Schema extraction** | `extractSchema` | `POST /policies/schema` | `policySchema` query |
 | **Batch evaluation** | Not supported | `POST /policies/evaluate/batch` | Not supported |
-| **Audit trail** | Not generated | Automatic [SHA-256 chain](/api/audit/verify-chain) | Automatic [SHA-256 chain](/api/audit/verify-chain) |
+| **Audit trail** | Not generated | Automatic [SHA-256 chain](https://aster-lang.cloud/docs/api/audit/verify-chain) | Automatic [SHA-256 chain](https://aster-lang.cloud/docs/api/audit/verify-chain) |
 | **Best for** | Editors, CI checks, local tooling | Production evaluation, deployment | Flexible queries, dashboards |
 <!-- /glossary:block -->
 
@@ -495,8 +495,8 @@ console.log('Smoke test result:', result)
 - [Deployment Guide](./deployment-guide) -- end-to-end guide from source to production.
 <!-- /glossary:block -->
 <!-- glossary:block id=browser-api-related-pages-list-item-33 -->
-- [API: Extract Schema](/api/policies/schema) -- REST API equivalent of `extractSchema`.
+- [API: Extract Schema](https://aster-lang.cloud/docs/api/policies/schema) -- REST API equivalent of `extractSchema`.
 <!-- /glossary:block -->
 <!-- glossary:block id=browser-api-related-pages-list-item-34 -->
-- [API: Validate Policy](/api/policies/validate) -- check if a deployed policy is callable.
+- [API: Validate Policy](https://aster-lang.cloud/docs/api/policies/validate) -- check if a deployed policy is callable.
 <!-- /glossary:block -->

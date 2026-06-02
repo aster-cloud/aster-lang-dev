@@ -109,7 +109,7 @@ Sie sind Entwickler, evaluieren die Sprache, betten den Parser in Ihr Produkt ei
 - API-Server aus diesem Repo selbst betreiben
 
 → [Im Playground starten](/de/learn/playground)
-→ [5-Minuten-Schnellstart](/de/getting-started/quickstart)
+→ [5-Minuten-Schnellstart](https://aster-lang.cloud/de/docs/getting-started/quickstart)
 
 </div>
 

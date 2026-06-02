@@ -192,9 +192,9 @@ Das Rollback ist atomar — nachfolgende Evaluierungsanfragen verwenden sofort d
 
 ## Verwandte Seiten
 
-- [API: Richtlinie evaluieren](/api/policies/evaluate) — vollständige Referenz für den Evaluierungsendpunkt.
-- [API: Quellcode evaluieren](/api/policies/evaluate-source) — Inline-Quellcode kompilieren und evaluieren.
-- [API: Schema extrahieren](/api/policies/schema) — Parametertypen programmatisch ermitteln.
-- [API: Versionshistorie](/api/policies/versions) — alle Versionen einer bereitgestellten Richtlinie auflisten.
-- [API: Rollback](/api/policies/rollback) — auf eine frühere Version zurücksetzen.
+- [API: Richtlinie evaluieren](https://aster-lang.cloud/de/docs/api/policies/evaluate) — vollständige Referenz für den Evaluierungsendpunkt.
+- [API: Quellcode evaluieren](https://aster-lang.cloud/de/docs/api/policies/evaluate-source) — Inline-Quellcode kompilieren und evaluieren.
+- [API: Schema extrahieren](https://aster-lang.cloud/de/docs/api/policies/schema) — Parametertypen programmatisch ermitteln.
+- [API: Versionshistorie](https://aster-lang.cloud/de/docs/api/policies/versions) — alle Versionen einer bereitgestellten Richtlinie auflisten.
+- [API: Rollback](https://aster-lang.cloud/de/docs/api/policies/rollback) — auf eine frühere Version zurücksetzen.
 - [Browser-API-Referenz](./browser-api) — clientseitige Validierung und Schema-Extraktion.

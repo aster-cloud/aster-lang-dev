@@ -40,11 +40,11 @@ Compliance-Beauftragter, Risikoanalyst oder Policy-Autor. Sie möchten Regeln in
 
 ### 👤 Ich bin Entwickler
 
-Sie möchten Policy-Evaluierung in Ihren Service integrieren. REST in 5 Minuten, GraphQL/WS für komplexere Workflows.
+Sie möchten CNL-Regeln schreiben und ausführen. Beginnen Sie im Browser-Playground; integrieren Sie über `@aster-cloud/aster-lang-ts`. Brauchen Sie eine verwaltete Engine? Aster Cloud bietet gehostetes REST / GraphQL / WS.
 
-→ [**5-Minuten-Schnellstart**](/de/getting-started/quickstart)
-→ [REST-API-Referenz](/api/policies/evaluate)
-→ [GraphQL Schema](/api/graphql/overview)
+→ [**Im Playground starten**](/de/learn/playground)
+→ [Browser-SDK-Anleitung](/de/learn/browser-api)
+→ [Cloud-API-Docs ↗](https://aster-lang.cloud/de/docs/api/policies/evaluate)
 
 </div>
 
@@ -55,8 +55,7 @@ Sie möchten Policy-Evaluierung in Ihren Service integrieren. REST in 5 Minuten,
 Sie brauchen Datenhoheit, GDPR/PII-Kontrollen und einen klaren Deployment-Pfad. Self-Hosting ist eine erstklassige Option.
 
 → [Deployment-Leitfaden](/de/learn/deployment-guide)
-→ [Authentifizierung & RBAC](/de/getting-started/authentication)
-→ [Vertrieb kontaktieren](mailto:sales@aster-lang.cloud)
+→ [Compliance-Ressourcen](/community/compliance/)
 
 </div>
 

@@ -113,7 +113,7 @@ const en: UiStrings = {
     badges: ['REST API', 'Type-Safe', 'Multi-tenant'],
     requestLabel: 'api-request',
     animationLabel: 'Aster Policy Evaluation API examples',
-    apiRefLink: { text: 'API Reference', href: '/api/policies/evaluate' },
+    apiRefLink: { text: 'Cloud API docs', href: 'https://aster-lang.cloud/docs/api/policies/evaluate' },
     siblingLink: {
       text: 'Need hosting, teams, and audit workflows? Open Aster Cloud',
       href: 'https://aster-lang.cloud',
@@ -123,7 +123,7 @@ const en: UiStrings = {
       'Source compiles in three languages into the same audit-grade engine',
       'Dual reference implementations (Java/ANTLR + TypeScript/PEG), cross-verified per commit',
       'Lexicon packs ship today — add a fourth with a config file',
-      'Drop-in via REST, GraphQL, or WebSocket',
+      'Drop-in via REST, GraphQL, or WebSocket — see Cloud docs',
       'Apache-2.0 licensed',
     ],
   },
@@ -203,7 +203,7 @@ const en: UiStrings = {
         key: 'audit',
         tone: 'danger',
         title: '\ud83d\udd12 Tamper-evident audit',
-        desc: "Every policy evaluation is recorded in the engine's tamper-evident AuditLog, hash-chained with SHA-256. Verify any chain via GET /api/v1/audit/verify-chain?start=\u2026&end=\u2026. Replay any historical decision deterministically \u2014 clocks and UUIDs are controlled at runtime.",
+        desc: "Every policy evaluation is recorded in the engine's tamper-evident AuditLog, hash-chained with SHA-256. Replay any historical decision deterministically \u2014 clocks and UUIDs are controlled at runtime.",
       },
       {
         key: 'deployment',
@@ -215,7 +215,7 @@ const en: UiStrings = {
         key: 'integration',
         tone: 'neutral',
         title: '\ud83e\uddf0 Drop-in via REST, GraphQL, or WebSocket',
-        desc: 'Submit policy source inline or reference a stored policy by ID. Batch evaluate. Stream traces. RBAC + HMAC signing on every endpoint.',
+        desc: 'Submit policy source inline or reference a stored policy by ID. Batch evaluate. Stream traces. See Cloud API docs for transports + auth.',
       },
     ],
   },
@@ -235,33 +235,32 @@ const en: UiStrings = {
         heading: 'Learn',
         links: [
           { text: 'Overview', href: '/learn/overview' },
-          { text: 'Quick Start', href: '/getting-started/quickstart' },
-          { text: 'Playground', href: '/learn/playground' },
           { text: 'CNL Reference', href: '/learn/cnl-quick-reference' },
-        ],
-      },
-      {
-        heading: 'API',
-        links: [
-          { text: 'REST', href: '/api/policies/evaluate' },
-          { text: 'GraphQL', href: '/api/graphql/overview' },
-          { text: 'WebSocket', href: '/api/websocket/preview' },
-          { text: 'Audit', href: '/api/audit/logs' },
-        ],
-      },
-      {
-        heading: 'Community',
-        links: [
-          { text: 'GitHub', href: 'https://github.com/aster-lang' },
-          { text: 'Blog', href: '/blog/' },
-          { text: 'Contribute', href: '/community/' },
+          { text: 'Playground', href: '/learn/playground' },
+          { text: 'Deployment', href: '/learn/deployment-guide' },
         ],
       },
       {
         heading: 'Cloud',
         links: [
           { text: 'aster-lang.cloud', href: 'https://aster-lang.cloud' },
-          { text: 'Enterprise', href: '/community/compliance/' },
+          { text: 'API Docs', href: 'https://aster-lang.cloud/docs/api/policies/evaluate' },
+          { text: 'Quickstart', href: 'https://aster-lang.cloud/docs/getting-started/quickstart' },
+          { text: 'Compliance', href: '/community/compliance/' },
+        ],
+      },
+      {
+        heading: 'Community',
+        links: [
+          { text: 'GitHub', href: 'https://github.com/aster-cloud' },
+          { text: 'Blog', href: '/blog/' },
+          { text: 'Contribute', href: '/community/' },
+        ],
+      },
+      {
+        heading: 'Editions',
+        links: [
+          { text: 'Compare', href: '/editions/' },
           { text: 'Sales', href: 'mailto:sales@aster-lang.cloud' },
         ],
       },
@@ -274,7 +273,7 @@ const zh: UiStrings = {
     badges: ['REST API', '\u7c7b\u578b\u5b89\u5168', '\u591a\u79df\u6237'],
     requestLabel: 'API \u8bf7\u6c42',
     animationLabel: 'Aster \u7b56\u7565\u8bc4\u4f30 API \u793a\u4f8b',
-    apiRefLink: { text: 'API \u53c2\u8003', href: '/api/policies/evaluate' },
+    apiRefLink: { text: 'Cloud API \u6587\u6863', href: 'https://aster-lang.cloud/zh/docs/api/policies/evaluate' },
     siblingLink: {
       text: '\u9700\u8981\u6258\u7ba1\u3001\u56e2\u961f\u534f\u4f5c\u3001\u5ba1\u8ba1\u5de5\u4f5c\u6d41\uff1f\u524d\u5f80 Aster Cloud',
       href: 'https://aster-lang.cloud',
@@ -364,7 +363,7 @@ const zh: UiStrings = {
         key: 'audit',
         tone: 'danger',
         title: '\ud83d\udd12 \u9632\u7be1\u6539\u5ba1\u8ba1',
-        desc: '\u6bcf\u6b21\u7b56\u7565\u8bc4\u4f30\u90fd\u8bb0\u5f55\u5230\u5f15\u64ce\u7684\u9632\u7be1\u6539\u5ba1\u8ba1\u65e5\u5fd7,\u91c7\u7528 SHA-256 \u54c8\u5e0c\u94fe\u3002\u901a\u8fc7 GET /api/v1/audit/verify-chain?start=\u2026&end=\u2026 \u9a8c\u8bc1\u4efb\u610f\u94fe\u6bb5\u3002\u4efb\u610f\u5386\u53f2\u51b3\u7b56\u53ef\u786e\u5b9a\u6027\u91cd\u653e \u2014\u2014 \u65f6\u949f\u4e0e UUID \u5728\u8fd0\u884c\u65f6\u53d7\u63a7\u3002',
+        desc: '\u6bcf\u6b21\u7b56\u7565\u8bc4\u4f30\u90fd\u8bb0\u5f55\u5230\u5f15\u64ce\u7684\u9632\u7be1\u6539\u5ba1\u8ba1\u65e5\u5fd7,\u91c7\u7528 SHA-256 \u54c8\u5e0c\u94fe\u3002\u4efb\u610f\u5386\u53f2\u51b3\u7b56\u53ef\u786e\u5b9a\u6027\u91cd\u653e \u2014\u2014 \u65f6\u949f\u4e0e UUID \u5728\u8fd0\u884c\u65f6\u53d7\u63a7\u3002',
       },
       {
         key: 'deployment',
@@ -376,7 +375,7 @@ const zh: UiStrings = {
         key: 'integration',
         tone: 'neutral',
         title: '\ud83e\uddf0 \u901a\u8fc7 REST\u3001GraphQL \u6216 WebSocket \u63a5\u5165',
-        desc: '\u5185\u8054\u63d0\u4ea4\u7b56\u7565\u6e90\u7801,\u6216\u6309 ID \u5f15\u7528\u5df2\u5b58\u50a8\u7684\u7b56\u7565\u3002\u6279\u91cf\u8bc4\u4f30\u3002\u6d41\u5f0f\u8ffd\u8e2a\u3002\u6bcf\u4e2a\u7aef\u70b9\u90fd\u6709 RBAC + HMAC \u7b7e\u540d\u3002',
+        desc: '\u5185\u8054\u63d0\u4ea4\u7b56\u7565\u6e90\u7801,\u6216\u6309 ID \u5f15\u7528\u5df2\u5b58\u50a8\u7684\u7b56\u7565\u3002\u6279\u91cf\u8bc4\u4f30\u3002\u6d41\u5f0f\u8ffd\u8e2a\u3002\u8be6\u89c1 Cloud API \u6587\u6863\u7684\u4f20\u8f93\u4e0e\u9274\u6743\u65b9\u5f0f\u3002',
       },
     ],
   },
@@ -396,33 +395,32 @@ const zh: UiStrings = {
         heading: '\u5b66\u4e60',
         links: [
           { text: '\u6982\u89c8', href: '/zh/learn/overview' },
-          { text: '\u5feb\u901f\u5f00\u59cb', href: '/zh/getting-started/quickstart' },
-          { text: '\u6f14\u7ec3\u573a', href: '/zh/learn/playground' },
           { text: 'CNL \u53c2\u8003', href: '/zh/learn/cnl-quick-reference' },
-        ],
-      },
-      {
-        heading: 'API',
-        links: [
-          { text: 'REST', href: '/api/policies/evaluate' },
-          { text: 'GraphQL', href: '/api/graphql/overview' },
-          { text: 'WebSocket', href: '/api/websocket/preview' },
-          { text: '\u5ba1\u8ba1', href: '/api/audit/logs' },
-        ],
-      },
-      {
-        heading: '\u793e\u533a',
-        links: [
-          { text: 'GitHub', href: 'https://github.com/aster-lang' },
-          { text: '\u535a\u5ba2', href: '/blog/' },
-          { text: '\u8d21\u732e', href: '/zh/community/' },
+          { text: '\u6f14\u7ec3\u573a', href: '/zh/learn/playground' },
+          { text: '\u90e8\u7f72\u6307\u5357', href: '/zh/learn/deployment-guide' },
         ],
       },
       {
         heading: 'Cloud',
         links: [
           { text: 'aster-lang.cloud', href: 'https://aster-lang.cloud' },
-          { text: '\u4f01\u4e1a\u7248', href: '/community/compliance/' },
+          { text: 'API \u6587\u6863', href: 'https://aster-lang.cloud/zh/docs/api/policies/evaluate' },
+          { text: '\u5feb\u901f\u5f00\u59cb', href: 'https://aster-lang.cloud/zh/docs/getting-started/quickstart' },
+          { text: '\u5408\u89c4', href: '/community/compliance/' },
+        ],
+      },
+      {
+        heading: '\u793e\u533a',
+        links: [
+          { text: 'GitHub', href: 'https://github.com/aster-cloud' },
+          { text: '\u535a\u5ba2', href: '/blog/' },
+          { text: '\u8d21\u732e', href: '/zh/community/' },
+        ],
+      },
+      {
+        heading: '\u7248\u672c\u5bf9\u6bd4',
+        links: [
+          { text: '\u5bf9\u6bd4', href: '/zh/editions/' },
           { text: '\u8054\u7cfb\u9500\u552e', href: 'mailto:sales@aster-lang.cloud' },
         ],
       },
@@ -435,7 +433,7 @@ const de: UiStrings = {
     badges: ['REST API', 'Typsicher', 'Mandantenf\u00e4hig'],
     requestLabel: 'API-Anfrage',
     animationLabel: 'Aster Policy Evaluation API Beispiele',
-    apiRefLink: { text: 'API-Referenz', href: '/api/policies/evaluate' },
+    apiRefLink: { text: 'Cloud-API-Docs', href: 'https://aster-lang.cloud/de/docs/api/policies/evaluate' },
     siblingLink: {
       text: 'Hosting, Teams oder Audit-Workflows? Aster Cloud \u00f6ffnen',
       href: 'https://aster-lang.cloud',
@@ -525,7 +523,7 @@ const de: UiStrings = {
         key: 'audit',
         tone: 'danger',
         title: '\ud83d\udd12 Manipulationssicheres Audit',
-        desc: 'Jede Policy-Evaluierung wird im manipulationssicheren AuditLog der Engine aufgezeichnet, mit SHA-256 Hash-verkettet. Verifizieren Sie jede Kette \u00fcber GET /api/v1/audit/verify-chain?start=\u2026&end=\u2026. Jede historische Entscheidung kann deterministisch reproduziert werden \u2014 Uhren und UUIDs werden zur Laufzeit kontrolliert.',
+        desc: 'Jede Policy-Evaluierung wird im manipulationssicheren AuditLog der Engine aufgezeichnet, mit SHA-256 Hash-verkettet. Jede historische Entscheidung kann deterministisch reproduziert werden \u2014 Uhren und UUIDs werden zur Laufzeit kontrolliert.',
       },
       {
         key: 'deployment',
@@ -537,7 +535,7 @@ const de: UiStrings = {
         key: 'integration',
         tone: 'neutral',
         title: '\ud83e\uddf0 Integration via REST, GraphQL oder WebSocket',
-        desc: 'Policy-Quellcode inline \u00fcbermitteln oder gespeicherte Policy per ID referenzieren. Batch-Evaluierung. Trace-Streaming. RBAC + HMAC-Signatur an jedem Endpunkt.',
+        desc: 'Policy-Quellcode inline \u00fcbermitteln oder gespeicherte Policy per ID referenzieren. Batch-Evaluierung. Trace-Streaming. Transporte + Auth siehe Cloud-API-Docs.',
       },
     ],
   },
@@ -557,33 +555,32 @@ const de: UiStrings = {
         heading: 'Lernen',
         links: [
           { text: '\u00dcberblick', href: '/de/learn/overview' },
-          { text: 'Schnellstart', href: '/de/getting-started/quickstart' },
-          { text: 'Playground', href: '/de/learn/playground' },
           { text: 'CNL-Referenz', href: '/de/learn/cnl-quick-reference' },
-        ],
-      },
-      {
-        heading: 'API',
-        links: [
-          { text: 'REST', href: '/api/policies/evaluate' },
-          { text: 'GraphQL', href: '/api/graphql/overview' },
-          { text: 'WebSocket', href: '/api/websocket/preview' },
-          { text: 'Audit', href: '/api/audit/logs' },
-        ],
-      },
-      {
-        heading: 'Community',
-        links: [
-          { text: 'GitHub', href: 'https://github.com/aster-lang' },
-          { text: 'Blog', href: '/blog/' },
-          { text: 'Mitwirken', href: '/de/community/' },
+          { text: 'Playground', href: '/de/learn/playground' },
+          { text: 'Bereitstellung', href: '/de/learn/deployment-guide' },
         ],
       },
       {
         heading: 'Cloud',
         links: [
           { text: 'aster-lang.cloud', href: 'https://aster-lang.cloud' },
-          { text: 'Enterprise', href: '/community/compliance/' },
+          { text: 'API-Docs', href: 'https://aster-lang.cloud/de/docs/api/policies/evaluate' },
+          { text: 'Schnellstart', href: 'https://aster-lang.cloud/de/docs/getting-started/quickstart' },
+          { text: 'Compliance', href: '/community/compliance/' },
+        ],
+      },
+      {
+        heading: 'Community',
+        links: [
+          { text: 'GitHub', href: 'https://github.com/aster-cloud' },
+          { text: 'Blog', href: '/blog/' },
+          { text: 'Mitwirken', href: '/de/community/' },
+        ],
+      },
+      {
+        heading: 'Editionen',
+        links: [
+          { text: 'Vergleich', href: '/de/editions/' },
           { text: 'Vertrieb', href: 'mailto:sales@aster-lang.cloud' },
         ],
       },

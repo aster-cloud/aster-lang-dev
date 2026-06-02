@@ -161,7 +161,7 @@ curl -s -X POST https://policy.aster-lang.dev/api/v1/policies/evaluate \
 }
 ```
 
-对于在单个请求中针对多组输入的批量评估，使用 `/api/v1/policies/evaluate-source-batch` 端点。详情参阅[批量评估](/api/policies/batch)参考。
+对于在单个请求中针对多组输入的批量评估，使用 `/api/v1/policies/evaluate-source-batch` 端点。详情参阅[批量评估](https://aster-lang.cloud/zh/docs/api/policies/batch)参考。
 
 ## 第六步 — 监控与审计
 
@@ -250,9 +250,9 @@ curl -s -X POST \
 
 ## 相关页面
 
-- [API：评估策略](/api/policies/evaluate) — 评估端点的完整参考。
-- [API：评估源码](/api/policies/evaluate-source) — 编译和评估内联源码。
-- [API：提取 Schema](/api/policies/schema) — 以编程方式发现参数类型。
-- [API：版本历史](/api/policies/versions) — 列出已部署策略的所有版本。
-- [API：回滚](/api/policies/rollback) — 恢复到先前版本。
+- [API：评估策略](https://aster-lang.cloud/zh/docs/api/policies/evaluate) — 评估端点的完整参考。
+- [API：评估源码](https://aster-lang.cloud/zh/docs/api/policies/evaluate-source) — 编译和评估内联源码。
+- [API：提取 Schema](https://aster-lang.cloud/zh/docs/api/policies/schema) — 以编程方式发现参数类型。
+- [API：版本历史](https://aster-lang.cloud/zh/docs/api/policies/versions) — 列出已部署策略的所有版本。
+- [API：回滚](https://aster-lang.cloud/zh/docs/api/policies/rollback) — 恢复到先前版本。
 - [浏览器 API 参考](./browser-api) — 客户端验证和 schema 提取。

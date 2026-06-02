@@ -40,11 +40,11 @@ hero:
 
 ### 👤 我是工程师
 
-你想把策略评估集成到服务里。REST 5 分钟接入,GraphQL/WS 适用于复杂流程。
+想写 CNL 规则并运行它。先用浏览器演练场；通过 `@aster-cloud/aster-lang-ts` 集成。需要托管引擎？Aster Cloud 提供 REST / GraphQL / WS。
 
-→ [**5 分钟快速开始**](/zh/getting-started/quickstart)
-→ [REST API 参考](/api/policies/evaluate)
-→ [GraphQL Schema](/api/graphql/overview)
+→ [**在演练场开始**](/zh/learn/playground)
+→ [浏览器 SDK 指南](/zh/learn/browser-api)
+→ [Cloud API 文档 ↗](https://aster-lang.cloud/zh/docs/api/policies/evaluate)
 
 </div>
 
@@ -55,8 +55,7 @@ hero:
 你需要数据主权、GDPR/PII 控制和清晰的部署路径。自托管是一等选项。
 
 → [部署指南](/zh/learn/deployment-guide)
-→ [认证与 RBAC](/zh/getting-started/authentication)
-→ [联系销售](mailto:sales@aster-lang.cloud)
+→ [合规资源](/community/compliance/)
 
 </div>
 

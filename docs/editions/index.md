@@ -109,7 +109,7 @@ You're a developer evaluating the language, embedding the parser in your own pro
 - Self-host the API server from this repo
 
 → [Start in the Playground](/learn/playground)
-→ [5-Minute Quick Start](/getting-started/quickstart)
+→ [5-Minute Quick Start](https://aster-lang.cloud/docs/getting-started/quickstart)
 
 </div>
 

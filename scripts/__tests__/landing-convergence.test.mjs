@@ -270,12 +270,14 @@ for (const { name, marker } of LOCALE_BLOCKS) {
 }
 
 test('hero strings include apiRefLink + siblingLink (PR-1)', () => {
-  // Each locale must declare both keys.
+  // Each locale must declare both keys. apiRefLink now points to the
+  // Aster Cloud docs subsite (Phase 2 API doc strip — application API
+  // docs live on aster-lang.cloud, not this CNL site).
   for (const { name } of LOCALE_BLOCKS) {
     assert.match(
       ui,
-      /apiRefLink: \{ text: '[^']+', href: '\/api\/policies\/evaluate' \}/,
-      `${name}: apiRefLink missing or wrong href`,
+      /apiRefLink: \{ text: '[^']+', href: 'https:\/\/aster-lang\.cloud\/[a-z/]*docs\/api\/policies\/evaluate' \}/,
+      `${name}: apiRefLink missing or wrong href (must point to aster-lang.cloud)`,
     )
     assert.match(
       ui,
@@ -324,15 +326,16 @@ test('bottomCta is permanently-bright (no primary-fg token reference in CSS)', (
 
 console.log('\n[5/6] CustomLayout slot wiring')
 
-test('CustomLayout imports all 6 hero/section components', () => {
+test('CustomLayout imports landing chrome components', () => {
   const layout = read('docs/.vitepress/theme/CustomLayout.vue')
-  // HeroAnimation moved out of the landing (it now lives in
-  // docs/api/policies/evaluate.md via global component registration
-  // in theme/index.ts). The tagline carousel (HeroTaglineList)
-  // carries the visual rotation on the landing instead.
+  // After the API doc strip (2026-Q3 architecture correction), the
+  // HeroAnimation cards live inside <HeroAnimationTeaser /> on the
+  // landing, framed as a Cloud teaser. CustomLayout imports the
+  // teaser, not HeroAnimation directly.
   const REQUIRED_IMPORTS = [
     'HeroSubtleLinks',
     'HeroTaglineList',
+    'HeroAnimationTeaser',
     'DevTrustBand',
     'DevFeatures',
     'DevBottomCta',
@@ -341,12 +344,6 @@ test('CustomLayout imports all 6 hero/section components', () => {
   for (const c of REQUIRED_IMPORTS) {
     assert.match(layout, new RegExp(`import ${c}`), `CustomLayout missing import: ${c}`)
   }
-  // HeroAnimation must NOT be imported by CustomLayout anymore —
-  // it's a global component registered in theme/index.ts.
-  assert.ok(
-    !/import HeroAnimation/.test(layout),
-    'CustomLayout still imports HeroAnimation (should be moved to theme/index.ts global registration)',
-  )
 })
 
 test('CustomLayout uses correct VitePress slot names', () => {
@@ -365,22 +362,31 @@ test('CustomLayout uses correct VitePress slot names', () => {
   )
 })
 
-test('HeroAnimation is registered globally via theme/index.ts', () => {
-  const themeIndex = read('docs/.vitepress/theme/index.ts')
-  assert.match(themeIndex, /import HeroAnimation/, 'theme/index.ts must import HeroAnimation')
+test('HeroAnimation is wrapped by HeroAnimationTeaser', () => {
+  const teaser = read('docs/.vitepress/components/HeroAnimationTeaser.vue')
   assert.match(
-    themeIndex,
-    /app\.component\(\s*['"]HeroAnimation['"]\s*,\s*HeroAnimation\s*\)/,
-    'theme/index.ts must register HeroAnimation globally so markdown pages can embed it',
+    teaser,
+    /import HeroAnimation/,
+    'HeroAnimationTeaser must import HeroAnimation',
+  )
+  assert.match(
+    teaser,
+    /<HeroAnimation\s*\/>/,
+    'HeroAnimationTeaser must render <HeroAnimation />',
+  )
+  assert.match(
+    teaser,
+    /aster-lang\.cloud/,
+    'HeroAnimationTeaser must funnel readers to aster-lang.cloud (Cloud teaser intent)',
   )
 })
 
-test('HeroAnimation is embedded in /api/policies/evaluate.md', () => {
-  const evaluateMd = read('docs/api/policies/evaluate.md')
+test('HeroAnimationTeaser is rendered on the landing via #home-features-after', () => {
+  const layout = read('docs/.vitepress/theme/CustomLayout.vue')
   assert.match(
-    evaluateMd,
-    /<HeroAnimation\s*\/>/,
-    'evaluate.md must embed <HeroAnimation /> (the 3 cards match this page subject)',
+    layout,
+    /<HeroAnimationTeaser\s*\/>/,
+    'CustomLayout must render <HeroAnimationTeaser /> in its template',
   )
 })
 

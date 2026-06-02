@@ -1,24 +1,27 @@
 # Cloudflare Pages redirect rules. Routes are matched in order; the
-# first match wins. 301 = permanent, preserves SEO.
+# first match wins.
+#   301 = permanent same-site redirect (preserves SEO).
+#   308 = permanent cross-site redirect (preserves HTTP method).
 #
 # Locale-prefixed paths (/zh/, /de/) MUST come BEFORE the unprefixed
 # EN paths. Cloudflare matches by source-prefix; without this ordering,
 # /zh/pricing/foo would match the bare /pricing/* rule and rewrite to
 # /editions/foo instead of /zh/editions/foo.
 #
-# 2026-Q2 IA refactor:
-#   - /pricing/* moved under /editions/* (Compare Editions content;
-#     the URL caught up to the page title)
-#   - /enterprise/* moved under /community/compliance/* (DPA/DSAR/
-#     telemetry are community resources, not a separate product tier).
-#     /enterprise/* + /community/compliance/* are en-only by glossary
-#     policy; the zh/de redirects exist defensively in case a
-#     translation pack is added later.
-#   - /graphql/* and /websocket/* moved under /api/* (REST, GraphQL,
-#     and WebSocket are all transports onto the same engine). Same
-#     en-only note as enterprise.
+# 2026-Q3 architecture correction:
+#   - /api/** and /getting-started/** were application-layer docs
+#     (Aster Cloud's policy engine REST/GraphQL/WS contracts). They
+#     do not belong on aster-lang.dev (CNL language site). Moved to
+#     aster-lang.cloud/docs/* (Phase 1 of cloud-docs-subsite plan).
+#   - Cross-site 308 to preserve SEO + bookmarks. Cloud subsite uses
+#     `localePrefix: 'as-needed'` so EN is bare /docs/* and zh/de
+#     carry the prefix.
+#
+# 2026-Q2 IA refactor (still relevant):
+#   - /pricing/* moved under /editions/* (same-site).
+#   - /enterprise/* moved under /community/compliance/* (same-site).
 
-# === Pricing → Editions (3-locale mirror) ===
+# === Pricing → Editions (3-locale mirror, same-site) ===
 /zh/pricing               /zh/editions/                       301
 /zh/pricing/              /zh/editions/                       301
 /zh/pricing/*             /zh/editions/:splat                 301
@@ -29,7 +32,7 @@
 /pricing/                 /editions/                          301
 /pricing/*                /editions/:splat                    301
 
-# === Enterprise → Community/Compliance (en-only; zh/de defensive) ===
+# === Enterprise → Community/Compliance (en-only, same-site) ===
 /zh/enterprise            /zh/community/compliance/           301
 /zh/enterprise/           /zh/community/compliance/           301
 /zh/enterprise/*          /zh/community/compliance/:splat     301
@@ -40,16 +43,28 @@
 /enterprise/              /community/compliance/              301
 /enterprise/*             /community/compliance/:splat        301
 
-# === GraphQL → API/GraphQL (en-only; zh/de defensive) ===
-/zh/graphql/*             /zh/api/graphql/:splat              301
-/de/graphql/*             /de/api/graphql/:splat              301
-/graphql                  /api/graphql/overview               301
-/graphql/                 /api/graphql/overview               301
-/graphql/*                /api/graphql/:splat                 301
+# === Application docs → aster-lang.cloud/docs/* (cross-site) ===
+# zh / de come first per the prefix-matching rule.
 
-# === WebSocket → API/WebSocket (en-only; zh/de defensive) ===
-/zh/websocket/*           /zh/api/websocket/:splat            301
-/de/websocket/*           /de/api/websocket/:splat            301
-/websocket                /api/websocket/preview              301
-/websocket/               /api/websocket/preview              301
-/websocket/*              /api/websocket/:splat               301
+# /api/* (REST + GraphQL + WebSocket + Audit + Workflows reference)
+/zh/api/*  https://aster-lang.cloud/zh/docs/api/:splat        308
+/de/api/*  https://aster-lang.cloud/de/docs/api/:splat        308
+/api/*     https://aster-lang.cloud/docs/api/:splat           308
+
+# /getting-started/* (auth, quickstart, errors, overview)
+/zh/getting-started/*  https://aster-lang.cloud/zh/docs/getting-started/:splat  308
+/de/getting-started/*  https://aster-lang.cloud/de/docs/getting-started/:splat  308
+/getting-started/*     https://aster-lang.cloud/docs/getting-started/:splat     308
+
+# Legacy /graphql and /websocket roots → Cloud equivalents.
+/zh/graphql/*  https://aster-lang.cloud/zh/docs/api/graphql/:splat    308
+/de/graphql/*  https://aster-lang.cloud/de/docs/api/graphql/:splat    308
+/graphql       https://aster-lang.cloud/docs/api/graphql/overview     308
+/graphql/      https://aster-lang.cloud/docs/api/graphql/overview     308
+/graphql/*     https://aster-lang.cloud/docs/api/graphql/:splat       308
+
+/zh/websocket/*  https://aster-lang.cloud/zh/docs/api/websocket/:splat  308
+/de/websocket/*  https://aster-lang.cloud/de/docs/api/websocket/:splat  308
+/websocket       https://aster-lang.cloud/docs/api/websocket/preview   308
+/websocket/      https://aster-lang.cloud/docs/api/websocket/preview   308
+/websocket/*     https://aster-lang.cloud/docs/api/websocket/:splat    308

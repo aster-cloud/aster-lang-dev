@@ -148,5 +148,5 @@ if (compiled.success) {
 - [Spielplatz](./playground) — die Browser-API interaktiv im Browser ausprobieren.
 - [CNL-Kurzreferenz](./cnl-quick-reference) — vollständige Syntaxanleitung für Aster CNL.
 - [Bereitstellungsanleitung](./deployment-guide) — End-to-End-Anleitung vom Quellcode zur Produktion.
-- [API: Schema extrahieren](/api/policies/schema) — REST API-Äquivalent von `extractSchema`.
-- [API: Richtlinie validieren](/api/policies/validate) — prüfen, ob eine bereitgestellte Richtlinie aufrufbar ist.
+- [API: Schema extrahieren](https://aster-lang.cloud/de/docs/api/policies/schema) — REST API-Äquivalent von `extractSchema`.
+- [API: Richtlinie validieren](https://aster-lang.cloud/de/docs/api/policies/validate) — prüfen, ob eine bereitgestellte Richtlinie aufrufbar ist.

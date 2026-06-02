@@ -2,12 +2,11 @@ import type { DefaultTheme, LocaleSpecificConfig } from 'vitepress'
 
 export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
   title: 'Aster Lang',
-  description: 'API Reference & Developer Documentation for Aster Policy Engine',
+  description: 'CNL language guide for Aster Lang — multilingual policy/workflow/decision authoring.',
   themeConfig: {
     nav: [
       { text: 'Learn', link: '/learn/overview' },
       { text: 'Playground', link: '/learn/playground' },
-      { text: 'API', link: '/api/policies/evaluate' },
       { text: 'Editions', link: '/editions/' },
       { text: 'Community', link: '/community/' },
       { text: 'Cloud', link: 'https://aster-lang.cloud' },
@@ -22,70 +21,6 @@ export const enConfig: LocaleSpecificConfig<DefaultTheme.Config> = {
             { text: 'Playground', link: '/learn/playground' },
             { text: 'Deployment Guide', link: '/learn/deployment-guide' },
             { text: 'Browser API', link: '/learn/browser-api' },
-          ],
-        },
-      ],
-      '/getting-started/': [
-        {
-          text: 'Getting Started',
-          items: [
-            { text: 'Overview', link: '/getting-started/overview' },
-            { text: 'Authentication', link: '/getting-started/authentication' },
-            { text: 'Quick Start', link: '/getting-started/quickstart' },
-            { text: 'Error Handling', link: '/getting-started/errors' },
-          ],
-        },
-      ],
-      '/api/': [
-        {
-          text: 'Policy Evaluation',
-          items: [
-            { text: 'Evaluate Policy', link: '/api/policies/evaluate' },
-            { text: 'Evaluate Source', link: '/api/policies/evaluate-source' },
-            { text: 'Evaluate JSON', link: '/api/policies/evaluate-json' },
-            { text: 'Batch Evaluate', link: '/api/policies/batch' },
-            { text: 'Extract Schema', link: '/api/policies/schema' },
-            { text: 'Validate Policy', link: '/api/policies/validate' },
-          ],
-        },
-        {
-          text: 'Workflows',
-          items: [
-            { text: 'Workflow Events', link: '/api/workflows/events' },
-            { text: 'Workflow State', link: '/api/workflows/state' },
-            { text: 'Metrics', link: '/api/workflows/metrics' },
-          ],
-        },
-        {
-          text: 'Audit',
-          items: [
-            { text: 'Audit Logs', link: '/api/audit/logs' },
-            { text: 'Hash Chain Verification', link: '/api/audit/verify-chain' },
-            { text: 'Version Usage', link: '/api/audit/version-usage' },
-            { text: 'Anomaly Detection', link: '/api/audit/anomalies' },
-            { text: 'Version Comparison', link: '/api/audit/compare' },
-          ],
-        },
-        {
-          text: 'Policy Management',
-          items: [
-            { text: 'Version History', link: '/api/policies/versions' },
-            { text: 'Rollback', link: '/api/policies/rollback' },
-            { text: 'Cache Management', link: '/api/policies/cache' },
-          ],
-        },
-        {
-          text: 'GraphQL',
-          items: [
-            { text: 'Overview', link: '/api/graphql/overview' },
-            { text: 'Queries', link: '/api/graphql/queries' },
-            { text: 'Mutations', link: '/api/graphql/mutations' },
-          ],
-        },
-        {
-          text: 'WebSocket',
-          items: [
-            { text: 'Preview Endpoint', link: '/api/websocket/preview' },
           ],
         },
       ],
