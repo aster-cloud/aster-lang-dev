@@ -4,10 +4,13 @@ layout: home
 footer: false
 
 hero:
-  name: "Policy as Code"
-  text: "in der Muttersprache"
-  tagline: "Schreiben Sie Geschäftsregeln in Ihrer Muttersprache. KI entwirft, Menschen genehmigen, GraalVM führt aus. Manipulationssicheres Audit inklusive."
-  # Text spiegelt aster-lang.cloud hero (messages/de.json `hero.*`)
+  name: "Eine Open-Source Controlled Natural Language"
+  text: "für Policy as Code"
+  tagline: "Kompilieren Sie Regeln, geschrieben in English, 中文 oder Deutsch, in dieselbe audit-feste Engine. Zwei Referenzimplementierungen (Java/ANTLR + TypeScript/PEG), bei jedem Commit gegeneinander verifiziert. Lexicon Packs sind sofort verfügbar — eine vierte Sprache hinzufügen heißt eine Konfigurationsdatei schreiben. Integration via REST, GraphQL oder WebSocket. Apache-2.0 lizenziert."
+  # Lang-Positionierung (KEINE Spiegelung von aster-lang.cloud)
+  # Cloud verkauft Hosting + KI; Lang verkauft die Sprache selbst: die
+  # CNL-Spezifikation, die dualen Compiler-Implementierungen, das
+  # Lexicon-System und die Integrationsfläche.
   # Kein image: — Hero-Text nimmt die volle Spaltenbreite ein, HeroAnimation rendert mittig unter den CTAs (cloud-aligned)
   actions:
     - theme: brand
