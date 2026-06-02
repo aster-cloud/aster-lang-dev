@@ -29,4 +29,11 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy docs/.vitepress/dist --project-name aster-lang-dev --branch main
+          # CF API rejects non-ASCII characters in commit messages
+          # (returns "Invalid commit message, it must be a valid UTF-8
+          # string. [code: 8000111]" — empirically blocked on smart
+          # quotes, em-dashes, and arrows that are legal UTF-8 but
+          # filtered by the deployment metadata pipeline). Override
+          # with an ASCII summary derived from GITHUB_SHA so the
+          # deployment never depends on commit-message contents.
+          command: pages deploy docs/.vitepress/dist --project-name aster-lang-dev --branch main --commit-hash=${{ github.sha }} --commit-message="deploy ${{ github.sha }}" --commit-dirty=true
