@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "site": "lang-dev",
+  "baseUrl": "https://aster-lang.dev",
+  "locales": {
+    "default": "en",
+    "prefixed": [
+      "zh",
+      "de"
+    ]
+  },
+  "generatedAt": null,
+  "routes": [
+    {
+      "path": "/",
+      "status": "canonical-here",
+      "owner": "marketing",
+      "source": "docs/index.md",
+      "locales": "all",
+      "notes": "Aster CNL language landing page"
+    },
+    {
+      "path": "/learn/overview",
+      "status": "canonical-here",
+      "owner": "language",
+      "source": "docs/learn/overview.md",
+      "locales": "all"
+    },
+    {
+      "path": "/learn/playground",
+      "status": "canonical-here",
+      "owner": "language",
+      "source": "docs/learn/playground.md",
+      "locales": "all",
+      "notes": "Browser-side CodeMirror playground (Vue + WASM). NOT the same as\nCloud's `/policies/new` editor; both are accepted entry points\nbut they serve different surfaces. Cross-site links FROM Cloud\ndocs into the product Playground must use\nhttps://aster-lang.cloud/policies/new, not https://aster-lang.dev/learn/playground.\n"
+    },
+    {
+      "path": "/learn/browser-api",
+      "status": "canonical-here",
+      "owner": "language",
+      "source": "docs/learn/browser-api.md",
+      "locales": "all"
+    },
+    {
+      "path": "/learn/cnl-quick-reference",
+      "status": "canonical-here",
+      "owner": "language",
+      "source": "docs/learn/cnl-quick-reference.md",
+      "locales": "all"
+    },
+    {
+      "path": "/learn/deployment-guide",
+      "status": "canonical-here",
+      "owner": "language",
+      "source": "docs/learn/deployment-guide.md",
+      "locales": "all"
+    },
+    {
+      "path": "/editions",
+      "status": "canonical-here",
+      "owner": "marketing",
+      "source": "docs/editions/index.md",
+      "locales": "all"
+    },
+    {
+      "path": "/editions/*",
+      "status": "canonical-here",
+      "owner": "marketing",
+      "source": "docs/editions/*.md",
+      "locales": "all"
+    },
+    {
+      "path": "/community",
+      "status": "canonical-here",
+      "owner": "community",
+      "source": "docs/community/index.md",
+      "locales": "all"
+    },
+    {
+      "path": "/community/contribute",
+      "status": "canonical-here",
+      "owner": "community",
+      "source": "docs/community/contribute.md",
+      "locales": "all"
+    },
+    {
+      "path": "/community/lexicons",
+      "status": "canonical-here",
+      "owner": "community",
+      "source": "docs/community/lexicons.md",
+      "locales": "all",
+      "notes": "Authoritative contributor entry point for new language packs."
+    },
+    {
+      "path": "/community/wanted-languages",
+      "status": "canonical-here",
+      "owner": "community",
+      "source": "docs/community/wanted-languages.md",
+      "locales": "all"
+    },
+    {
+      "path": "/community/compliance",
+      "status": "canonical-here",
+      "owner": "compliance",
+      "source": "docs/community/compliance/index.md",
+      "locales": "all"
+    },
+    {
+      "path": "/community/compliance/*",
+      "status": "canonical-here",
+      "owner": "compliance",
+      "source": "docs/community/compliance/*.md",
+      "locales": "all",
+      "notes": "Post-2026-Q2 IA: legacy /enterprise → /community/compliance same-site.\nSome pages may be public mirrors of internal Cloud compliance docs;\nwhere that happens, declare them as `mirror` in a follow-up Phase 2\npass that audits per-page status.\n"
+    },
+    {
+      "path": "/blog",
+      "status": "canonical-here",
+      "owner": "marketing",
+      "source": "docs/blog/index.md",
+      "locales": "en-only"
+    },
+    {
+      "path": "/blog/posts/*",
+      "status": "canonical-here",
+      "owner": "marketing",
+      "source": "docs/blog/posts/*.md",
+      "locales": "en-only"
+    },
+    {
+      "path": "/api/*",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.cloud/docs/api/*",
+      "redirectCode": 308,
+      "owner": "docs",
+      "locales": "all",
+      "notes": "Application REST/GraphQL/WS docs live on Cloud as of 2026-Q3."
+    },
+    {
+      "path": "/getting-started/*",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.cloud/docs/getting-started/*",
+      "redirectCode": 308,
+      "owner": "docs",
+      "locales": "all"
+    },
+    {
+      "path": "/graphql",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.cloud/docs/api/graphql/overview",
+      "redirectCode": 308,
+      "owner": "docs",
+      "locales": "all"
+    },
+    {
+      "path": "/graphql/*",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.cloud/docs/api/graphql/*",
+      "redirectCode": 308,
+      "owner": "docs",
+      "locales": "all"
+    },
+    {
+      "path": "/websocket",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.cloud/docs/api/websocket/preview",
+      "redirectCode": 308,
+      "owner": "docs",
+      "locales": "all"
+    },
+    {
+      "path": "/websocket/*",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.cloud/docs/api/websocket/*",
+      "redirectCode": 308,
+      "owner": "docs",
+      "locales": "all"
+    },
+    {
+      "path": "/pricing",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.dev/editions",
+      "redirectCode": 301,
+      "owner": "marketing",
+      "locales": "all",
+      "notes": "2026-Q2 same-site rename to /editions."
+    },
+    {
+      "path": "/pricing/*",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.dev/editions/*",
+      "redirectCode": 301,
+      "owner": "marketing",
+      "locales": "all"
+    },
+    {
+      "path": "/enterprise",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.dev/community/compliance/",
+      "redirectCode": 301,
+      "owner": "marketing",
+      "locales": "all",
+      "notes": "2026-Q2 same-site move into community/compliance."
+    },
+    {
+      "path": "/enterprise/*",
+      "status": "redirect-to",
+      "canonicalUrl": "https://aster-lang.dev/community/compliance/*",
+      "redirectCode": 301,
+      "owner": "marketing",
+      "locales": "all"
+    }
+  ],
+  "allowLinks": []
+}

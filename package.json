@@ -12,6 +12,8 @@
     "check:locale-parity": "tsx scripts/check-locale-parity.ts",
     "sync:compliance": "node scripts/sync-enterprise-docs.mjs",
     "check:compliance": "node scripts/sync-enterprise-docs.mjs --check",
+    "routes:build": "tsx scripts/routes/build-routes.ts",
+    "routes:check": "tsx scripts/routes/check-route-coverage.ts",
     "test:scripts": "node scripts/__tests__/sync-enterprise-docs.test.mjs && node scripts/__tests__/build-blog-rss.test.mjs && node scripts/__tests__/landing-convergence.test.mjs"
   },
   "dependencies": {

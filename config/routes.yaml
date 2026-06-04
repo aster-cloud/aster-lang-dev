@@ -114,6 +114,12 @@ routes:
     source: docs/community/wanted-languages.md
     locales: all
 
+  - path: /community/compliance
+    status: canonical-here
+    owner: compliance
+    source: docs/community/compliance/index.md
+    locales: all
+
   - path: /community/compliance/*
     status: canonical-here
     owner: compliance

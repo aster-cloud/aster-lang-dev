@@ -53,6 +53,24 @@ jobs:
         working-directory: aster-lang-dev
         run: pnpm run test:scripts
 
+      # Route ownership contract (ADR 0010). Two checks:
+      #   1. routes:build must be a no-op — the committed
+      #      docs/public/.well-known/routes.json must match what the
+      #      generator produces from config/routes.yaml.
+      #   2. routes:check verifies every docs/**/*.md has a manifest
+      #      entry, every _redirects rule has a redirect-to twin, and
+      #      every manifest entry with `source:` resolves to a real file.
+      # Phase 3 will add cross-site link validation against
+      # aster-cloud's manifest snapshot.
+      - name: Route ownership — generated JSON is up to date
+        working-directory: aster-lang-dev
+        run: |
+          pnpm run routes:build
+          git diff --exit-code docs/public/.well-known/routes.json
+      - name: Route ownership — coverage
+        working-directory: aster-lang-dev
+        run: pnpm run routes:check
+
       # Compliance public-mirror drift detection. The DPA / DSAR /
       # telemetry-fields pages under docs/community/compliance/ are derived from
       # aster-cloud's docs/on-prem/ via scripts/sync-enterprise-docs.mjs.
