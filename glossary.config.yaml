@@ -52,6 +52,9 @@ ignored-surfaces:
   - path: docs/community/compliance/**/*.md
     reason: redacted public mirror of internal legal docs; sync via scripts/sync-enterprise-docs.mjs
     expires: never
+  - path: docs/adr/**/*.md
+    reason: architecture decision records; English-only by editorial policy, not site-rendered
+    expires: never
 
 untranslated-tokens:
   - Aster
