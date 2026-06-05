@@ -110,3 +110,45 @@ jobs:
       - name: VitePress build (sanity)
         working-directory: aster-lang-dev
         run: pnpm docs:build
+
+  # Every ```aster code block in the docs must actually compile with the
+  # real engine. A broken first-impression example is adoption poison
+  # (this guard was added after the landing hero + syntax reference were
+  # found teaching syntax the compiler rejects). Runs aster-lang-test's
+  # verify-doc-examples.mjs against a freshly-built aster-lang-ts.
+  verify-doc-examples:
+    name: Verify CNL doc examples compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with: { path: aster-lang-dev }
+
+      - uses: actions/checkout@v6
+        with:
+          repository: aster-cloud/aster-lang-ts
+          path: aster-lang-ts
+          token: ${{ secrets.CROSS_REPO_TOKEN || github.token }}
+
+      - uses: actions/checkout@v6
+        with:
+          repository: aster-cloud/aster-lang-test
+          path: aster-lang-test
+          token: ${{ secrets.CROSS_REPO_TOKEN || github.token }}
+
+      - uses: pnpm/action-setup@v6
+        with:
+          package_json_file: aster-lang-ts/package.json
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+          cache-dependency-path: aster-lang-ts/pnpm-lock.yaml
+
+      - name: Build aster-lang-ts
+        working-directory: aster-lang-ts
+        run: pnpm install --frozen-lockfile && pnpm build
+
+      - name: Verify every ```aster doc block compiles
+        working-directory: aster-lang-test
+        run: node scripts/verify-doc-examples.mjs
