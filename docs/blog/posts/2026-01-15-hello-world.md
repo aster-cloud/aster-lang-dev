@@ -34,7 +34,7 @@ Here's a rule that compiles and runs the same way in English, 中文, and Deutsc
 ```aster
 Module aster.example.greet.
 
-Rule greet given name:
+Rule greet given name, produce Text:
     Return "Hello, " + name.
 ```
 

@@ -13,11 +13,10 @@ Most rule engines look like code. Some look like configuration. Aster Lang looks
 ```aster
 Module aster.finance.loan.
 
-Rule evaluateLoanEligibility given applicant:
-    If applicant.creditScore is at least 700
-    and applicant.annualIncome is at least 50000:
+Rule evaluateLoanEligibility given applicant, produce Decision:
+    If applicant.creditScore at least 700 and applicant.annualIncome at least 50000
         Return approved.
-    Otherwise:
+    Otherwise
         Return rejected.
 ```
 

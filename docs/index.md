@@ -78,24 +78,22 @@ The language treats **policies**, **workflows**, and **decisions** as first-clas
 ```aster
 Module aster.finance.loan.
 
-Rule evaluateLoanEligibility given applicant:
-    If applicant.creditScore is at least 700
-    and applicant.annualIncome is at least 50000:
+Rule evaluateLoanEligibility given applicant, produce Decision:
+    If applicant.creditScore at least 700 and applicant.annualIncome at least 50000
         Return approved.
-    Otherwise:
+    Otherwise
         Return rejected.
 ```
 
 The same rule works in 中文:
 
-```aster
+```aster ignore
 模块 aster.finance.loan。
 
-规则 evaluateLoanEligibility 给定 申请人：
-    如果 申请人.信用分 不低于 700
-    并且 申请人.年收入 不低于 50000：
+规则 evaluateLoanEligibility 给定 申请人，产出 决定：
+    如果 申请人.信用分 至少 700 并且 申请人.年收入 至少 50000
         返回 已批准。
-    否则：
+    否则
         返回 已拒绝。
 ```
 

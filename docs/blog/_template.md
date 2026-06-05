@@ -23,7 +23,7 @@ the project's CNL highlighting.
 ```aster
 Module example.
 
-Rule greet given name:
+Rule greet given name, produce Text:
     Return "Hello, " + name.
 ```
 
