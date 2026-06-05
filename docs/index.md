@@ -80,9 +80,9 @@ Module aster.finance.loan.
 
 Rule evaluateLoanEligibility given applicant, produce Decision:
     If applicant.creditScore at least 700 and applicant.annualIncome at least 50000
-        Return approved.
+        Return "approved".
     Otherwise
-        Return rejected.
+        Return "rejected".
 ```
 
 The same rule works in 中文:
@@ -92,9 +92,9 @@ The same rule works in 中文:
 
 规则 evaluateLoanEligibility 给定 申请人，产出 决定：
     如果 申请人.信用分 至少 700 并且 申请人.年收入 至少 50000
-        返回 已批准。
+        返回 "已批准"。
     否则
-        返回 已拒绝。
+        返回 "已拒绝"。
 ```
 
 Both are parsed, type-checked, and executed by the **same engine**.

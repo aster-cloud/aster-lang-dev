@@ -15,9 +15,9 @@ Module aster.finance.loan.
 
 Rule evaluateLoanEligibility given applicant, produce Decision:
     If applicant.creditScore at least 700 and applicant.annualIncome at least 50000
-        Return approved.
+        Return "approved".
     Otherwise
-        Return rejected.
+        Return "rejected".
 ```
 
 That's not by accident. It's the result of a series of decisions about who should be able to read, write, and review business rules. This post walks through those decisions and the trade-offs they imply.
