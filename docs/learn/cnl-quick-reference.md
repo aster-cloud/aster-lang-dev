@@ -20,7 +20,7 @@ Module <Name>.
 
 Examples:
 
-```
+```aster
 Module pricing.
 Module Loan.Approval.
 Module Insurance.Auto.Quote.
@@ -59,11 +59,11 @@ Rule <name> given <param> as <Type>, produce <ReturnType>:
 
 Example:
 
-```
+```aster
 Rule calculateDiscount given amount as Int, tier as Text, produce Int:
-  If tier is "gold"
+  If tier equals to "gold"
     Return amount times 20 divided by 100.
-  If tier is "silver"
+  If tier equals to "silver"
     Return amount times 10 divided by 100.
   Return 0.
 ```
@@ -74,7 +74,7 @@ Rule calculateDiscount given amount as Int, tier as Text, produce Int:
 When a rule takes no parameters, omit the `given` clause:
 <!-- /glossary:block -->
 
-```
+```aster
 Rule defaultRate produce Float:
   Return 3.5.
 ```
@@ -85,7 +85,7 @@ Rule defaultRate produce Float:
 Parameters can use user-defined struct types:
 <!-- /glossary:block -->
 
-```
+```aster
 Rule evaluateApplicant given applicant as Applicant, produce Bool:
   If applicant.creditScore at least 700
     Return true.
@@ -104,7 +104,7 @@ Define <Name> has <field> as <Type>, <field2> as <Type2>.
 
 Examples:
 
-```
+```aster
 Define Applicant has name as Text, age as Int, creditScore as Int.
 Define Vehicle has make as Text, year as Int, value as Int.
 Define Address has street as Text, city as Text, postalCode as Text.
@@ -114,7 +114,7 @@ Define Address has street as Text, city as Text, postalCode as Text.
 Struct types can be used as parameter types, return types, and field types in other structs:
 <!-- /glossary:block -->
 
-```
+```aster
 Define Customer has name as Text, address as Address.
 ```
 
@@ -147,7 +147,7 @@ DateTime is not a keyword you write in source code. The compiler infers `DateTim
 Any name introduced by a `Define` declaration becomes a valid type:
 <!-- /glossary:block -->
 
-```
+```aster
 Define Policy has premium as Int, deductible as Int.
 
 Rule quote given age as Int, produce Policy:
@@ -173,7 +173,7 @@ If <condition>
 `If` statements can be chained. The first branch whose condition evaluates to `true` executes, and its `Return` statement returns a value from the rule.
 <!-- /glossary:block -->
 
-```
+```aster
 Rule classify given score as Int, produce Text:
   If score at least 90
     Return "excellent".
@@ -190,10 +190,10 @@ Rule classify given score as Int, produce Text:
 Conditions can be nested by increasing indentation:
 <!-- /glossary:block -->
 
-```
+```aster
 Rule evaluate given applicant as Applicant, tier as Text, produce Bool:
   If applicant.creditScore at least 700
-    If tier is "premium"
+    If tier equals to "premium"
       Return true.
   Return false.
 ```
@@ -224,8 +224,7 @@ Arithmetic expressions follow standard precedence: `times` and `divided by` bind
 | `less than` | Less than | `score less than 50` |
 | `at least` | Greater than or equal | `income at least 30000` |
 | `at most` | Less than or equal | `balance at most 0` |
-| `is` | Equality | `tier is "gold"` |
-| `equals to` | Equality (numeric) | `count equals to 5` |
+| `equals to` | Equality | `tier equals to "gold"` |
 <!-- /glossary:block -->
 
 ### Logical Operators
@@ -234,7 +233,7 @@ Arithmetic expressions follow standard precedence: `times` and `divided by` bind
 | Operator | Description | Example |
 |----------|-------------|---------|
 | `and` | Logical AND | `age at least 18 and income at least 30000` |
-| `or` | Logical OR | `tier is "gold" or tier is "platinum"` |
+| `or` | Logical OR | `tier equals to "gold" or tier equals to "platinum"` |
 | `not` | Logical NOT | `not isExpired` |
 <!-- /glossary:block -->
 
@@ -259,7 +258,7 @@ To return a value of a struct type, use a construction expression with `with <fi
 
 Example:
 
-```
+```aster
 Define Quote has premium as Int, deductible as Int.
 
 Rule calculateQuote given vehicleValue as Int, year as Int, produce Quote:
@@ -307,7 +306,7 @@ Aster CNL supports multiple locales. The same logical policy is expressed using 
 | If | `If` | `如果` | `wenn` |
 | And | `and` | `且` | `und` |
 | Or | `or` | `或` | `oder` |
-| Is | `is` | `是` | `ist` |
+| Equals | `equals to` | `等于` | `entspricht` |
 | Set...to | `set ... to` | `将 ... 设为` | `setze ... auf` |
 | Return | `Return` | `返回` | `gib zurueck` |
 <!-- /glossary:block -->
@@ -324,7 +323,7 @@ The compiler accepts a `lexicon` parameter that tells it which keyword set to us
 A rule that checks multiple criteria before approving a loan application.
 <!-- /glossary:block -->
 
-```
+```aster
 Module Loan.Approval.
 
 Define Applicant has name as Text, age as Int, creditScore as Int, income as Int.
@@ -345,7 +344,7 @@ Rule isEligible given applicant as Applicant, requestedAmount as Int, produce Bo
 A rule that calculates an insurance quote and returns a structured result.
 <!-- /glossary:block -->
 
-```
+```aster
 Module Insurance.Auto.
 
 Define Vehicle has make as Text, year as Int, value as Int.
@@ -367,15 +366,15 @@ Rule generateQuote given vehicle as Vehicle, driverAge as Int, produce Quote:
 A module with a struct definition and a pricing rule that uses text comparison.
 <!-- /glossary:block -->
 
-```
+```aster
 Module Pricing.Subscription.
 
 Define Plan has name as Text, monthlyRate as Int, userLimit as Int.
 
 Rule resolvePlan given tier as Text, produce Plan:
-  If tier is "enterprise"
+  If tier equals to "enterprise"
     Return Plan with name set to "Enterprise", monthlyRate set to 299, userLimit set to 500.
-  If tier is "team"
+  If tier equals to "team"
     Return Plan with name set to "Team", monthlyRate set to 49, userLimit set to 20.
   Return Plan with name set to "Starter", monthlyRate set to 9, userLimit set to 3.
 ```
@@ -386,15 +385,15 @@ Rule resolvePlan given tier as Text, produce Plan:
 The same pricing logic expressed with Chinese keywords.
 <!-- /glossary:block -->
 
-```
+```aster ignore
 模块 定价。
 
 定义 报价 包含 单价 为 整数，折扣 为 整数。
 
 规则 计算报价 给定 数量 为 整数，会员等级 为 文本，产出 报价：
-  如果 会员等级 是 "金牌"
+  如果 会员等级 等于 "金牌"
     返回 报价 将 单价 设为 数量 乘 80 除以 100，折扣 设为 20。
-  如果 会员等级 是 "银牌"
+  如果 会员等级 等于 "银牌"
     返回 报价 将 单价 设为 数量 乘 90 除以 100，折扣 设为 10。
   返回 报价 将 单价 设为 数量，折扣 设为 0。
 ```
@@ -414,7 +413,7 @@ The same pricing logic expressed with Chinese keywords.
 | Local binding | `Let <name> be <expr>.` |
 | Construction | `<Type> with <field> set to <value>, ...` |
 | Field access | `<param>.<field>` |
-| Equality test | `<expr> is <expr>` |
+| Equality test | `<expr> equals to <expr>` |
 | Logical AND | `<expr> and <expr>` |
 | Logical OR | `<expr> or <expr>` |
 <!-- /glossary:block -->
