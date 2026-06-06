@@ -220,11 +220,15 @@ Arithmetic expressions follow standard precedence: `times` and `divided by` bind
 <!-- glossary:block id=cnl-quick-reference-comparison-operators-paragraph-23 -->
 | Operator | Description | Example |
 |----------|-------------|---------|
-| `greater than` | Greater than | `age greater than 18` |
-| `less than` | Less than | `score less than 50` |
-| `at least` | Greater than or equal | `income at least 30000` |
-| `at most` | Less than or equal | `balance at most 0` |
-| `equals to` | Equality | `tier equals to "gold"` |
+| `greater than` | Greater than | `age is greater than 18` |
+| `less than` | Less than | `score is less than 50` |
+| `at least` | Greater than or equal | `income is at least 30000` |
+| `at most` | Less than or equal | `balance is at most 0` |
+| `equals to` / `is equal to` | Equality | `tier is equal to "gold"` |
+
+You can write an optional **`is`** before any comparator for fully natural
+English — `score is at least 700` reads the same as `score at least 700` and
+compiles identically. Use whichever feels clearer; both are valid.
 <!-- /glossary:block -->
 
 ### Logical Operators
