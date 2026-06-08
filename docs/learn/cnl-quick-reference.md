@@ -287,8 +287,8 @@ compiles identically. Use whichever feels clearer; both are valid.
 | Operator | Description | Example | Status |
 |----------|-------------|---------|--------|
 | `not` | Logical NOT | `not isExpired` | ✅ Available |
-| `and` | Logical AND | `age at least 18 and income at least 30000` | 🚧 Planned |
-| `or` | Logical OR | `tier equals to "gold" or tier equals to "platinum"` | 🚧 Planned |
+| `and` | Logical AND | `age at least 18 and income at least 30000` | ✅ Available |
+| `or` | Logical OR | `tier equals to "gold" or tier equals to "platinum"` | ✅ Available |
 <!-- /glossary:block -->
 
 `not` negates a boolean condition:
@@ -301,17 +301,16 @@ Rule isActive given expired as Bool, produce Bool:
 ```
 
 <!-- glossary:block id=cnl-quick-reference-logical-operators-paragraph-25 -->
-> **`and` / `or` are not yet implemented.** Combine conditions with nested `If`
-> statements until logical operators land:
+`and` requires both conditions to hold; `or` requires either. `and` binds
+tighter than `or`, so `x or y and z` reads as `x or (y and z)`.
 <!-- /glossary:block -->
 
 ```aster
 Define Applicant has age as Int, creditScore as Int.
 
 Rule eligible given applicant as Applicant, produce Bool:
-  If applicant.age at least 18
-    If applicant.creditScore at least 650
-      Return true.
+  If applicant.age at least 18 and applicant.creditScore at least 650
+    Return true.
   Return false.
 ```
 
