@@ -30,6 +30,28 @@ Module Insurance.Auto.Quote.
 The module name is used to address the policy when deploying and evaluating via the REST API.
 <!-- /glossary:block -->
 
+### Cross-Module References
+
+A module can reuse a rule published by another team with `Use`. Pin a specific
+version with `version <N>` and bind a local alias with `as <Name>`; call the
+imported rule through the alias (`<Name>.<rule>`).
+
+```aster
+Module billing.checkout.
+
+Use risk.Scoring version 2 as Score.
+
+Rule approve given amount as Int, produce Text:
+  If amount less than 1000
+    Return "auto".
+  Return "review".
+```
+
+The referenced module must be published as a library version visible to your
+tenant. Pinning a version keeps your policy stable when the upstream team ships
+updates. The same clause works in every locale — `引用 risk.Scoring 版本 2 作为
+Score。` / `verwende risk.Scoring version 2 als Score.`
+
 ## Rule Definition
 
 <!-- glossary:block id=cnl-quick-reference-rule-definition-paragraph-4 -->
@@ -93,6 +115,30 @@ Rule evaluateApplicant given applicant as Applicant, produce Bool:
     Return true.
   Return false.
 ```
+
+### Entry Rule
+
+When a module has several rules, mark the main entry point with the `@entry`
+annotation so callers don't have to specify which rule to run. The annotation
+can sit on the same line as `Rule` or on its own line above it.
+
+```aster
+Module loan.approval.
+
+Define Applicant has creditScore as Int.
+
+Rule scoreFloor produce Int:
+  Return 650.
+
+@entry
+Rule decide given applicant as Applicant, produce Text:
+  If applicant.creditScore at least 700
+    Return "approved".
+  Return "rejected".
+```
+
+A module may have at most one `@entry` rule. Without it, a single-rule module
+runs that rule by default; a multi-rule module requires the caller to name one.
 
 ## Data / Struct Definitions
 
