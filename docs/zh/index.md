@@ -69,15 +69,16 @@ Aster Lang 是用于编写可执行业务逻辑的 **多语言受控自然语言
 
 语言把 **策略**、**流程**、**决策** 当作一等公民:同一套语法既能表达资质检查,也能表达审批流转或路由规则。引擎将三者编译到同一条审计级执行路径。
 
-```aster
+```aster ignore
 Module aster.finance.loan.
 
-Rule evaluateLoanEligibility given applicant:
-    If applicant.creditScore is at least 700
-    and applicant.annualIncome is at least 50000:
-        Return approved.
-    Otherwise:
-        Return rejected.
+Define Applicant has creditScore as Int, annualIncome as Int.
+
+Rule evaluateLoanEligibility given applicant as Applicant, produce Text:
+  If applicant.creditScore at least 700
+    If applicant.annualIncome at least 50000
+      Return "approved".
+  Return "rejected".
 ```
 
 同一条规则也可以用中文书写:
@@ -85,12 +86,13 @@ Rule evaluateLoanEligibility given applicant:
 ```aster
 模块 aster.finance.loan。
 
-规则 evaluateLoanEligibility 给定 申请人：
-    如果 申请人.信用分 不低于 700
-    并且 申请人.年收入 不低于 50000：
-        返回 已批准。
-    否则：
-        返回 已拒绝。
+定义 申请人 包含 信用分 as 整数，年收入 as 整数。
+
+规则 evaluateLoanEligibility 给定 申请人 as 申请人，产出 文本：
+  如果 申请人.信用分 至少 700
+    如果 申请人.年收入 至少 50000
+      返回 "已批准"。
+  返回 "已拒绝"。
 ```
 
 两者由 **同一个引擎** 解析、类型检查、执行。

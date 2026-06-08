@@ -86,6 +86,8 @@ Parameters can use user-defined struct types:
 <!-- /glossary:block -->
 
 ```aster
+Define Applicant has creditScore as Int.
+
 Rule evaluateApplicant given applicant as Applicant, produce Bool:
   If applicant.creditScore at least 700
     Return true.
@@ -191,6 +193,8 @@ Conditions can be nested by increasing indentation:
 <!-- /glossary:block -->
 
 ```aster
+Define Applicant has creditScore as Int.
+
 Rule evaluate given applicant as Applicant, tier as Text, produce Bool:
   If applicant.creditScore at least 700
     If tier equals to "premium"
@@ -234,20 +238,35 @@ compiles identically. Use whichever feels clearer; both are valid.
 ### Logical Operators
 
 <!-- glossary:block id=cnl-quick-reference-logical-operators-paragraph-24 -->
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `and` | Logical AND | `age at least 18 and income at least 30000` |
-| `or` | Logical OR | `tier equals to "gold" or tier equals to "platinum"` |
-| `not` | Logical NOT | `not isExpired` |
+| Operator | Description | Example | Status |
+|----------|-------------|---------|--------|
+| `not` | Logical NOT | `not isExpired` | ✅ Available |
+| `and` | Logical AND | `age at least 18 and income at least 30000` | 🚧 Planned |
+| `or` | Logical OR | `tier equals to "gold" or tier equals to "platinum"` | 🚧 Planned |
 <!-- /glossary:block -->
+
+`not` negates a boolean condition:
+
+```aster
+Rule isActive given expired as Bool, produce Bool:
+  If not expired
+    Return true.
+  Return false.
+```
 
 <!-- glossary:block id=cnl-quick-reference-logical-operators-paragraph-25 -->
-Logical operators can be combined in a single condition:
+> **`and` / `or` are not yet implemented.** Combine conditions with nested `If`
+> statements until logical operators land:
 <!-- /glossary:block -->
 
-```
-If applicant.age at least 18 and applicant.creditScore at least 650 and applicant.income at least 25000
-  Return true.
+```aster
+Define Applicant has age as Int, creditScore as Int.
+
+Rule eligible given applicant as Applicant, produce Bool:
+  If applicant.age at least 18
+    If applicant.creditScore at least 650
+      Return true.
+  Return false.
 ```
 
 ## Construction Expressions

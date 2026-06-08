@@ -70,27 +70,29 @@ Aster Lang ist eine **mehrsprachige Controlled Natural Language (CNL)** zum Schr
 Die Sprache behandelt **Policies**, **Workflows** und **Decisions** als Konzepte erster Klasse: Dieselbe Syntax drückt eine Eignungsprüfung, einen Genehmigungsfluss oder eine Routing-Regel aus. Die Engine kompiliert alle drei in denselben audit-festen Ausführungspfad.
 
 ```aster
-Module aster.finance.loan.
+Modul aster.finance.loan.
 
-Rule evaluateLoanEligibility given applicant:
-    If applicant.creditScore is at least 700
-    and applicant.annualIncome is at least 50000:
-        Return approved.
-    Otherwise:
-        Return rejected.
+Definiere Antragsteller hat bonitaet as Ganzzahl, jahreseinkommen as Ganzzahl.
+
+Regel pruefeKreditEignung gegeben antragsteller as Antragsteller, liefert Text:
+  wenn antragsteller.bonitaet mindestens 700
+    wenn antragsteller.jahreseinkommen mindestens 50000
+      gib zurueck "genehmigt".
+  gib zurueck "abgelehnt".
 ```
 
 Dieselbe Regel funktioniert auch auf Chinesisch:
 
-```aster
+```aster ignore
 模块 aster.finance.loan。
 
-规则 evaluateLoanEligibility 给定 申请人：
-    如果 申请人.信用分 不低于 700
-    并且 申请人.年收入 不低于 50000：
-        返回 已批准。
-    否则：
-        返回 已拒绝。
+定义 申请人 包含 信用分 as 整数，年收入 as 整数。
+
+规则 evaluateLoanEligibility 给定 申请人 as 申请人，产出 文本：
+  如果 申请人.信用分 至少 700
+    如果 申请人.年收入 至少 50000
+      返回 "已批准"。
+  返回 "已拒绝"。
 ```
 
 Beide werden von **derselben Engine** geparst, typgeprüft und ausgeführt.

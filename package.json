@@ -10,6 +10,7 @@
     "check:glossary": "tsx scripts/check-glossary.ts",
     "check:glossary:strict": "tsx scripts/check-glossary.ts --strict",
     "check:locale-parity": "tsx scripts/check-locale-parity.ts",
+    "check:examples": "tsx scripts/check-cnl-examples.ts",
     "sync:compliance": "node scripts/sync-enterprise-docs.mjs",
     "check:compliance": "node scripts/sync-enterprise-docs.mjs --check",
     "routes:build": "tsx scripts/routes/build-routes.ts",
