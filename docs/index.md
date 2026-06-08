@@ -78,11 +78,13 @@ The language treats **policies**, **workflows**, and **decisions** as first-clas
 ```aster
 Module aster.finance.loan.
 
-Rule evaluateLoanEligibility given applicant, produce Decision:
-    If applicant.creditScore at least 700 and applicant.annualIncome at least 50000
-        Return "approved".
-    Otherwise
-        Return "rejected".
+Define Applicant has creditScore as Int, annualIncome as Int.
+
+Rule evaluateLoanEligibility given applicant as Applicant, produce Text:
+  If applicant.creditScore at least 700
+    If applicant.annualIncome at least 50000
+      Return "approved".
+  Return "rejected".
 ```
 
 The same rule works in 中文:
@@ -90,11 +92,13 @@ The same rule works in 中文:
 ```aster ignore
 模块 aster.finance.loan。
 
-规则 evaluateLoanEligibility 给定 申请人，产出 决定：
-    如果 申请人.信用分 至少 700 并且 申请人.年收入 至少 50000
-        返回 "已批准"。
-    否则
-        返回 "已拒绝"。
+定义 申请人 包含 信用分 as 整数，年收入 as 整数。
+
+规则 evaluateLoanEligibility 给定 申请人 as 申请人，产出 文本：
+  如果 申请人.信用分 至少 700
+    如果 申请人.年收入 至少 50000
+      返回 "已批准"。
+  返回 "已拒绝"。
 ```
 
 Both are parsed, type-checked, and executed by the **same engine**.

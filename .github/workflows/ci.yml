@@ -46,6 +46,13 @@ jobs:
         working-directory: aster-lang-dev
         run: pnpm run check:locale-parity
 
+      # CNL 示例编译验证 —— 提取文档中所有 ```aster 代码块，用
+      # @aster-cloud/aster-lang-ts 真实编译 + 类型检查，确保发布到 aster-lang.dev
+      # 的示例不会随语言演进而失效。纯展示片段标 ```aster ignore 跳过。
+      - name: CNL examples compile
+        working-directory: aster-lang-dev
+        run: pnpm run check:examples
+
       # Build-side script tests — frontmatter parser, XML helpers (CDATA
       # splitting), and the compliance link-rewriter. Cheap to run, catches
       # regression in the small standalone scripts we maintain in-tree.
