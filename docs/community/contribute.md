@@ -66,5 +66,5 @@ Translations:
 - [GitHub Discussions](https://github.com/aster-cloud/aster-lang-core/discussions) — public Q&A
 <!-- /glossary:block -->
 <!-- glossary:block id=contribute-need-help-list-item-11 -->
-- [Discord (planned)](https://aster-lang.cloud/community) — real-time chat coming soon
+- **Discord (planned)** — real-time chat coming soon
 <!-- /glossary:block -->
