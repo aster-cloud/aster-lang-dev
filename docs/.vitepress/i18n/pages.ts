@@ -37,16 +37,17 @@ const translated = new Set([
 ])
 
 function stripLocalePrefix(path: string): string {
-  return path.replace(/^(zh|de)\//, '')
+  return path.replace(/^(zh|de|hi)\//, '')
 }
 
 function pathToUrl(path: string): string {
   return path.replace(/\.md$/, '.html').replace(/index\.html$/, '')
 }
 
-function detectLocale(path: string): 'en' | 'zh' | 'de' {
+function detectLocale(path: string): 'en' | 'zh' | 'de' | 'hi' {
   if (path.startsWith('zh/')) return 'zh'
   if (path.startsWith('de/')) return 'de'
+  if (path.startsWith('hi/')) return 'hi'
   return 'en'
 }
 
@@ -71,6 +72,7 @@ export function buildHreflangLinks(ctx: TransformContext): HeadConfig[] {
       ['link', { rel: 'alternate', hreflang: 'x-default', href: `${SITE_URL}/${suffix}` }],
       ['link', { rel: 'alternate', hreflang: 'zh-CN', href: `${SITE_URL}/zh/${suffix}` }],
       ['link', { rel: 'alternate', hreflang: 'de-DE', href: `${SITE_URL}/de/${suffix}` }],
+      ['link', { rel: 'alternate', hreflang: 'hi-IN', href: `${SITE_URL}/hi/${suffix}` }],
     )
   }
   return head

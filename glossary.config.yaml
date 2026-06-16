@@ -17,6 +17,7 @@ localesVersion: 1
 locale-dirs:
   - de
   - zh
+  - hi
 
 glossary-pin:
   version: 0.1.0
