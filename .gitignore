@@ -12,3 +12,5 @@ docs/.vitepress/dist/
 .glossary/cache/
 glossary-findings.json
 locale-parity-findings.json
+# CCG workflow scaffolding
+.ccg/

@@ -128,4 +128,43 @@ Regel berechneAngebot gegeben fahrzeug als Fahrzeug, liefert Angebot:
   gib zurueck Angebot mit praemie gesetzt auf fahrzeug.wert mal 3 geteilt durch 100, selbstbehalt gesetzt auf 500.`,
     },
   ],
+  HI_IN: [
+    {
+      id: 'basic-rule',
+      name: 'मूल नियम',
+      source: `मॉड्यूल pricing।
+
+नियम discountedPrice दिया गया amount रूप में पूर्णांक, उत्पन्न पूर्णांक:
+  यदि amount से अधिक 100
+    लौटाएं amount गुणा 90 भाग 100।
+  लौटाएं amount।`,
+    },
+    {
+      id: 'eligibility',
+      name: 'पात्रता जाँच',
+      source: `मॉड्यूल loan।
+
+परिभाषित Applicant रखता है creditScore रूप में पूर्णांक, income रूप में पूर्णांक, age रूप में पूर्णांक।
+
+नियम checkEligibility दिया गया applicant रूप में Applicant, उत्पन्न बूलियन:
+  यदि applicant.creditScore से कम 600
+    लौटाएं असत्य।
+  यदि applicant.income से कम 30000
+    लौटाएं असत्य।
+  यदि applicant.age से कम 18
+    लौटाएं असत्य।
+  लौटाएं सत्य।`,
+    },
+    {
+      id: 'arithmetic',
+      name: 'अंकगणित',
+      source: `मॉड्यूल calc।
+
+नियम net दिया गया gross रूप में पूर्णांक, tax रूप में पूर्णांक, उत्पन्न पूर्णांक:
+  मानें result हो gross घटा tax।
+  यदि result से कम 0
+    लौटाएं 0।
+  लौटाएं result।`,
+    },
+  ],
 };

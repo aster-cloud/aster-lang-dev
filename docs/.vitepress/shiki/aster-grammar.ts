@@ -37,6 +37,8 @@ const KEYWORDS_STRUCTURAL = [
   '模块', '规则', '函数', '类型',
   // Deutsch
   'Modul', 'Regel', 'Funktion', 'Typ',
+  // हिन्दी (Devanagari) — 见 aster-lang-core builtin/hi-IN.json
+  'मॉड्यूल', 'नियम', 'परिभाषित',
 ];
 
 const KEYWORDS_RELATIONAL = [
@@ -58,6 +60,8 @@ const KEYWORDS_CONTROL = [
   '如果', '那么', '否则', '当', '对每个',
   // Deutsch
   'wenn', 'Wenn', 'dann', 'Dann', 'sonst', 'Sonst', 'andernfalls', 'Andernfalls',
+  // हिन्दी
+  'यदि', 'अन्यथा', 'जब', 'प्रत्येक', 'मिलान',
 ];
 
 const KEYWORDS_ACTION = [
@@ -81,12 +85,16 @@ const KEYWORDS_ACTION = [
   'ablehnen', 'Ablehnen',
   'erlauben', 'Erlauben',
   'zurückgeben', 'Zurückgeben',
+  // हिन्दी
+  'लौटाएं', 'दिया गया', 'उत्पन्न',
 ];
 
 const KEYWORDS_BOOLEAN = [
   'true', 'false', 'null', 'none',
   '真', '假', '空',
   'wahr', 'falsch', 'nichts',
+  // हिन्दी
+  'सत्य', 'असत्य', 'शून्य', 'कोई नहीं',
 ];
 
 /** Construct a regex that matches any keyword in the list as a whole word. */
