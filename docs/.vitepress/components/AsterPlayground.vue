@@ -226,6 +226,8 @@ let lastRunDispatchedAt = 0;
 
 // Lazy-loaded modules
 let asterLang: any = null;
+// HI_IN（Hindi/天城文）来自 ./lexicons barrel —— browser 入口暂未导出它。
+let hiLexicon: any = null;
 let cmView: any = null;
 let cmState: any = null;
 let cmCommands: any = null;
@@ -244,6 +246,7 @@ function getLexicon(id: string) {
   switch (id) {
     case 'ZH_CN': return asterLang.ZH_CN;
     case 'DE_DE': return asterLang.DE_DE;
+    case 'HI_IN': return hiLexicon;
     default: return asterLang.EN_US;
   }
 }
@@ -399,6 +402,7 @@ function localeForLexicon(id: string): string {
   switch (id) {
     case 'ZH_CN': return 'zh-CN';
     case 'DE_DE': return 'de-DE';
+    case 'HI_IN': return 'hi-IN';
     default: return 'en-US';
   }
 }
@@ -552,8 +556,10 @@ async function initEditor() {
   if (!editorContainer.value) return;
 
   // Dynamic imports to avoid SSR issues
-  const [asterModule, viewModule, stateModule, commandsModule, langModule, searchModule, oneDarkModule] = await Promise.all([
+  const [asterModule, lexiconsModule, viewModule, stateModule, commandsModule, langModule, searchModule, oneDarkModule] = await Promise.all([
     import('@aster-cloud/aster-lang-ts/browser'),
+    // HI_IN 只在 ./lexicons barrel 暴露（1.0.1 的 browser 入口未导出）。
+    import('@aster-cloud/aster-lang-ts/lexicons'),
     import('@codemirror/view'),
     import('@codemirror/state'),
     import('@codemirror/commands'),
@@ -563,6 +569,7 @@ async function initEditor() {
   ]);
 
   asterLang = asterModule;
+  hiLexicon = lexiconsModule.HI_IN;
   cmView = viewModule;
   cmState = stateModule;
   cmCommands = commandsModule;
@@ -787,6 +794,7 @@ const footerClass = computed(() => {
           <option value="EN_US">English</option>
           <option value="ZH_CN">中文</option>
           <option value="DE_DE">Deutsch</option>
+          <option value="HI_IN">हिन्दी</option>
         </select>
       </label>
       <label>
