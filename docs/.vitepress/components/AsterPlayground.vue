@@ -75,21 +75,41 @@ const lastCalledArgs = ref<string>('');
 //   src/app/api/playground/evaluate-source/route.ts.
 //
 // API base resolution order:
-//   1. <meta name="aster-api-base" content="https://..."> (CI override).
-//   2. import.meta.env.VITE_ASTER_API_BASE at build time.
+//   1. import.meta.env.VITE_ASTER_API_BASE at build time (trusted source).
+//   2. <meta name="aster-api-base" content="https://..."> (CI override) —
+//      only honored when its origin is in ALLOWED_BACKEND_ORIGINS, so a
+//      stray/injected meta tag can't redirect playground traffic.
 //   3. Built-in default — the public aster-cloud BFF host.
+const DEFAULT_BACKEND_BASE = 'https://aster-lang.cloud';
+// Allowlist of origins the meta-tag override is permitted to point at. A
+// build-time env var is trusted implicitly; an in-DOM meta tag is not, so it
+// must match one of these origins exactly before we use it.
+const ALLOWED_BACKEND_ORIGINS = new Set([DEFAULT_BACKEND_BASE]);
 const runOnBackend = ref(false);
 const backendBase = computed(() => {
+  // Vite injects import.meta.env at build time; this is the trusted source.
+  const env = (import.meta as unknown as { env?: { VITE_ASTER_API_BASE?: string } }).env;
+  const fromEnv = env?.VITE_ASTER_API_BASE;
+  if (fromEnv) return fromEnv.replace(/\/+$/, '');
+
+  // Meta-tag override: only honored if it resolves to an allowed origin.
   if (typeof document !== 'undefined') {
     const meta = document.querySelector('meta[name="aster-api-base"]');
     const c = meta?.getAttribute('content');
-    if (c) return c.replace(/\/+$/, '');
+    if (c) {
+      try {
+        const url = new URL(c);
+        if (ALLOWED_BACKEND_ORIGINS.has(url.origin)) {
+          return c.replace(/\/+$/, '');
+        }
+      } catch {
+        // Malformed URL — ignore and fall through to the safe default.
+      }
+    }
   }
-  // Vite injects import.meta.env at build time; fall back to the
-  // public aster-cloud BFF so the demo works without configuration.
-  const env = (import.meta as unknown as { env?: { VITE_ASTER_API_BASE?: string } }).env;
-  const fromEnv = env?.VITE_ASTER_API_BASE;
-  return (fromEnv ?? 'https://aster-lang.cloud').replace(/\/+$/, '');
+
+  // Fall back to the public aster-cloud BFF so the demo works unconfigured.
+  return DEFAULT_BACKEND_BASE;
 });
 const backendInFlight = ref(false);
 const backendController = ref<AbortController | null>(null);
@@ -514,14 +534,35 @@ async function runOnBackendImpl(funcName: string, context: Record<string, unknow
 }
 
 const MAX_DISPLAY_BYTES = 256 * 1024;
+// Slice `s` so the UTF-8 byte length of the result does not exceed `maxBytes`.
+// Walks back to a char boundary so multi-byte sequences (Devanagari/CJK)
+// are never split mid-codepoint.
+function sliceToByteLimit(s: string, maxBytes: number): string {
+  const encoder = new TextEncoder();
+  if (encoder.encode(s).length <= maxBytes) return s;
+  // Binary-search the largest char count whose encoded length fits.
+  let lo = 0;
+  let hi = s.length;
+  while (lo < hi) {
+    const mid = Math.ceil((lo + hi) / 2);
+    if (encoder.encode(s.slice(0, mid)).length <= maxBytes) {
+      lo = mid;
+    } else {
+      hi = mid - 1;
+    }
+  }
+  return s.slice(0, lo);
+}
 function clipForDisplay(value: unknown): unknown {
   try {
     const s = JSON.stringify(value);
-    if (s != null && s.length > MAX_DISPLAY_BYTES) {
+    // Measure actual UTF-8 bytes, not UTF-16 code units, so the cap is
+    // accurate for multi-byte scripts.
+    if (s != null && new TextEncoder().encode(s).length > MAX_DISPLAY_BYTES) {
       return {
         __clipped: true,
         message: `Response truncated to ${MAX_DISPLAY_BYTES} bytes for display`,
-        head: s.slice(0, MAX_DISPLAY_BYTES) + '…',
+        head: sliceToByteLimit(s, MAX_DISPLAY_BYTES) + '…',
       };
     }
     return value;
@@ -537,7 +578,7 @@ function clipForDisplay(value: unknown): unknown {
       __clipped: true,
       __reason: 'stringify_error',
       message: `Could not serialise response for display: ${e instanceof Error ? e.message : String(e)}`,
-      head: String(value).slice(0, MAX_DISPLAY_BYTES),
+      head: sliceToByteLimit(String(value), MAX_DISPLAY_BYTES),
     };
   }
 }
