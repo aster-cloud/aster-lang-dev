@@ -17,6 +17,8 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, relative } from 'node:path';
 import { compileAndTypecheck, EN_US, ZH_CN, DE_DE } from '@aster-cloud/aster-lang-ts/browser';
+// HI_IN（Hindi）只在 ./lexicons barrel 暴露（/browser 入口暂未导出）。
+import { HI_IN } from '@aster-cloud/aster-lang-ts/lexicons';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -98,9 +100,12 @@ function main(): void {
         continue;
       }
 
-      // 按文档路径选 lexicon：docs/zh → 中文示例，docs/de → 德文，其余英文
+      // 按文档路径选 lexicon：docs/zh → 中文，docs/de → 德文，docs/hi → 印地文，其余英文
       const rel = relative(ROOT, ex.file);
-      const lexicon = rel.startsWith('docs/zh/') ? ZH_CN : rel.startsWith('docs/de/') ? DE_DE : EN_US;
+      const lexicon = rel.startsWith('docs/zh/') ? ZH_CN
+        : rel.startsWith('docs/de/') ? DE_DE
+        : rel.startsWith('docs/hi/') ? HI_IN
+        : EN_US;
       const result = compileAndTypecheck(ex.code, { lexicon });
       const parseErrors = (result.parseErrors ?? []).map((e: unknown) =>
         typeof e === 'object' && e !== null && 'message' in e ? (e as { message: string }).message : String(e),

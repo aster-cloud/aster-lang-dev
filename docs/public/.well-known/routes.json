@@ -6,7 +6,8 @@
     "default": "en",
     "prefixed": [
       "zh",
-      "de"
+      "de",
+      "hi"
     ]
   },
   "generatedAt": null,

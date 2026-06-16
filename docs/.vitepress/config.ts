@@ -3,6 +3,7 @@ import { sharedConfig } from './config.shared'
 import { enConfig } from './locales/en'
 import { zhConfig } from './locales/zh'
 import { deConfig } from './locales/de'
+import { hiConfig } from './locales/hi'
 import { buildHreflangLinks } from './i18n/pages'
 
 export default defineConfig({
@@ -11,6 +12,7 @@ export default defineConfig({
     root: { label: 'English', lang: 'en-US', ...enConfig },
     zh: { label: '简体中文', lang: 'zh-CN', link: '/zh/', ...zhConfig },
     de: { label: 'Deutsch', lang: 'de-DE', link: '/de/', ...deConfig },
+    hi: { label: 'हिन्दी', lang: 'hi-IN', link: '/hi/', ...hiConfig },
   },
   themeConfig: {
     // Nav + favicon both use logo-mark.svg — transparent background,

@@ -41,8 +41,8 @@ importers:
         version: 1.2.3
     devDependencies:
       '@aster-cloud/glossary':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.1.2
+        version: 0.1.2
       '@types/node':
         specifier: ^24.0.0
         version: 24.13.2
@@ -177,8 +177,8 @@ packages:
       vscode-languageserver-types:
         optional: true
 
-  '@aster-cloud/glossary@0.1.1':
-    resolution: {integrity: sha512-6ZbktjiQrfNmmqofauD5FdXi/wwaRdVZBLtLmYz62W8ye1PBknqj0C9u88UnVyc0pSRbBcNVRPYocrXQlOye2w==}
+  '@aster-cloud/glossary@0.1.2':
+    resolution: {integrity: sha512-UA0dd2mmTpDOkfPro7ZcgEFoa8SjJHi/ZRRMeMJacWscmviE0rr93LzEJEAByYCith5qmnwXALQ97LhfZNB24Q==}
     engines: {node: '>=20'}
 
   '@aster-cloud/tokens@0.2.0':
@@ -1400,7 +1400,7 @@ snapshots:
       - ws
       - zod
 
-  '@aster-cloud/glossary@0.1.1':
+  '@aster-cloud/glossary@0.1.2':
     dependencies:
       remark: 15.0.1
       remark-parse: 11.0.0
