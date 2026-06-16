@@ -64,7 +64,7 @@ function mdToRoute(absPath: string): string | null {
   if (rel.startsWith('.vitepress/')) return null;
   if (rel.includes('/.glossary/')) return null;
   if (rel.startsWith('public/')) return null;
-  if (rel.startsWith('zh/') || rel.startsWith('de/')) return null; // locale mirrors
+  if (rel.startsWith('zh/') || rel.startsWith('de/') || rel.startsWith('hi/')) return null; // locale mirrors
   if (rel.startsWith('adr/')) return null; // internal architecture docs, not public site
   if (rel.split('/').some((seg) => seg.startsWith('_'))) return null; // _template.md
   const base = rel.split('/').pop() ?? '';
