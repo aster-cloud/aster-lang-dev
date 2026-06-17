@@ -1,8 +1,15 @@
-name: Deploy to Cloudflare Pages
+name: Deploy to Cloudflare Pages (RETIRED)
 
+# ⚠️ 已退役（ADR 0018 Phase 3）。本站（VitePress）已被新的 aster-dev（Next.js）
+# 替换，aster-lang.dev 自定义域名现绑在 Cloudflare Worker `aster-dev` 上。
+#
+# 自动 push 触发已移除——否则 push main 会重新 `pages deploy` 并把 aster-lang.dev
+# 域名从新 Worker 抢回旧 Pages 项目，回退 cutover。
+#
+# 仅保留 workflow_dispatch（手动）作为应急回退手段：若新站故障需临时回退到旧 Pages
+# 站，手动触发本 workflow + 在 CF dashboard 把域名绑回 Pages 项目即可。
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
